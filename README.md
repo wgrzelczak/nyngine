@@ -1,0 +1,2 @@
+tools/_generate_sln.py
+tools/_clang_format_all.py
