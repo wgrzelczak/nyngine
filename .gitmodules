@@ -1,0 +1,12 @@
+[submodule "External/spdlog"]
+	path = External/spdlog
+	url = https://github.com/gabime/spdlog
+	ignore = dirty
+[submodule "External/glfw"]
+	path = External/glfw
+	url = https://github.com/glfw/glfw
+	ignore = dirty
+[submodule "External/imgui"]
+	path = External/imgui
+	url = https://github.com/ocornut/imgui
+	ignore = dirty
