@@ -5,7 +5,7 @@ from clang_format_one import clang_format
 
 currentDir = os.getcwd()
 slnDir = os.path.dirname(currentDir)
-gameDir = os.path.join(slnDir, "Game")
+gameDir = os.path.join(slnDir, "Game", "Nyngine")
 
 for dir, dirs, files in chain.from_iterable(os.walk(path) for path in [gameDir]):
     for file in files:
