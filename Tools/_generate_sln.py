@@ -1,6 +1,6 @@
 import os
 
-FILE = "premake5_solution.lua"
+FILE = "premake5_main.lua"
 PLATFORM = "windows"
 ACTION = "vs2017"
 COMPILER = "gcc"
