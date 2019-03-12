@@ -41,6 +41,7 @@ namespace ny::Core
         void Init();
         void Run();
         void Shutdown();
+        void SleepFor(u32 milliseconds) const;
 
         ApplicationState m_state;
         std::unique_ptr<Window> m_window = nullptr;
