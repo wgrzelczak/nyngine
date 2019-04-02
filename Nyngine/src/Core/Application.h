@@ -3,6 +3,7 @@
 #include "FieldDetection.h"
 #include "ImGui\ImGuiLayer.h"
 #include "Preinclude.h"
+#include "Scene\Scene.h"
 #include "Window.h"
 #include <variant>
 
@@ -28,7 +29,13 @@ namespace ny::Core
       public:
         Application();
         virtual ~Application();
-        void Exec();
+        void PreInit();
+        void Init();
+        void Run();
+        void Shutdown();
+
+        template <class T>
+        void PushLayer();
 
         template <class EventType>
         void OnEvent(EventType&& event);
@@ -37,15 +44,11 @@ namespace ny::Core
         Window& GetWindow() const { return *m_window; }
 
       private:
-        void PreInit();
-        void Init();
-        void Run();
-        void Shutdown();
         void SleepFor(u32 milliseconds) const;
 
         ApplicationState m_state;
         std::unique_ptr<Window> m_window = nullptr;
-        std::vector<v_Layer> m_layers;
+        std::vector<std::unique_ptr<v_Layer>> m_layers;
     };
 
 #define IApp Core::Application::GetInstance()
@@ -65,8 +68,14 @@ namespace ny::Core
         {
             if (!e.m_handled)
             {
-                std::visit(dispatchEvent, l);
+                std::visit(dispatchEvent, *l);
             }
         }
+    }
+
+    template <class T>
+    inline void Application::PushLayer()
+    {
+        m_layers.push_back(std::make_unique<v_Layer>(std::in_place_type_t<T>()));
     }
 } // namespace ny::Core

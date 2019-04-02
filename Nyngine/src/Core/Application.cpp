@@ -24,14 +24,6 @@ namespace ny::Core
     {
     }
 
-    void Application::Exec()
-    {
-        PreInit();
-        Init();
-        Run();
-        Shutdown();
-    }
-
     void Application::PreInit()
     {
         NY_ASSERT(!m_instance, "Application already initialized!!");
@@ -45,10 +37,10 @@ namespace ny::Core
     {
         NY_TRACE("Initializing...");
 
-        m_layers.push_back(ApplicationLayer());
-        m_layers.push_back(ImGuiLayer());
-
         m_window = std::make_unique<Window>();
+
+        PushLayer<ApplicationLayer>();
+        PushLayer<ImGuiLayer>();
 
         NY_TRACE("Initialized");
         SetState(ApplicationState::Running);
@@ -73,7 +65,7 @@ namespace ny::Core
 
             for (auto& l : m_layers)
             {
-                std::visit(updateLayer, l);
+                std::visit(updateLayer, *l);
             }
 
             m_window->Update();
