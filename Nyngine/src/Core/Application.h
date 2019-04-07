@@ -1,81 +1,69 @@
 #pragma once
-#include "ApplicationLayer.h"
 #include "FieldDetection.h"
-#include "ImGui\ImGuiLayer.h"
-#include "Preinclude.h"
-#include "Scene\Scene.h"
 #include "Window.h"
 #include <variant>
 
 namespace ny::Core
 {
-    enum class ApplicationState
-    {
-        Init,
-        Running,
-        ShuttingDown
-    };
-
-    using v_Layer = std::variant<ApplicationLayer, ImGuiLayer>;
-
-    class Application
+    class Application abstract
     {
       public:
-        static Application* GetInstance();
+        virtual void PreInit() = 0;
+        virtual void Init() = 0;
+        virtual void Tick() = 0;
+        virtual void Shutdown() = 0;
 
-      private:
-        static Application* m_instance;
-
-      public:
-        Application();
-        virtual ~Application();
-        void PreInit();
-        void Init();
-        void Run();
-        void Shutdown();
-
-        template <class T>
-        void PushLayer();
-
-        template <class EventType>
-        void OnEvent(EventType&& event);
-
-        void SetState(ApplicationState state) { m_state = state; }
-        Window& GetWindow() const { return *m_window; }
-
-      private:
-        void SleepFor(u32 milliseconds) const;
-
-        ApplicationState m_state;
-        std::unique_ptr<Window> m_window = nullptr;
-        std::vector<std::unique_ptr<v_Layer>> m_layers;
+        virtual Window& GetWindow() const = 0;
     };
 
-#define IApp Core::Application::GetInstance()
-
-    template <class EventType>
-    inline void Application::OnEvent(EventType&& e)
+    template <class LayerV>
+    class ApplicationExt : public Application
     {
-        auto dispatchEvent = [&](auto&& arg) {
-            using LayerType = std::decay_t<decltype(arg)>;
-            if constexpr (HasEvent<LayerType, EventType>)
-            {
-                arg.OnEvent(std::forward<EventType>(e));
-            }
-        };
+      protected:
+        using LayersVariant = LayerV;
 
-        for (auto& l : m_layers)
+        void UpdateLayers()
         {
-            if (!e.m_handled)
+            auto updateLayer = [&](auto&& arg) {
+                using LayerType = std::decay_t<decltype(arg)>;
+                if constexpr (HasUpdate<LayerType>)
+                {
+                    arg.OnUpdate();
+                }
+            };
+
+            for (auto& l : m_layers)
             {
-                std::visit(dispatchEvent, *l);
+                std::visit(updateLayer, *l);
             }
         }
-    }
 
-    template <class T>
-    inline void Application::PushLayer()
-    {
-        m_layers.push_back(std::make_unique<v_Layer>(std::in_place_type_t<T>()));
-    }
+        template <class T>
+        void PushLayer()
+        {
+            m_layers.push_back(std::make_unique<LayersVariant>(std::in_place_type_t<T>()));
+        }
+
+        template <class EventType>
+        void OnEvent(EventType&& event)
+        {
+            auto dispatchEvent = [&](auto&& arg) {
+                using LayerType = std::decay_t<decltype(arg)>;
+                if constexpr (HasEvent<LayerType, EventType>)
+                {
+                    arg.OnEvent(std::forward<EventType>(e));
+                }
+            };
+
+            for (auto& l : m_layers)
+            {
+                if (!e.m_handled)
+                {
+                    std::visit(dispatchEvent, *l);
+                }
+            }
+        }
+
+        std::vector<std::unique_ptr<LayersVariant>> m_layers;
+    };
 } // namespace ny::Core

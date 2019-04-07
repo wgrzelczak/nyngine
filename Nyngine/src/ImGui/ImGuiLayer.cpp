@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ImGuiLayer.h"
-#include "Core\Application.h"
+#include "Core\Engine.h"
 #include "glad\glad.h" //to remove
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
@@ -58,7 +58,7 @@ namespace ny
     {
         ImGuiIO& io = ImGui::GetIO();
 
-        io.DisplaySize = ImVec2(IApp->GetWindow().GetWidth(), IApp->GetWindow().GetHeight());
+        io.DisplaySize = ImVec2(Core::Engine::GetApplication()->GetWindow().GetWidth(), Core::Engine::GetApplication()->GetWindow().GetHeight());
 
         float time = (float)glfwGetTime();
         io.DeltaTime = m_time > 0.0f ? (time - m_time) : (1.0f / 60.0f);

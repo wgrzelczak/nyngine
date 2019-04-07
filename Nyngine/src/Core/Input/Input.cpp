@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Input.h"
-#include "Core\Application.h"
+#include "Core\Engine.h"
 #include "GLFW\glfw3.h"
 
 namespace ny::Core
@@ -13,20 +13,20 @@ namespace ny::Core
 
     bool Input::IsKeyPressedImpl(i32 keyCode) const
     {
-        auto window = IApp->GetWindow().GetNative();
+        auto window = Engine::GetApplication()->GetWindow().GetNative();
         return (glfwGetKey(window, keyCode) & (GLFW_PRESS | GLFW_REPEAT)) != 0;
     }
 
     bool Input::IsMouseButtonPressedImpl(i32 button) const
     {
-        auto window = IApp->GetWindow().GetNative();
+        auto window = Engine::GetApplication()->GetWindow().GetNative();
         return (glfwGetMouseButton(window, button) & GLFW_PRESS) != 0;
     }
 
     std::pair<float, float> Input::GetMousePosImpl() const
     {
         double x, y;
-        auto window = IApp->GetWindow().GetNative();
+        auto window = Engine::GetApplication()->GetWindow().GetNative();
         glfwGetCursorPos(window, &x, &y);
 
         return std::make_pair(static_cast<f32>(x), static_cast<f32>(y));

@@ -1,18 +1,12 @@
 #include "pch.h"
-#include "Core\Application.h"
-#include "GameLayer.h"
+#include "Core\Engine.h"
+#include "NyngineApp.h"
 
 int main(int argc, char** agrv)
 {
-    ny::Core::Application app;
+    auto* engine = ny::Core::Engine::GetInstance();
 
-    app.PreInit();
-    app.Init();
-
-    //app.PushLayer<GameLayer>();
-
-    app.Run();
-    app.Shutdown();
+    engine->Run(new NyngineApp());
 
     return 0;
 }

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Window.h"
-#include "Application.h"
+#include "Engine.h"
 #include "Event\InputEvents.h"
 #include "Event\WindowEvents.h"
 #include <glad\glad.h>
@@ -49,7 +49,7 @@ namespace ny::Core
     void Window::RegisterCallbacks()
     {
         glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) {
-            IApp->OnEvent<WindowClosedEvent>({});
+            Engine::GetInstance()->OnEvent<WindowClosedEvent>({});
         });
 
         glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
@@ -57,49 +57,49 @@ namespace ny::Core
             windowData.width = width;
             windowData.height = height;
 
-            IApp->OnEvent<WindowResizedEvent>({width, height});
+            Engine::GetInstance()->OnEvent<WindowResizedEvent>({width, height});
         });
 
         glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
             switch (action)
             {
             case GLFW_PRESS:
-                IApp->OnEvent<KeyPressedEvent>({key, 0});
+                Engine::GetInstance()->OnEvent<KeyPressedEvent>({key, 0});
                 break;
 
             case GLFW_RELEASE:
-                IApp->OnEvent<KeyReleasedEvent>({key});
+                Engine::GetInstance()->OnEvent<KeyReleasedEvent>({key});
                 break;
 
             case GLFW_REPEAT:
-                IApp->OnEvent<KeyPressedEvent>({key, 1});
+                Engine::GetInstance()->OnEvent<KeyPressedEvent>({key, 1});
                 break;
             }
         });
 
         glfwSetCharCallback(m_window, [](GLFWwindow* window, unsigned int keycode) {
-            IApp->OnEvent<KeyTypedEvent>({keycode});
+            Engine::GetInstance()->OnEvent<KeyTypedEvent>({keycode});
         });
 
         glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
             switch (action)
             {
             case GLFW_PRESS:
-                IApp->OnEvent<MouseButtonPressedEvent>({button});
+                Engine::GetInstance()->OnEvent<MouseButtonPressedEvent>({button});
                 break;
 
             case GLFW_RELEASE:
-                IApp->OnEvent<MouseButtonReleasedEvent>({button});
+                Engine::GetInstance()->OnEvent<MouseButtonReleasedEvent>({button});
                 break;
             }
         });
 
         glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset) {
-            IApp->OnEvent<MouseScrolledEvent>({static_cast<f32>(xOffset), static_cast<f32>(yOffset)});
+            Engine::GetInstance()->OnEvent<MouseScrolledEvent>({static_cast<f32>(xOffset), static_cast<f32>(yOffset)});
         });
 
         glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xPos, double yPos) {
-            IApp->OnEvent<MouseMovedEvent>({static_cast<f32>(xPos), static_cast<f32>(yPos)});
+            Engine::GetInstance()->OnEvent<MouseMovedEvent>({static_cast<f32>(xPos), static_cast<f32>(yPos)});
         });
     }
 } // namespace ny::Core
