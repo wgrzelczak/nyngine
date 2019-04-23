@@ -6,7 +6,6 @@ Build/
 imgui.ini
 
 
-
 # Created by https://www.gitignore.io/api/c++,visualstudio
 
 ### C++ ###
@@ -375,3 +374,8 @@ ASALocalRun/
 
 
 # End of https://www.gitignore.io/api/c++,visualstudio
+
+
+#Tools
+#Exclude all exe files
+!Tools/*.exe
