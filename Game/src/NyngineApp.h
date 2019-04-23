@@ -13,7 +13,6 @@ class NyngineApp : public ny::Core::ApplicationExt<std::variant<EngineLayer, ImG
   public:
     NyngineApp();
     virtual ~NyngineApp();
-    virtual void PreInit() override;
     virtual void Init() override;
     virtual void Tick() override;
     virtual void Shutdown() override;

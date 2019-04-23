@@ -9,10 +9,6 @@ NyngineApp::~NyngineApp()
 {
 }
 
-void NyngineApp::PreInit()
-{
-}
-
 void NyngineApp::Init()
 {
     NY_TRACE("Initializing...");

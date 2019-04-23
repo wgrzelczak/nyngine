@@ -2,6 +2,7 @@
 #include "FieldDetection.h"
 #include "Window.h"
 #include <variant>
+#include "Event/Event.h"
 
 namespace ny::Core
 {
@@ -12,7 +13,7 @@ namespace ny::Core
         virtual void Init() = 0;
         virtual void Tick() = 0;
         virtual void Shutdown() = 0;
-
+        virtual void OnEvent(Event&) = 0;
         virtual Window& GetWindow() const = 0;
     };
 
@@ -20,6 +21,10 @@ namespace ny::Core
     class ApplicationExt : public Application
     {
       protected:
+        virtual void PreInit() override
+        {
+        }
+
         using LayersVariant = LayerV;
 
         void UpdateLayers()
@@ -44,23 +49,27 @@ namespace ny::Core
             m_layers.push_back(std::make_unique<LayersVariant>(std::in_place_type_t<T>()));
         }
 
-        template <class EventType>
-        void OnEvent(EventType&& event)
+        void OnEvent(Event& e)
         {
-            auto dispatchEvent = [&](auto&& arg) {
-                using LayerType = std::decay_t<decltype(arg)>;
-                if constexpr (HasEvent<LayerType, EventType>)
-                {
-                    arg.OnEvent(std::forward<EventType>(e));
-                }
+            auto dispatchEvent = [&](auto&& arg)
+			{
+                EVENT_DISPATCH(arg, e, WindowClosedEvent);
+                EVENT_DISPATCH(arg, e, WindowResizedEvent);
+                EVENT_DISPATCH(arg, e, KeyPressedEvent);
+                EVENT_DISPATCH(arg, e, KeyReleasedEvent);
+                EVENT_DISPATCH(arg, e, KeyTypedEvent);
+                EVENT_DISPATCH(arg, e, MouseButtonPressedEvent);
+                EVENT_DISPATCH(arg, e, MouseButtonReleasedEvent);
+                EVENT_DISPATCH(arg, e, MouseScrolledEvent);
+                EVENT_DISPATCH(arg, e, MouseMovedEvent);
             };
 
             for (auto& l : m_layers)
             {
-                if (!e.m_handled)
-                {
-                    std::visit(dispatchEvent, *l);
-                }
+                if (e.m_handled)
+                    break;
+                
+				std::visit(dispatchEvent, *l);
             }
         }
 

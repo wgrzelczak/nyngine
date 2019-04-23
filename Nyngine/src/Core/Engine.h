@@ -29,8 +29,7 @@ namespace ny::Core
 
         void Run(Application* app);
 
-        template <class EventType>
-        void OnEvent(EventType&& event);
+        void OnEvent(Event& e);
 
         void SetState(State state) { m_state = state; }
 
@@ -44,10 +43,9 @@ namespace ny::Core
 
 #define IEngine Core::Engine::GetInstance()
 
-    template <class EventType>
-    inline void Engine::OnEvent(EventType&& e)
+    inline void Engine::OnEvent(Event& e)
     {
         NY_ASSERT(m_app, "");
-        //m_app->OnEvent(e);
+        m_app->OnEvent(e);
     }
 } // namespace ny::Core

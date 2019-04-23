@@ -96,7 +96,7 @@ namespace ny
     void ImGuiLayer::OnEvent(Core::KeyReleasedEvent e)
     {
         ImGuiIO& io = ImGui::GetIO();
-        io.MouseDown[e.keyCode] = true;
+        io.KeysDown[e.keyCode] = false;
     }
 
     void ImGuiLayer::OnEvent(Core::KeyTypedEvent e)
