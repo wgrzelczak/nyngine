@@ -8,7 +8,7 @@ namespace ny::Core
         WindowClosedEvent() :
             Event(EventType::WindowClosedEvent) {}
 
-		EVENT_REGISTER_TYPE(WindowClosedEvent);
+        EVENT_REGISTER_TYPE(WindowClosedEvent);
     };
 
     struct WindowResizedEvent : Event
@@ -18,7 +18,7 @@ namespace ny::Core
         const i32 width;
         const i32 height;
 
-		EVENT_REGISTER_TYPE(WindowResizedEvent);
+        EVENT_REGISTER_TYPE(WindowResizedEvent);
     };
 
 } // namespace ny::Core

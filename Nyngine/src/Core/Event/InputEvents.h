@@ -14,7 +14,7 @@ namespace ny::Core
         const i32 keyCode;
         const i32 repeat;
 
-		EVENT_REGISTER_TYPE(KeyPressedEvent);
+        EVENT_REGISTER_TYPE(KeyPressedEvent);
     };
 
     struct KeyReleasedEvent : Event
@@ -23,7 +23,7 @@ namespace ny::Core
             Event(EventType::KeyReleasedEvent), keyCode(key) {}
         const i32 keyCode;
 
-		EVENT_REGISTER_TYPE(KeyReleasedEvent);
+        EVENT_REGISTER_TYPE(KeyReleasedEvent);
     };
 
     struct KeyTypedEvent : Event
@@ -32,7 +32,7 @@ namespace ny::Core
             Event(EventType::KeyTypedEvent), keyCode(key) {}
         const u32 keyCode;
 
-		EVENT_REGISTER_TYPE(KeyTypedEvent);
+        EVENT_REGISTER_TYPE(KeyTypedEvent);
     };
 
     //Mouse events
@@ -42,7 +42,7 @@ namespace ny::Core
             Event(EventType::MouseButtonPressedEvent), keyCode(key) {}
         const i32 keyCode;
 
-		EVENT_REGISTER_TYPE(MouseButtonPressedEvent);
+        EVENT_REGISTER_TYPE(MouseButtonPressedEvent);
     };
 
     struct MouseButtonReleasedEvent : Event
@@ -51,7 +51,7 @@ namespace ny::Core
             Event(EventType::MouseButtonReleasedEvent), keyCode(key) {}
         const i32 keyCode;
 
-		EVENT_REGISTER_TYPE(MouseButtonReleasedEvent);
+        EVENT_REGISTER_TYPE(MouseButtonReleasedEvent);
     };
 
     struct MouseScrolledEvent : Event
@@ -61,7 +61,7 @@ namespace ny::Core
         const f32 x;
         const f32 y;
 
-		EVENT_REGISTER_TYPE(MouseScrolledEvent);
+        EVENT_REGISTER_TYPE(MouseScrolledEvent);
     };
 
     struct MouseMovedEvent : Event
@@ -71,6 +71,6 @@ namespace ny::Core
         const f32 x;
         const f32 y;
 
-		EVENT_REGISTER_TYPE(MouseMovedEvent);
+        EVENT_REGISTER_TYPE(MouseMovedEvent);
     };
 } // namespace ny::Core

@@ -1,8 +1,8 @@
 #pragma once
+#include "Event/Event.h"
 #include "FieldDetection.h"
 #include "Window.h"
 #include <variant>
-#include "Event/Event.h"
 
 namespace ny::Core
 {
@@ -51,8 +51,7 @@ namespace ny::Core
 
         void OnEvent(Event& e)
         {
-            auto dispatchEvent = [&](auto&& arg)
-			{
+            auto dispatchEvent = [&](auto&& arg) {
                 EVENT_DISPATCH(arg, e, WindowClosedEvent);
                 EVENT_DISPATCH(arg, e, WindowResizedEvent);
                 EVENT_DISPATCH(arg, e, KeyPressedEvent);
@@ -68,8 +67,8 @@ namespace ny::Core
             {
                 if (e.m_handled)
                     break;
-                
-				std::visit(dispatchEvent, *l);
+
+                std::visit(dispatchEvent, *l);
             }
         }
 
