@@ -20,6 +20,37 @@ namespace ny::Core
     template <class LayerV>
     class ApplicationExt : public Application
     {
+      public:
+        template <class T>
+        void EnableLayer()
+        {
+            auto EnableLayer = [&](auto&& arg) {
+                using LayerType = std::decay_t<decltype(arg)>;
+                if constexpr (std::is_same_v<T, LayerType> && HasEnable<T>)
+                    arg.OnEnable();
+            };
+
+            for (auto& l : m_layers)
+            {
+                std::visit(EnableLayer, *l);
+            }
+        }
+
+        template <class T>
+        void DisableLayer()
+        {
+            auto DisableLayer = [&](auto&& arg) {
+                using LayerType = std::decay_t<decltype(arg)>;
+                if constexpr (std::is_same_v<T, LayerType> && HasDisable<T>)
+                    arg.OnDisable();
+            };
+
+            for (auto& l : m_layers)
+            {
+                std::visit(DisableLayer, *l);
+            }
+        }
+
       protected:
         virtual void PreInit() override
         {
@@ -29,7 +60,7 @@ namespace ny::Core
 
         void UpdateLayers()
         {
-            auto earlyUpdateLayer = [&](auto&& arg) {
+            auto EarlyUpdateLayer = [&](auto&& arg) {
                 using LayerType = std::decay_t<decltype(arg)>;
                 if constexpr (HasEarlyUpdate<LayerType>)
                 {
@@ -37,7 +68,7 @@ namespace ny::Core
                 }
             };
 
-            auto updateLayer = [&](auto&& arg) {
+            auto UpdateLayer = [&](auto&& arg) {
                 using LayerType = std::decay_t<decltype(arg)>;
                 if constexpr (HasUpdate<LayerType>)
                 {
@@ -55,12 +86,12 @@ namespace ny::Core
 
             for (auto& l : m_layers)
             {
-                std::visit(earlyUpdateLayer, *l);
+                std::visit(EarlyUpdateLayer, *l);
             }
 
             for (auto& l : m_layers)
             {
-                std::visit(updateLayer, *l);
+                std::visit(UpdateLayer, *l);
             }
 
             for (auto& l : m_layers)
@@ -69,15 +100,9 @@ namespace ny::Core
             }
         }
 
-        template <class T>
-        void PushLayer()
-        {
-            m_layers.push_back(std::make_unique<LayersVariant>(std::in_place_type_t<T>()));
-        }
-
         void OnEvent(Event& e)
         {
-            auto dispatchEvent = [&](auto&& arg) {
+            auto DispatchEvent = [&](auto&& arg) {
                 EVENT_DISPATCH(arg, e, WindowClosedEvent);
                 EVENT_DISPATCH(arg, e, WindowResizedEvent);
                 EVENT_DISPATCH(arg, e, KeyPressedEvent);
@@ -94,8 +119,14 @@ namespace ny::Core
                 if (e.m_handled)
                     break;
 
-                std::visit(dispatchEvent, *l);
+                std::visit(DispatchEvent, *l);
             }
+        }
+
+        template <class T>
+        void PushLayer()
+        {
+            m_layers.push_back(std::make_unique<LayersVariant>(std::in_place_type_t<T>()));
         }
 
         std::vector<std::unique_ptr<LayersVariant>> m_layers;

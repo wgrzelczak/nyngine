@@ -10,12 +10,10 @@ namespace ny
     ImGuiLayer::ImGuiLayer()
     {
         IMGUI_CHECKVERSION();
-        OnEnable();
     }
 
     ImGuiLayer::~ImGuiLayer()
     {
-        OnDisable();
     }
 
     void ImGuiLayer::OnEnable()

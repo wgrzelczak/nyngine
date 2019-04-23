@@ -29,6 +29,18 @@ namespace ny::Core
 
         template <class L, class E>
         constexpr bool has_event(...) { return false; }
+
+        template <class L>
+        constexpr decltype(std::declval<L>().OnEnable(), true) has_enable() { return true; }
+
+        template <class L>
+        constexpr bool has_enable(...) { return false; }
+
+        template <class L>
+        constexpr decltype(std::declval<L>().OnDisable(), true) has_disable() { return true; }
+
+        template <class L>
+        constexpr bool has_disable(...) { return false; }
     } // namespace Helpers
 
     template <class L>
@@ -42,4 +54,10 @@ namespace ny::Core
 
     template <class L, class E>
     constexpr bool HasEvent = Helpers::has_event<L, E>();
+
+    template <class L>
+    constexpr bool HasEnable = Helpers::has_enable<L>();
+
+    template <class L>
+    constexpr bool HasDisable = Helpers::has_disable<L>();
 } // namespace ny::Core

@@ -18,6 +18,9 @@ void NyngineApp::Init()
     PushLayer<EngineLayer>();
     PushLayer<ImGuiLayer>();
 
+    EnableLayer<EngineLayer>();
+    EnableLayer<ImGuiLayer>();
+
     NY_TRACE("Initialized");
 }
 
