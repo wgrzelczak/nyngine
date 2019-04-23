@@ -36,6 +36,7 @@ namespace ny::Core
 
         m_app->PreInit();
         m_app->Init();
+        m_app->LateInit();
 
         m_state = State::Running;
     }

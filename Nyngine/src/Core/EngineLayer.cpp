@@ -11,6 +11,8 @@ namespace ny::Core
 
     void EngineLayer::OnDisable()
     {
+        //avoid disabling layer
+        SetIsEnabled(true);
     }
 
     void EngineLayer::OnUpdate()
@@ -20,5 +22,13 @@ namespace ny::Core
     void EngineLayer::OnEvent(Core::WindowClosedEvent e)
     {
         Engine::GetInstance()->SetState(Engine::State::ShuttingDown);
+    }
+
+    void EngineLayer::OnEvent(Core::KeyPressedEvent e)
+    {
+        if (e.keyCode == NY_KEY_F8)
+        {
+            Engine::GetApplication()->ToggleDebugLayer();
+        }
     }
 } // namespace ny::Core

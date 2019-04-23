@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ImGuiLayer.h"
 #include "Core\Engine.h"
+#include "Debug/Core.h"
 #include "glad\glad.h" //to remove
 #include "imgui.h"
 #include "imgui_bridge.h"
@@ -10,15 +11,8 @@ namespace ny
     ImGuiLayer::ImGuiLayer()
     {
         IMGUI_CHECKVERSION();
-    }
-
-    ImGuiLayer::~ImGuiLayer()
-    {
-    }
-
-    void ImGuiLayer::OnEnable()
-    {
         ImGui::CreateContext();
+
         ImGuiIO& io = ImGui::GetIO();
 
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -39,16 +33,23 @@ namespace ny
 
         GLFWwindow* window = ny::Core::Engine::GetApplication()->GetWindow().GetNative();
 
-        // Setup Platform/Renderer bindings
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 410");
     }
 
-    void ImGuiLayer::OnDisable()
+    ImGuiLayer::~ImGuiLayer()
     {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+    }
+
+    void ImGuiLayer::OnEnable()
+    {
+    }
+
+    void ImGuiLayer::OnDisable()
+    {
     }
 
     void ImGuiLayer::OnEarlyUpdate()
@@ -80,5 +81,7 @@ namespace ny
     {
         static bool show = true;
         ImGui::ShowDemoWindow(&show);
+
+        Debug::Core::Draw();
     }
 } // namespace ny

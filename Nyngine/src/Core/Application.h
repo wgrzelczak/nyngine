@@ -1,6 +1,7 @@
 #pragma once
 #include "Event/Event.h"
 #include "FieldDetection.h"
+#include "Layer.h"
 #include "Window.h"
 #include <variant>
 
@@ -11,10 +12,13 @@ namespace ny::Core
       public:
         virtual void PreInit() = 0;
         virtual void Init() = 0;
+        virtual void LateInit() = 0;
         virtual void Tick() = 0;
         virtual void Shutdown() = 0;
         virtual void OnEvent(Event&) = 0;
         virtual Window& GetWindow() const = 0;
+
+        virtual void ToggleDebugLayer() = 0;
     };
 
     template <class LayerV>
@@ -27,7 +31,13 @@ namespace ny::Core
             auto EnableLayer = [&](auto&& arg) {
                 using LayerType = std::decay_t<decltype(arg)>;
                 if constexpr (std::is_same_v<T, LayerType> && HasEnable<T>)
-                    arg.OnEnable();
+                {
+                    if (!arg.IsEnabled())
+                    {
+                        arg.OnEnable();
+                        arg.SetIsEnabled(true);
+                    }
+                }
             };
 
             for (auto& l : m_layers)
@@ -42,7 +52,13 @@ namespace ny::Core
             auto DisableLayer = [&](auto&& arg) {
                 using LayerType = std::decay_t<decltype(arg)>;
                 if constexpr (std::is_same_v<T, LayerType> && HasDisable<T>)
-                    arg.OnDisable();
+                {
+                    if (arg.IsEnabled())
+                    {
+                        arg.OnDisable();
+                        arg.SetIsEnabled(false);
+                    }
+                }
             };
 
             for (auto& l : m_layers)
@@ -51,20 +67,43 @@ namespace ny::Core
             }
         }
 
+        template <class T>
+        Layer* GetLayerData()
+        {
+            Layer* ret = nullptr;
+            auto GetLayerData = [&](auto&& arg) {
+                using LayerType = std::decay_t<decltype(arg)>;
+                if constexpr (std::is_same_v<T, LayerType>)
+                {
+                    ret = &arg;
+                }
+            };
+            for (auto& l : m_layers)
+            {
+                std::visit(GetLayerData, *l);
+            }
+            return ret;
+        }
+
       protected:
-        virtual void PreInit() override
+        virtual void PreInit() override final
         {
         }
 
-        using LayersVariant = LayerV;
+        virtual void LateInit() override final
+        {
+            EnableLayer<EngineLayer>();
+        }
 
+        using LayersVariant = LayerV;
         void UpdateLayers()
         {
             auto EarlyUpdateLayer = [&](auto&& arg) {
                 using LayerType = std::decay_t<decltype(arg)>;
                 if constexpr (HasEarlyUpdate<LayerType>)
                 {
-                    arg.OnEarlyUpdate();
+                    if (arg.IsEnabled())
+                        arg.OnEarlyUpdate();
                 }
             };
 
@@ -72,7 +111,8 @@ namespace ny::Core
                 using LayerType = std::decay_t<decltype(arg)>;
                 if constexpr (HasUpdate<LayerType>)
                 {
-                    arg.OnUpdate();
+                    if (arg.IsEnabled())
+                        arg.OnUpdate();
                 }
             };
 
@@ -80,7 +120,8 @@ namespace ny::Core
                 using LayerType = std::decay_t<decltype(arg)>;
                 if constexpr (HasLateUpdate<LayerType>)
                 {
-                    arg.OnLateUpdate();
+                    if (arg.IsEnabled())
+                        arg.OnLateUpdate();
                 }
             };
 
@@ -103,6 +144,8 @@ namespace ny::Core
         void OnEvent(Event& e)
         {
             auto DispatchEvent = [&](auto&& arg) {
+                if (!arg.IsEnabled()) return;
+
                 EVENT_DISPATCH(arg, e, WindowClosedEvent);
                 EVENT_DISPATCH(arg, e, WindowResizedEvent);
                 EVENT_DISPATCH(arg, e, KeyPressedEvent);
@@ -130,5 +173,19 @@ namespace ny::Core
         }
 
         std::vector<std::unique_ptr<LayersVariant>> m_layers;
+
+      private:
+        virtual void ToggleDebugLayer() override
+        {
+            Layer* layerData = GetLayerData<ImGuiLayer>();
+            if (!layerData->IsEnabled())
+            {
+                EnableLayer<ImGuiLayer>();
+            }
+            else
+            {
+                DisableLayer<ImGuiLayer>();
+            }
+        }
     };
 } // namespace ny::Core

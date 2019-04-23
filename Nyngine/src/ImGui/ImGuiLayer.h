@@ -1,11 +1,12 @@
 #pragma once
 #include "Core\Event\InputEvents.h"
 #include "Core\Event\WindowEvents.h"
+#include "Core\Layer.h"
 #include "Preinclude.h"
 
 namespace ny
 {
-    class ImGuiLayer
+    class ImGuiLayer : public ny::Core::Layer
     {
       public:
         ImGuiLayer();
