@@ -29,6 +29,14 @@ namespace ny::Core
 
         void UpdateLayers()
         {
+            auto earlyUpdateLayer = [&](auto&& arg) {
+                using LayerType = std::decay_t<decltype(arg)>;
+                if constexpr (HasEarlyUpdate<LayerType>)
+                {
+                    arg.OnEarlyUpdate();
+                }
+            };
+
             auto updateLayer = [&](auto&& arg) {
                 using LayerType = std::decay_t<decltype(arg)>;
                 if constexpr (HasUpdate<LayerType>)
@@ -37,9 +45,27 @@ namespace ny::Core
                 }
             };
 
+            auto LateUpdateLayer = [&](auto&& arg) {
+                using LayerType = std::decay_t<decltype(arg)>;
+                if constexpr (HasLateUpdate<LayerType>)
+                {
+                    arg.OnLateUpdate();
+                }
+            };
+
+            for (auto& l : m_layers)
+            {
+                std::visit(earlyUpdateLayer, *l);
+            }
+
             for (auto& l : m_layers)
             {
                 std::visit(updateLayer, *l);
+            }
+
+            for (auto& l : m_layers)
+            {
+                std::visit(LateUpdateLayer, *l);
             }
         }
 
