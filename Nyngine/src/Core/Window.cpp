@@ -27,6 +27,8 @@ namespace ny::Core
 
         glfwSetWindowUserPointer(m_window, &m_data);
 
+        glfwSwapInterval(0); //Disable V-Sync
+
         RegisterCallbacks();
     }
 

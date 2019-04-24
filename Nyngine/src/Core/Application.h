@@ -178,6 +178,9 @@ namespace ny::Core
         virtual void ToggleDebugLayer() override
         {
             Layer* layerData = GetLayerData<ImGuiLayer>();
+
+            if (!layerData) return;
+
             if (!layerData->IsEnabled())
             {
                 EnableLayer<ImGuiLayer>();
