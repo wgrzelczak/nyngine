@@ -15,6 +15,7 @@ IncludeCategories:
     Priority:        1
 IncludeBlocks: Merge
 
+AccessModifierOffset: -4
 AlignEscapedNewlines: Right
 AlignTrailingComments: true
 AllowAllParametersOfDeclarationOnNextLine: true

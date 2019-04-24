@@ -7,11 +7,11 @@
 
 class GameLayer : public ny::Core::Layer
 {
-  public:
+public:
     void OnEnable();
     void OnDisable();
     void OnUpdate();
 
-  private:
+private:
     ny::Scene m_scene;
 };

@@ -5,11 +5,11 @@ namespace ny::Core
 {
     class Log
     {
-      public:
+    public:
         static void Init();
         static std::shared_ptr<spdlog::logger> Core();
 
-      private:
+    private:
         static std::shared_ptr<spdlog::logger> m_coreLogger;
     };
 } // namespace ny::Core

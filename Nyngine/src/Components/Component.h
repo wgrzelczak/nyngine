@@ -4,7 +4,7 @@ namespace ny
 {
     class Component
     {
-      public:
+    public:
         Component();
         ~Component();
 

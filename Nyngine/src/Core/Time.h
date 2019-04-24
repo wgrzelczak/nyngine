@@ -6,7 +6,7 @@ namespace ny::Core
 {
     class Time
     {
-      public:
+    public:
         using ms = std::chrono::milliseconds;
         using us = std::chrono::microseconds;
 
@@ -24,7 +24,7 @@ namespace ny::Core
 
         static us GetDuration(u32 time) { return us(time); }
 
-      private:
+    private:
         static Time* GetInstance();
 
         void InitImpl();

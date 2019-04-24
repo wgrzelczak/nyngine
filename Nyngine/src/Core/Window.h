@@ -13,7 +13,7 @@ namespace ny::Core
 
     class Window
     {
-      public:
+    public:
         Window(const WindowSettings& settings = WindowSettings());
         virtual ~Window();
         void Close();
@@ -23,7 +23,7 @@ namespace ny::Core
         u32 GetWidth() const { return m_data.width; }
         u32 GetHeight() const { return m_data.height; }
 
-      private:
+    private:
         void RegisterCallbacks();
 
         GLFWwindow* m_window = nullptr;

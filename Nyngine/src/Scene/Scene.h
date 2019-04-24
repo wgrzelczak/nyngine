@@ -5,7 +5,7 @@ namespace ny
 {
     class Scene
     {
-      public:
+    public:
         Scene() {}
         ~Scene() {}
 

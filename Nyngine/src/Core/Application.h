@@ -9,7 +9,7 @@ namespace ny::Core
 {
     class Application abstract
     {
-      public:
+    public:
         virtual void PreInit() = 0;
         virtual void Init() = 0;
         virtual void LateInit() = 0;
@@ -24,7 +24,7 @@ namespace ny::Core
     template <class LayerV>
     class ApplicationExt : public Application
     {
-      public:
+    public:
         template <class T>
         void EnableLayer()
         {
@@ -85,7 +85,7 @@ namespace ny::Core
             return ret;
         }
 
-      protected:
+    protected:
         virtual void PreInit() override final
         {
         }
@@ -174,7 +174,7 @@ namespace ny::Core
 
         std::vector<std::unique_ptr<LayersVariant>> m_layers;
 
-      private:
+    private:
         virtual void ToggleDebugLayer() override
         {
             Layer* layerData = GetLayerData<ImGuiLayer>();

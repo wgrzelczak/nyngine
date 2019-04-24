@@ -8,7 +8,7 @@ namespace ny::Core
 {
     class EngineLayer : public Layer
     {
-      public:
+    public:
         void OnEnable();
         void OnDisable();
         void OnUpdate();

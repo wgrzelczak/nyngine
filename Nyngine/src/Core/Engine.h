@@ -8,7 +8,7 @@ namespace ny::Core
 {
     class Engine
     {
-      public:
+    public:
         enum class State
         {
             Init,
@@ -16,14 +16,14 @@ namespace ny::Core
             ShuttingDown
         };
 
-      public:
+    public:
         static Engine* GetInstance();
         static Application* GetApplication();
 
-      protected:
+    protected:
         Engine() {}
 
-      public:
+    public:
         Engine(Engine&) = delete;
         Engine(Engine&&) = delete;
 
@@ -33,7 +33,7 @@ namespace ny::Core
 
         void SetState(State state) { m_state = state; }
 
-      private:
+    private:
         void Init();
         void Tick();
 

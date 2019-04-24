@@ -8,7 +8,7 @@ namespace ny
 {
     class ImGuiLayer : public ny::Core::Layer
     {
-      public:
+    public:
         ImGuiLayer();
         ~ImGuiLayer();
 

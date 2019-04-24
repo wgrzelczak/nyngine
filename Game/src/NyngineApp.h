@@ -10,7 +10,7 @@ using namespace ny::Core;
 
 class NyngineApp : public ny::Core::ApplicationExt<std::variant<EngineLayer, ImGuiLayer>>
 {
-  public:
+public:
     NyngineApp();
     virtual ~NyngineApp();
     virtual void Init() override;
@@ -19,6 +19,6 @@ class NyngineApp : public ny::Core::ApplicationExt<std::variant<EngineLayer, ImG
 
     Window& GetWindow() const override { return *m_window; }
 
-  private:
+private:
     std::unique_ptr<Window> m_window = nullptr;
 };

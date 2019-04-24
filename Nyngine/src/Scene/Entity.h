@@ -7,7 +7,7 @@ namespace ny
 {
     class Entity
     {
-      public:
+    public:
         Entity();
         ~Entity();
 
