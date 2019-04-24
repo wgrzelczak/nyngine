@@ -26,12 +26,11 @@ Window's sandbox in C++.
 ## Tools
 ### Premake5
 Genereating vs solution.
-- ```.clang-format``` - all code formatting rules
 - ```premake5_main.lua``` - main config file
 
 
 ### Code formatting
 Formatting all (c, cpp, h, hpp) files in _Game_ and _Nyngine_ directories.
-
-* Auto-formatting on ```git commit```
-* Manual-formatting by ```Tools/_clang_format_all.py```
+- ```.clang-format``` - all code formatting rules
+- Auto-formatting on ```git commit```
+- Manual-formatting by ```Tools/_clang_format_all.py```
