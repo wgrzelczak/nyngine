@@ -1,21 +1,36 @@
-h1. Nyngine
-Windows platform engine in C++. 
+# Nyngine
+Window's sandbox in C++. 
 
-h2. Dependencies
+## Dependencies
 * GLFW
 * GLAD
 * ImGUI
+* spdlog
 
-
-h2. Requirements
+## Requirements
 * python3
 
-h2. Installation
-* Genereate solution Tools/_generate_sln.py
-* Copy git hooks Tools/git_copy_hooks.py
+## Installation
+1. ```Tools/_generate_sln.py```
+2. ```Tools/git_copy_hooks.py```
 
-h2. Code formatig
-Formating all (c, cpp, h, hpp) files in _Game_ directory.
+## Directory Hierarchy
+- Build
+    - bin - binaries
+    - obj - intermediates
+- External - 3rd parties
+- Game - game code
+- Nyngine - engine code
+- Tools - tools and utilities
 
-* auto-format on git pre-commit
-* manual-format by Tools/_clang_format_all.py
+## Tools
+### Premake5
+Genereating vs solution.
+- ```premake5_main.lua``` - main config file
+
+
+### Code formatting
+Formatting all (c, cpp, h, hpp) files in _Game_ and _Nyngine_ directories.
+- ```.clang-format``` - all code formatting rules
+- Auto-formatting on ```git commit```
+- Manual-formatting by ```Tools/_clang_format_all.py```
