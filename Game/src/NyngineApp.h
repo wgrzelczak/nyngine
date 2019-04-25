@@ -1,5 +1,6 @@
 #pragma once
 #include "Core\Application.h"
+#include "Core\Engine.h"
 #include "Core\EngineLayer.h"
 #include "Core\Window.h"
 #include "ImGui\ImGuiLayer.h"
@@ -17,8 +18,9 @@ public:
     virtual void Tick() override;
     virtual void Shutdown() override;
 
-    Window& GetWindow() const override { return *m_window; }
-
 private:
-    std::unique_ptr<Window> m_window = nullptr;
+    void RegisterNewWindow()
+    {
+        Engine::GetInstance()->RegisterWindow();
+    }
 };

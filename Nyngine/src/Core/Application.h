@@ -16,7 +16,6 @@ namespace ny::Core
         virtual void Tick() = 0;
         virtual void Shutdown() = 0;
         virtual void OnEvent(Event&) = 0;
-        virtual Window& GetWindow() const = 0;
 
         virtual void ToggleDebugLayer() = 0;
     };

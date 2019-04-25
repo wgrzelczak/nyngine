@@ -3,6 +3,7 @@
 #include "Event\InputEvents.h"
 #include "Event\WindowEvents.h"
 #include "FieldDetection.h"
+#include "Rendering/Renderer.h"
 
 namespace ny::Core
 {
@@ -31,14 +32,22 @@ namespace ny::Core
 
         void OnEvent(Event& e);
 
+        void RegisterWindow();
+
         void SetState(State state) { m_state = state; }
+        Window& GetWindow() const { return *m_window; }
 
     private:
         void Init();
         void Tick();
+        void Shutdown();
 
         State m_state = State::Init;
+
         Application* m_app = nullptr;
+
+        std::unique_ptr<Renderer> m_renderer = nullptr;
+        std::unique_ptr<Window> m_window = nullptr;
     };
 
 #define IEngine Core::Engine::GetInstance()

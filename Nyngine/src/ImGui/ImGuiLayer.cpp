@@ -31,7 +31,7 @@ namespace ny
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
 
-        GLFWwindow* window = ny::Core::Engine::GetApplication()->GetWindow().GetNative();
+        GLFWwindow* window = ny::Core::Engine::GetInstance()->GetWindow().GetNative();
 
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 410");
@@ -63,7 +63,7 @@ namespace ny
     {
         ImGuiIO& io = ImGui::GetIO();
 
-        io.DisplaySize = ImVec2(Core::Engine::GetApplication()->GetWindow().GetWidth(), Core::Engine::GetApplication()->GetWindow().GetHeight());
+        io.DisplaySize = ImVec2(Core::Engine::GetInstance()->GetWindow().GetWidth(), Core::Engine::GetInstance()->GetWindow().GetHeight());
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

@@ -13,7 +13,7 @@ void NyngineApp::Init()
 {
     NY_TRACE("Initializing...");
 
-    m_window = std::make_unique<Window>();
+    RegisterNewWindow();
 
     PushLayer<EngineLayer>();
     PushLayer<ImGuiLayer>();
@@ -27,12 +27,9 @@ void NyngineApp::Init()
 void NyngineApp::Tick()
 {
     UpdateLayers();
-
-    m_window->Update();
 }
 
 void NyngineApp::Shutdown()
 {
     NY_TRACE("Shutting down...");
-    m_window->Close();
 }

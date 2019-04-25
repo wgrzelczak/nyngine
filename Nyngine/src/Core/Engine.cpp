@@ -27,6 +27,8 @@ namespace ny::Core
         {
             Tick();
         }
+
+        Shutdown();
     }
 
     void Engine::Init()
@@ -46,13 +48,24 @@ namespace ny::Core
         NY_ASSERT(m_app, "");
 
         Time::Update();
-
-        glClearColor(0, 1, 0, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
+        m_renderer->BeginFrame();
 
         m_app->Tick();
+
+        m_window->Update();
 
         //NY_DEBUG("FPS: {}", 1000000.0f / Time::Delta());
         NY_DEBUG("Frame time: {}ms", Time::Delta() / 1000.f);
     }
+
+    void Engine::Shutdown()
+    {
+        m_window->Close();
+    }
+
+    void Engine::RegisterWindow()
+    {
+        m_window = std::make_unique<Window>();
+    }
+
 } // namespace ny::Core
