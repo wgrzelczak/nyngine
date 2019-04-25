@@ -13,8 +13,6 @@ void NyngineApp::Init()
 {
     NY_TRACE("Initializing...");
 
-    RegisterNewWindow();
-
     PushLayer<EngineLayer>();
     PushLayer<ImGuiLayer>();
 

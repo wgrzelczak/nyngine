@@ -35,6 +35,10 @@ namespace ny::Core
         Time::Init();
         Log::Init();
 
+        m_window = std::make_unique<Window>();
+        m_renderer = std::make_unique<Renderer>();
+        m_renderer->Init();
+
         m_app->PreInit();
         m_app->Init();
         m_app->LateInit();
@@ -61,10 +65,4 @@ namespace ny::Core
     {
         m_window->Close();
     }
-
-    void Engine::RegisterWindow()
-    {
-        m_window = std::make_unique<Window>();
-    }
-
 } // namespace ny::Core

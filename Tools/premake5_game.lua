@@ -4,6 +4,9 @@ project "Game"
     language "C++"
     staticruntime "off"
 
+
+    debugdir "$(SolutionDir)"
+
     targetdir (OutputDir)
     objdir (IntDir)
 

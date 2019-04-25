@@ -26,7 +26,6 @@ namespace ny::Core
         NY_ASSERT(status, "Failed to initialize Glad!");
 
         glfwSetWindowUserPointer(m_window, &m_data);
-
         glfwSwapInterval(0); //Disable V-Sync
 
         RegisterCallbacks();

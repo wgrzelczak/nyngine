@@ -1,5 +1,6 @@
 #pragma once
 #include "Preinclude.h"
+#include "Rendering\Renderer.h"
 #include <GLFW\glfw3.h>
 
 namespace ny::Core

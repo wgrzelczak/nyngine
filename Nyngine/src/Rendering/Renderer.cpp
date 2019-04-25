@@ -7,8 +7,8 @@ namespace ny::Rendering
 {
     void Renderer::Init()
     {
-        std::shared_ptr vShader = std::make_shared<Shader>("default.vs", ShaderType::Vertex);
-        std::shared_ptr fShader = std::make_shared<Shader>("default.fs", ShaderType::Fragment);
+        std::shared_ptr vShader = std::make_shared<Shader>("Assets/Shaders/default.vs", ShaderType::Vertex);
+        std::shared_ptr fShader = std::make_shared<Shader>("Assets/Shaders/default.fs", ShaderType::Fragment);
 
         m_shaders.push_back(vShader);
         m_shaders.push_back(fShader);
