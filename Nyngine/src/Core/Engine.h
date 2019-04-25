@@ -1,5 +1,6 @@
 #pragma once
 #include "Application.h"
+#include "Debug/Core.h"
 #include "Event\InputEvents.h"
 #include "Event\WindowEvents.h"
 #include "FieldDetection.h"
@@ -48,6 +49,9 @@ namespace ny::Core
 
         std::unique_ptr<Renderer> m_renderer = nullptr;
         std::unique_ptr<Window> m_window = nullptr;
+
+        friend class EngineLayer;
+        friend class Debug::Core;
     };
 
 #define IEngine Core::Engine::GetInstance()

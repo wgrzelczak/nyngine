@@ -78,8 +78,8 @@ namespace ny
 
     void ImGuiLayer::OnUpdate()
     {
-        static bool show = true;
-        ImGui::ShowDemoWindow(&show);
+        //static bool show = true;
+        //ImGui::ShowDemoWindow(&show);
 
         Debug::Core::Draw();
     }
