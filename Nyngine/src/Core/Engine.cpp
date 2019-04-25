@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Engine.h"
 #include "Application.h"
-#include "glad\glad.h"
 
 namespace ny::Core
 {

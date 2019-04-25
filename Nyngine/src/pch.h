@@ -1,10 +1,12 @@
 #include "Core\Log.h"
 #include "Core\Time.h"
 #include <forward_list>
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <map>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>

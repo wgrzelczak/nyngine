@@ -3,7 +3,7 @@
 #include "Engine.h"
 #include "Event\InputEvents.h"
 #include "Event\WindowEvents.h"
-#include <glad\glad.h>
+#include "glad\glad.h"
 
 namespace ny::Core
 {

@@ -2,7 +2,6 @@
 #include "ImGuiLayer.h"
 #include "Core\Engine.h"
 #include "Debug/Core.h"
-#include "glad\glad.h" //to remove
 #include "imgui.h"
 #include "imgui_bridge.h"
 
