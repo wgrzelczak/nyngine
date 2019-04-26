@@ -14,11 +14,8 @@ namespace ny::Rendering
     {
     public:
         Shader(std::string filename, ShaderType type);
-        void AttachToProgram(u32 programId);
 
-    private:
-        u32 m_shader;
-
+        u32 m_shaderId;
         std::string m_name;
 
         static u32 GetGLShaderType(ShaderType shaderType);

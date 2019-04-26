@@ -7,17 +7,7 @@ namespace ny::Rendering
 {
     void Renderer::Init()
     {
-        std::shared_ptr vShader = std::make_shared<Shader>("Assets/Shaders/default.vs", ShaderType::Vertex);
-        std::shared_ptr fShader = std::make_shared<Shader>("Assets/Shaders/default.fs", ShaderType::Fragment);
-
-        m_shaders.push_back(vShader);
-        m_shaders.push_back(fShader);
-
-        m_programId = glCreateProgram();
-        vShader->AttachToProgram(m_programId);
-        fShader->AttachToProgram(m_programId);
-
-        glLinkProgram(m_programId);
+        m_material = std::make_shared<Material>("Assets/Shaders/default.vs", "Assets/Shaders/default.fs");
 
         //TODO
         float vertices[] = {
@@ -69,8 +59,8 @@ namespace ny::Rendering
         glClearColor(0.25f, 0.25f, 0.25f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(m_programId);
-        glUniform1ui(glGetUniformLocation(m_programId, "time"), ny::Core::Time::DeltaFromStart());
+        glUseProgram(m_material->GetId());
+        glUniform1ui(glGetUniformLocation(m_material->GetId(), "time"), ny::Core::Time::DeltaFromStart());
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

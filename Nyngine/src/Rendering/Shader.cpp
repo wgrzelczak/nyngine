@@ -14,9 +14,9 @@ namespace ny::Rendering
 
         std::string shaderCode = Utilities::ReadFileToString(m_name);
         const char* shaderCodePtr = shaderCode.c_str();
-        m_shader = glCreateShader(GetGLShaderType(type));
-        glShaderSource(m_shader, 1, &shaderCodePtr, NULL);
-        glCompileShader(m_shader);
+        m_shaderId = glCreateShader(GetGLShaderType(type));
+        glShaderSource(m_shaderId, 1, &shaderCodePtr, NULL);
+        glCompileShader(m_shaderId);
     }
 
     u32 Shader::GetGLShaderType(ShaderType shaderType)
@@ -31,10 +31,5 @@ namespace ny::Rendering
 
         NY_ERROR("Undefined shader type!!");
         return -1;
-    }
-
-    void Shader::AttachToProgram(u32 programId)
-    {
-        glAttachShader(programId, m_shader);
     }
 } // namespace ny::Rendering

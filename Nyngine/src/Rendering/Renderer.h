@@ -1,6 +1,6 @@
 #pragma once
+#include "Material.h"
 #include "Preinclude.h"
-#include "Shader.h"
 
 namespace ny::Rendering
 {
@@ -11,8 +11,7 @@ namespace ny::Rendering
         void BeginFrame();
 
     private:
-        u32 m_programId;
-        std::vector<std::shared_ptr<Shader>> m_shaders;
+        std::shared_ptr<Material> m_material = nullptr;
     };
 } // namespace ny::Rendering
 
