@@ -28,13 +28,13 @@ project "Game"
         "%{IncludeDir.SPDLOG}",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.GLAD}",
-        "%{IncludeDir.ImGui}"
-    
+        "%{IncludeDir.ImGui}",
+        "%{IncludeDir.GLM}"
     }
 
     links 
     {
-    	"Nyngine"
+        "Nyngine"
     }
 
     filter "system:windows"

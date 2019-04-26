@@ -18,6 +18,7 @@ IncludeDir["SPDLOG"] = "%{wks.location}/External/spdlog/include"
 IncludeDir["GLFW"] = "%{wks.location}/External/glfw/include"
 IncludeDir["GLAD"] = "%{wks.location}/External/glad/include"
 IncludeDir["ImGui"] = "%{wks.location}/External/ImGui"
+IncludeDir["GLM"] = "%{wks.location}/External/glm"
 
 
 include "premake5_game.lua"
