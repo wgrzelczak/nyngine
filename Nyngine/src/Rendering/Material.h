@@ -9,6 +9,7 @@ namespace ny::Rendering
     {
     public:
         Material(Attrib_t attribs, std::string vertexShader, std::string fragmentShader, std::string textureFilename);
+        Material(MaterialType type, std::string vertexShader, std::string fragmentShader, std::string textureFilename);
         ~Material();
 
         void Bind(f32* vertices, u32 verticesNum, u32* indices, u32 indiciesNum);

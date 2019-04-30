@@ -38,7 +38,7 @@ namespace ny::Rendering
     {
         i32 status;
         char info[1024];
-        glGetShaderiv(shaderId, GL_LINK_STATUS, &status);
+        glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
         if (!status)
         {
             glGetShaderInfoLog(shaderId, 1024, NULL, info);

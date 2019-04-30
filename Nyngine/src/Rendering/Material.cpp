@@ -12,7 +12,11 @@ namespace ny::Rendering
 
         Texture texture = Texture(std::move(textureFilename));
         m_textureId = texture.GetId();
-        texture.UnloadData();
+    }
+
+    Material::Material(MaterialType type, std::string vertexShader, std::string fragmentShader, std::string textureFilename) :
+        Material(AttributesHelper::GetByType(type), vertexShader, fragmentShader, textureFilename)
+    {
     }
 
     Material::~Material()
@@ -41,25 +45,29 @@ namespace ny::Rendering
 
         u32 attribsSize = AttributesHelper::GetAttributesSize(m_attributes);
         u32 attribsOffset = 0;
+        u32 attribNum = 0;
 
         if (AttributesHelper::IsAttribSet(m_attributes, Attribute::aPosition))
         {
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, attribsSize, (void*)attribsOffset);
-            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(attribNum, 3, GL_FLOAT, GL_FALSE, attribsSize, (void*)attribsOffset);
+            glEnableVertexAttribArray(attribNum);
+            attribNum += 1;
             attribsOffset += AttributesHelper::GetAttributeSize(Attribute::aPosition);
         }
 
         if (AttributesHelper::IsAttribSet(m_attributes, Attribute::aColor3))
         {
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, attribsSize, (void*)attribsOffset);
-            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(attribNum, 3, GL_FLOAT, GL_FALSE, attribsSize, (void*)attribsOffset);
+            glEnableVertexAttribArray(attribNum);
+            attribNum += 1;
             attribsOffset += AttributesHelper::GetAttributeSize(Attribute::aColor3);
         }
 
         if (AttributesHelper::IsAttribSet(m_attributes, Attribute::aTexture0))
         {
-            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, attribsSize, (void*)attribsOffset);
-            glEnableVertexAttribArray(2);
+            glVertexAttribPointer(attribNum, 2, GL_FLOAT, GL_FALSE, attribsSize, (void*)attribsOffset);
+            glEnableVertexAttribArray(attribNum);
+            attribNum += 1;
             attribsOffset += AttributesHelper::GetAttributeSize(Attribute::aTexture0);
         }
 
