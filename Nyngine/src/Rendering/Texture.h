@@ -9,6 +9,12 @@ namespace ny::Rendering
         Texture(std::string filename);
         ~Texture();
         void UnloadData();
+        u32 GetId() const { return m_id; }
+
+    private:
+        void GenerateTexture();
+
+        u32 m_id;
 
         i32 m_width = 0;
         i32 m_height = 0;

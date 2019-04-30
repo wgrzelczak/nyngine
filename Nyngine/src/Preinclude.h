@@ -15,6 +15,14 @@
         NY_BREAK();            \
     }
 
+using u8 = std::uint8_t;
+using u16 = std::uint16_t;
 using u32 = std::uint32_t;
 using i32 = std::int32_t;
 using f32 = float;
+
+#define BIT_POSITION(pos) (1 << pos)
+#define BIT_IS_SET(n, pos) ((n & BIT_POSITION(pos)) != 0)
+#define BIT_ARE_SET(n, m) ((n & m) != 0)
+#define BIT_SET(n, pos) n |= BIT_POSITION(pos)
+#define BIT_CLEAR(n, pos) n &= ~BIT_POSITION(pos)

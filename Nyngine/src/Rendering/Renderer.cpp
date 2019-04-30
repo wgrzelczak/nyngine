@@ -7,7 +7,8 @@ namespace ny::Rendering
 {
     void Renderer::Init()
     {
-        m_material = std::make_shared<Material>("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/texture.jpg");
+        Attrib_t attributes = AttributesHelper::GetByType(MaterialType::TextureColorBlend);
+        m_material = std::make_shared<Material>(attributes, "Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/texture.jpg");
 
         //TODO
         float vertices[] = {
