@@ -2,6 +2,9 @@
 #include "Renderer.h"
 #include "Core/Engine.h"
 #include "glad/glad.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
 namespace ny::Rendering
 {
@@ -32,14 +35,27 @@ namespace ny::Rendering
         glClear(GL_COLOR_BUFFER_BIT);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe
 
-        m_material->Attach();
-        glUniform1ui(glGetUniformLocation(m_material->GetProgramId(), "time"), ny::Core::Time::DeltaFromStart());
-
         u32 width = ny::Core::Engine::GetInstance()->GetWindow().GetWidth();
         u32 height = ny::Core::Engine::GetInstance()->GetWindow().GetHeight();
 
         f32 ratio = width / (f32)height;
         glViewport(0, 0, width, height);
+
+        //glm::mat4 proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 100.0f);
+        glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+
+        glm::mat4 view = glm::mat4(1.0f);
+        // note that we're translating the scene in the reverse direction of where we want to move
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+        m_material->Attach();
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 1.0f));
+        model = glm::rotate(model, (float)ny::Core::Time::DeltaFromStart() * 0.000001f, glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+        glUniform1ui(glGetUniformLocation(m_material->GetProgramId(), "time"), ny::Core::Time::DeltaFromStart());
+        glUniformMatrix4fv(glGetUniformLocation(m_material->GetProgramId(), "MVP"), 1, GL_FALSE, glm::value_ptr(proj * view * model));
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
