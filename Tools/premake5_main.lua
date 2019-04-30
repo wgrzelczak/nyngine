@@ -19,7 +19,8 @@ IncludeDir["GLFW"] = "%{wks.location}/External/glfw/include"
 IncludeDir["GLAD"] = "%{wks.location}/External/glad/include"
 IncludeDir["ImGui"] = "%{wks.location}/External/ImGui"
 IncludeDir["GLM"] = "%{wks.location}/External/glm"
-
+IncludeDir["STB"] = "%{wks.location}/External/stb"
+IncludeDir["tinyobjloader"] = "%{wks.location}/External/tinyobjloader"
 
 include "premake5_game.lua"
 include "premake5_engine.lua"

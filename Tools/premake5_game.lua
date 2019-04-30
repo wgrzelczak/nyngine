@@ -29,7 +29,8 @@ project "Game"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.GLAD}",
         "%{IncludeDir.ImGui}",
-        "%{IncludeDir.GLM}"
+        "%{IncludeDir.STB}",
+        "%{IncludeDir.tinyobjloader}"
     }
 
     links 

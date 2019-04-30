@@ -22,3 +22,4 @@
 [submodule "External/tinyobjloader"]
 	path = External/tinyobjloader
 	url = https://github.com/syoyo/tinyobjloader
+	ignore = dirty

@@ -25,7 +25,9 @@ project "Nyngine"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.GLAD}",
         "%{IncludeDir.ImGui}",
-        "%{IncludeDir.GLM}"
+        "%{IncludeDir.GLM}",
+        "%{IncludeDir.STB}",
+        "%{IncludeDir.tinyobjloader}"
     }
 
     links 
