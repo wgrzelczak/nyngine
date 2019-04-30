@@ -19,5 +19,8 @@ namespace ny::Rendering
         std::string m_name;
 
         static u32 GetGLShaderType(ShaderType shaderType);
+
+        static void CheckCompilationError(u32 shaderId);
+        static void CheckLinkingError(u32 programId);
     };
 } // namespace ny::Rendering

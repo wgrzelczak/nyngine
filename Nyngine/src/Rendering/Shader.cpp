@@ -17,6 +17,7 @@ namespace ny::Rendering
         m_shaderId = glCreateShader(GetGLShaderType(type));
         glShaderSource(m_shaderId, 1, &shaderCodePtr, NULL);
         glCompileShader(m_shaderId);
+        CheckCompilationError(m_shaderId);
     }
 
     u32 Shader::GetGLShaderType(ShaderType shaderType)
@@ -31,5 +32,29 @@ namespace ny::Rendering
 
         NY_ERROR("Undefined shader type!!");
         return -1;
+    }
+
+    void Shader::CheckCompilationError(u32 shaderId)
+    {
+        i32 status;
+        char info[1024];
+        glGetShaderiv(shaderId, GL_LINK_STATUS, &status);
+        if (!status)
+        {
+            glGetShaderInfoLog(shaderId, 1024, NULL, info);
+            NY_ERROR("[Shader] Cannot compile shader {}: {}", shaderId, info);
+        }
+    }
+
+    void Shader::CheckLinkingError(u32 programId)
+    {
+        i32 status;
+        char info[1024];
+        glGetProgramiv(programId, GL_LINK_STATUS, &status);
+        if (!status)
+        {
+            glGetProgramInfoLog(programId, 1024, NULL, info);
+            NY_ERROR("[Shader] Cannot link program {}: {}", programId, info);
+        }
     }
 } // namespace ny::Rendering

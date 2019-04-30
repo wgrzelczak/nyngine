@@ -9,7 +9,7 @@
 
 #define NY_BREAK() __debugbreak();
 #define NY_ASSERT(x, ...)      \
-    if (!x)                    \
+    if (!(x))                  \
     {                          \
         NY_ERROR(__VA_ARGS__); \
         NY_BREAK();            \
