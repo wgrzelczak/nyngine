@@ -1,9 +1,11 @@
 #pragma once
+#include "Attributes.h"
 #include "Preinclude.h"
+#include "glm/glm.hpp"
 
 namespace ny::Rendering
 {
-    enum ShaderType
+    enum class ShaderType
     {
         Undefined = -1,
         Fragment,
@@ -13,14 +15,17 @@ namespace ny::Rendering
     class Shader
     {
     public:
+        static u32 GetGLShaderType(ShaderType shaderType);
+        static void CheckCompilationError(u32 shaderId);
+        static void CheckLinkingError(u32 programId);
+
         Shader(std::string filename, ShaderType type);
 
         u32 m_shaderId;
         std::string m_name;
+        ShaderType m_type;
 
-        static u32 GetGLShaderType(ShaderType shaderType);
-
-        static void CheckCompilationError(u32 shaderId);
-        static void CheckLinkingError(u32 programId);
+    private:
+        void Load();
     };
 } // namespace ny::Rendering

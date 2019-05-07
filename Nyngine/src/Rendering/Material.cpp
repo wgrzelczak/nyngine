@@ -5,8 +5,7 @@
 
 namespace ny::Rendering
 {
-    Material::Material(Attrib_t attribs, std::string vertexShader, std::string fragmentShader, std::string textureFilename) :
-        m_attributes(attribs)
+    Material::Material(std::string vertexShader, std::string fragmentShader, std::string textureFilename)
     {
         CreateProgram(std::move(vertexShader), std::move(fragmentShader));
 
@@ -14,13 +13,11 @@ namespace ny::Rendering
         m_textureId = texture.GetId();
     }
 
-    Material::Material(MaterialType type, std::string vertexShader, std::string fragmentShader, std::string textureFilename) :
-        Material(AttributesHelper::GetByType(type), vertexShader, fragmentShader, textureFilename)
-    {
-    }
-
     Material::~Material()
     {
+        if (m_program != nullptr)
+            delete m_program;
+
         if (m_ebo != 0)
             glDeleteBuffers(1, &m_ebo);
         if (m_vbo != 0)
@@ -43,33 +40,19 @@ namespace ny::Rendering
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indiciesSize, indices, GL_STATIC_DRAW);
 
-        u32 attribsSize = AttributesHelper::GetAttributesSize(m_attributes);
-        u32 attribsOffset = 0;
-        u32 attribNum = 0;
+        u32 attribsStride = 0;
+        attribsStride += sizeof(f32) * 3; //pos
+        attribsStride += sizeof(f32) * 3; //color
+        attribsStride += sizeof(f32) * 2; //uv
 
-        if (AttributesHelper::IsAttribSet(m_attributes, Attribute::aPosition))
-        {
-            glVertexAttribPointer(attribNum, 3, GL_FLOAT, GL_FALSE, attribsSize, (void*)attribsOffset);
-            glEnableVertexAttribArray(attribNum);
-            attribNum += 1;
-            attribsOffset += AttributesHelper::GetAttributeSize(Attribute::aPosition);
-        }
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, attribsStride, (void*)0);
+        glEnableVertexAttribArray(0);
 
-        if (AttributesHelper::IsAttribSet(m_attributes, Attribute::aColor3))
-        {
-            glVertexAttribPointer(attribNum, 3, GL_FLOAT, GL_FALSE, attribsSize, (void*)attribsOffset);
-            glEnableVertexAttribArray(attribNum);
-            attribNum += 1;
-            attribsOffset += AttributesHelper::GetAttributeSize(Attribute::aColor3);
-        }
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, attribsStride, (void*)(3 * 4));
+        glEnableVertexAttribArray(1);
 
-        if (AttributesHelper::IsAttribSet(m_attributes, Attribute::aTexture0))
-        {
-            glVertexAttribPointer(attribNum, 2, GL_FLOAT, GL_FALSE, attribsSize, (void*)attribsOffset);
-            glEnableVertexAttribArray(attribNum);
-            attribNum += 1;
-            attribsOffset += AttributesHelper::GetAttributeSize(Attribute::aTexture0);
-        }
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, attribsStride, (void*)(6 * 4));
+        glEnableVertexAttribArray(2);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -78,7 +61,10 @@ namespace ny::Rendering
 
     void Material::Attach() const
     {
-        glUseProgram(m_programId);
+        Program* program = GetProgram();
+        if (!program) return;
+
+        glUseProgram(program->m_programId);
 
         glBindVertexArray(m_vao);
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -86,19 +72,12 @@ namespace ny::Rendering
 
         glBindTexture(GL_TEXTURE_2D, m_textureId);
     }
+
     void Material::CreateProgram(std::string vertexShader, std::string fragmentShader)
     {
-        Shader vShader = Shader(vertexShader, ShaderType::Vertex);
-        Shader fShader = Shader(fragmentShader, ShaderType::Fragment);
-
-        m_programId = glCreateProgram();
-        glAttachShader(m_programId, vShader.m_shaderId);
-        glAttachShader(m_programId, fShader.m_shaderId);
-
-        glLinkProgram(m_programId);
-        Shader::CheckLinkingError(m_programId);
-
-        glDeleteShader(vShader.m_shaderId);
-        glDeleteShader(fShader.m_shaderId);
+        //m_program = std::make_unique<Program>(vertexShader, fragmentShader);
+        if (m_program != nullptr) delete m_program;
+        m_program = new Program(vertexShader, fragmentShader);
     }
+
 } // namespace ny::Rendering

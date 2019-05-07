@@ -10,7 +10,7 @@ namespace ny::Rendering
 {
     void Renderer::Init()
     {
-        m_material = std::make_shared<Material>(MaterialType::TextureColorBlend, "Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/texture.jpg");
+        m_material = std::make_shared<Material>("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/texture.jpg");
 
         //TODO
         float vertices[] = {
@@ -22,6 +22,7 @@ namespace ny::Rendering
             1.f, -1.f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
             -1.f, -1.f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f // bottom left
         };
+
         unsigned int indices[] = {
             0, 1, 2,
             3, 4, 5};
@@ -48,14 +49,15 @@ namespace ny::Rendering
         // note that we're translating the scene in the reverse direction of where we want to move
         view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
-        m_material->Attach();
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::scale(model, glm::vec3(0.5f, 0.5f, 1.0f));
         model = glm::rotate(model, (float)ny::Core::Time::DeltaFromStart() * 0.000001f, glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-        glUniform1ui(glGetUniformLocation(m_material->GetProgramId(), "time"), ny::Core::Time::DeltaFromStart());
-        glUniformMatrix4fv(glGetUniformLocation(m_material->GetProgramId(), "MVP"), 1, GL_FALSE, glm::value_ptr(proj * view * model));
+        m_material->Attach();
+
+        m_material->GetProgram()->SetUint("time", ny::Core::Time::DeltaFromStart());
+        m_material->GetProgram()->SetMatrix("MVP", (proj * view * model));
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
