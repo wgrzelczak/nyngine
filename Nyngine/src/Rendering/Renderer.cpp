@@ -3,13 +3,19 @@
 #include "Core/Engine.h"
 #include "glad/glad.h"
 #include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace ny::Rendering
 {
+    Renderer::Renderer() :
+        m_camera({0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0})
+    {
+    }
+
     void Renderer::Init()
     {
+        m_camera.SetPerspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
+
         m_material = std::make_shared<Material>("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/texture.jpg");
 
         //TODO
@@ -42,22 +48,19 @@ namespace ny::Rendering
         f32 ratio = width / (f32)height;
         glViewport(0, 0, width, height);
 
-        //glm::mat4 proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 100.0f);
-        glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
-
-        glm::mat4 view = glm::mat4(1.0f);
-        // note that we're translating the scene in the reverse direction of where we want to move
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        glm::mat4 PV = m_camera.Projection() * m_camera.View();
 
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 1.0f));
+
+        model = glm::translate(model, {0, 1, 0});
         model = glm::rotate(model, (float)ny::Core::Time::DeltaFromStart() * 0.000001f, glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 1.0f));
 
         m_material->Attach();
 
         m_material->GetProgram()->SetUint("time", ny::Core::Time::DeltaFromStart());
-        m_material->GetProgram()->SetMatrix("MVP", (proj * view * model));
+        m_material->GetProgram()->SetMatrix("MVP", (PV * model));
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
