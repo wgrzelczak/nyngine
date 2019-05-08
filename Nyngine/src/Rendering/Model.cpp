@@ -19,7 +19,7 @@ namespace ny::Rendering
         m_position = position;
     }
 
-    void Model::SetRotationAroundAxis(const glm::vec3& axis, const f32& angle)
+    void Model::SetRotationAroundAxis(const f32& angle, const glm::vec3& axis)
     {
         m_rotation = glm::angleAxis(angle, axis);
     }
@@ -42,6 +42,11 @@ namespace ny::Rendering
     void Model::SetMesh(Mesh* mesh)
     {
         m_mesh = mesh;
+    }
+
+    void Model::AddRotation(const glm::quat& rotation)
+    {
+        m_rotation += rotation;
     }
 
     glm::mat4 Model::GetModelMatrix() const
