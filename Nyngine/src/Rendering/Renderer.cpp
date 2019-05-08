@@ -18,8 +18,8 @@ namespace ny::Rendering
 
         m_material = std::make_shared<Material>("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/texture.jpg");
 
-        //TODO
-        float vertices[] = {
+        tmp_mesh = new Mesh();
+        tmp_mesh->m_vertices = {
             -1.f, 1.f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,  // top left
             1.f, 1.f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,   // top right
             -1.f, -1.f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // bottom left
@@ -29,11 +29,14 @@ namespace ny::Rendering
             -1.f, -1.f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f // bottom left
         };
 
-        unsigned int indices[] = {
-            0, 1, 2,
-            3, 4, 5};
+        tmp_mesh->m_indicies = {0, 1, 2, 3, 4, 5};
 
-        m_material->Bind(vertices, sizeof(vertices), indices, sizeof(indices));
+        tmp_mesh->Generate();
+
+        tmp_model = new Model(m_material.get(), tmp_mesh);
+        tmp_model->SetPosition(glm::vec3{0, 0, 0});
+        tmp_model->SetRotationAroundAxis(glm::vec3(1.0f, 0.0f, 0.0f), glm::radians(-55.0f));
+        tmp_model->SetScale(glm::vec3(0.5f, 0.5f, 1.0f));
     }
 
     void Renderer::BeginFrame()
@@ -50,18 +53,14 @@ namespace ny::Rendering
 
         glm::mat4 PV = m_camera.Projection() * m_camera.View();
 
-        glm::mat4 model = glm::mat4(1.0f);
+        //model = glm::rotate(model, (float)ny::Core::Time::DeltaFromStart() * 0.000001f, glm::vec3(0.0f, 1.0f, 0.0f));
+        tmp_model->CalculateModelMatrix();
+        tmp_model->GetMesh()->Bind();
 
-        model = glm::translate(model, {0, 1, 0});
-        model = glm::rotate(model, (float)ny::Core::Time::DeltaFromStart() * 0.000001f, glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 1.0f));
-
-        m_material->Attach();
-
+        m_material->Bind();
         m_material->GetProgram()->SetUint("time", ny::Core::Time::DeltaFromStart());
-        m_material->GetProgram()->SetMatrix("MVP", (PV * model));
+        m_material->GetProgram()->SetMatrix("MVP", (PV * tmp_model->GetModelMatrix()));
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, tmp_model->GetMesh()->m_indicies.size(), GL_UNSIGNED_INT, 0);
     }
 } // namespace ny::Rendering

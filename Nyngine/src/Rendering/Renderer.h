@@ -1,6 +1,7 @@
 #pragma once
 #include "Camera.h"
 #include "Material.h"
+#include "Model.h"
 #include "Preinclude.h"
 namespace ny::Rendering
 {
@@ -15,6 +16,9 @@ namespace ny::Rendering
     private:
         Camera m_camera;
         std::shared_ptr<Material> m_material = nullptr;
+
+        Model* tmp_model = nullptr;
+        Mesh* tmp_mesh = nullptr;
     };
 } // namespace ny::Rendering
 
