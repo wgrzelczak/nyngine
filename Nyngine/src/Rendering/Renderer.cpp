@@ -18,20 +18,21 @@ namespace ny::Rendering
 
         m_material = std::make_shared<Material>("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/texture.jpg");
 
-        tmp_mesh = new Mesh();
-        tmp_mesh->m_vertices = {
-            -1.f, 1.f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,  // top left
-            1.f, 1.f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,   // top right
-            -1.f, -1.f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // bottom left
+        std::vector<glm::vec3> positions = {
+            {-1.f, 1.f, 0.0f},
+            {1.f, 1.f, 0.0f},
+            {-1.f, -1.f, 0.0f},
+            {1.f, -1.f, 0.0f}};
 
-            1.f, 1.f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // top right
-            1.f, -1.f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-            -1.f, -1.f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f // bottom left
-        };
+        std::vector<glm::vec2> uvs = {
+            {0.0f, 1.0f},
+            {1.0f, 1.0f},
+            {0.0f, 0.0f},
+            {1.0f, 0.0f}};
 
-        tmp_mesh->m_indicies = {0, 1, 2, 3, 4, 5};
+        std::vector<u32> indicies = {0, 1, 2, 1, 3, 2};
 
-        tmp_mesh->Generate();
+        tmp_mesh = new Mesh(positions, uvs, indicies);
 
         tmp_model = new Model(m_material.get(), tmp_mesh);
         tmp_model->SetPosition(glm::vec3{0, 0, 0});
