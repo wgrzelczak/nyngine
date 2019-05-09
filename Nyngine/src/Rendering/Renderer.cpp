@@ -8,6 +8,8 @@
 
 namespace ny::Rendering
 {
+    static glm::quat tmpQuat{1.f, 0.f, 0.f, 0.f};
+    static glm::quat tmpQuatN{1.f, 0.f, 0.f, 0.f};
     Renderer::Renderer() :
         m_camera({0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0})
     {
@@ -25,6 +27,9 @@ namespace ny::Rendering
                 m_camera.UpdateView();
                 ImGui::DragFloat4("Model rotation", &tmp_model->GetRotationRef().x, 0.01f);
                 tmp_model->NormalizeRotation();
+                ImGui::DragFloat4("Rotate0", &tmpQuat.x, 0.0001f, -1.f, 1.f, "%.5f");
+                tmpQuatN = glm::normalize(tmpQuat);
+                ImGui::DragFloat4("Rotate1", &tmpQuatN.x, 0.01f);
             });
     }
 
@@ -88,8 +93,8 @@ namespace ny::Rendering
 
         glm::mat4 PV = m_camera.Projection() * m_camera.View();
 
-        f32 delta = (float)ny::Core::Time::Delta() * 0.000001f;
-        //tmp_model->AddRotation(glm::quat(1.0f, 0.0f, 0.0f, 0.01f) * delta);
+        f32 delta = (float)ny::Core::Time::Delta() * 0.0001f;
+        tmp_model->AddRotation(tmpQuatN * delta);
         tmp_model->CalculateModelMatrix();
 
         tmp_model->GetMesh()->Bind();

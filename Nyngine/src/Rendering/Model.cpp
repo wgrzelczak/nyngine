@@ -41,7 +41,7 @@ namespace ny::Rendering
 
     void Model::AddRotation(const glm::quat& rotation)
     {
-        m_rotation = (rotation * m_rotation);
+        m_rotation = glm::normalize(rotation * m_rotation);
     }
 
     glm::mat4 Model::GetModelMatrix() const
