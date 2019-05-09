@@ -26,6 +26,8 @@ namespace ny::Rendering
     }
     void Mesh::Generate()
     {
+        NY_INFO("[Rendering] Creating mesh...");
+
         u32 attribsOffset = 0;
         u32 attribsStride = 0;
         attribsStride += sizeof(f32) * 3;

@@ -35,6 +35,7 @@ namespace ny::Rendering
 
     void Renderer::Init()
     {
+        NY_INFO("[Rendering] Initialize...");
         m_camera.SetPerspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
 
         m_material = std::make_shared<Material>("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/texture.jpg");
@@ -77,6 +78,8 @@ namespace ny::Rendering
         tmp_model->SetPosition(glm::vec3{0, 0, 0});
         tmp_model->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
         //tmp_model->SetQuaternionRotation(glm::quat(0.8f, 0.0f, 0.0f, 0.6f));
+
+        NY_INFO("[Rendering] Initialized");
     }
 
     void Renderer::BeginFrame()

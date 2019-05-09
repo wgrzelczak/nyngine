@@ -7,6 +7,7 @@ namespace ny::Rendering
 {
     Material::Material(std::string vertexShader, std::string fragmentShader, std::string textureFilename)
     {
+        NY_INFO("[Rendering] Creating Material: {}, {}", vertexShader, fragmentShader);
         CreateProgram(std::move(vertexShader), std::move(fragmentShader));
 
         Texture texture = Texture(std::move(textureFilename));
@@ -15,8 +16,10 @@ namespace ny::Rendering
 
     Material::~Material()
     {
+        NY_INFO("[Rendering] Destroying Material...");
         if (m_program != nullptr)
             delete m_program;
+        NY_INFO("[Rendering] Material has been destroyed");
     }
 
     void Material::Bind() const
