@@ -14,19 +14,22 @@ namespace ny::Rendering
         Model(Material* material, Mesh* mesh);
 
         void SetPosition(const glm::vec3& position);
-        void SetRotationAroundAxis(const f32& angle, const glm::vec3& axis);
+
         void SetQuaternionRotation(const glm::quat& rotation);
+        void AddRotation(const glm::quat& rotation);
+
         void SetScale(const glm::vec3& scale);
 
         void SetMaterial(Material* material);
         void SetMesh(Mesh* mesh);
 
-        void AddRotation(const glm::quat& rotation);
-
         void CalculateModelMatrix();
 
         glm::mat4 GetModelMatrix() const;
         Mesh* GetMesh() const;
+
+        glm::quat& GetRotationRef();
+        void NormalizeRotation();
 
     private:
         glm::vec3 m_position{0.0f, 0.0f, 0.0f};

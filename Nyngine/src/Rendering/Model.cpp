@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Model.h"
 #include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtx/euler_angles.hpp"
+#include "glm/gtx/quaternion.hpp"
 
 namespace ny::Rendering
 {
@@ -17,11 +17,6 @@ namespace ny::Rendering
     void Model::SetPosition(const glm::vec3& position)
     {
         m_position = position;
-    }
-
-    void Model::SetRotationAroundAxis(const f32& angle, const glm::vec3& axis)
-    {
-        m_rotation = glm::angleAxis(angle, axis);
     }
 
     void Model::SetQuaternionRotation(const glm::quat& rotation)
@@ -46,7 +41,7 @@ namespace ny::Rendering
 
     void Model::AddRotation(const glm::quat& rotation)
     {
-        m_rotation += rotation;
+        m_rotation = (rotation * m_rotation);
     }
 
     glm::mat4 Model::GetModelMatrix() const
@@ -59,11 +54,21 @@ namespace ny::Rendering
         return m_mesh;
     }
 
+    glm::quat& Model::GetRotationRef()
+    {
+        return m_rotation;
+    }
+
+    void Model::NormalizeRotation()
+    {
+        m_rotation = glm::normalize(m_rotation);
+    }
+
     void Model::CalculateModelMatrix()
     {
         m_modelMatrix = glm::mat4(1.0f);
         m_modelMatrix = glm::translate(m_modelMatrix, m_position);
-        m_modelMatrix = glm::rotate(m_modelMatrix, m_rotation.w, {m_rotation.x, m_rotation.y, m_rotation.z});
+        m_modelMatrix = m_modelMatrix * glm::toMat4(m_rotation);
         m_modelMatrix = glm::scale(m_modelMatrix, m_scale);
 
         //m_modelMatrix = parent->GetModelMatrix() * m_modelMatrix;

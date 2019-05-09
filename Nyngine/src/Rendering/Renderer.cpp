@@ -23,6 +23,8 @@ namespace ny::Rendering
                 }
                 ImGui::DragFloat3("Camera position", &m_camera.GetPositionRef().x, 0.01f);
                 m_camera.UpdateView();
+                ImGui::DragFloat4("Model rotation", &tmp_model->GetRotationRef().x, 0.01f);
+                tmp_model->NormalizeRotation();
             });
     }
 
@@ -68,8 +70,8 @@ namespace ny::Rendering
 
         tmp_model = new Model(m_material.get(), tmp_mesh);
         tmp_model->SetPosition(glm::vec3{0, 0, 0});
-        tmp_model->SetRotationAroundAxis(glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         tmp_model->SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
+        //tmp_model->SetQuaternionRotation(glm::quat(0.8f, 0.0f, 0.0f, 0.6f));
     }
 
     void Renderer::BeginFrame()
@@ -86,8 +88,8 @@ namespace ny::Rendering
 
         glm::mat4 PV = m_camera.Projection() * m_camera.View();
 
-        f32 angle = (float)ny::Core::Time::DeltaFromStart() * 0.000001f;
-        tmp_model->SetRotationAroundAxis(angle, glm::vec3(1.0f, 1.0f, 1.0f));
+        f32 delta = (float)ny::Core::Time::Delta() * 0.000001f;
+        //tmp_model->AddRotation(glm::quat(1.0f, 0.0f, 0.0f, 0.01f) * delta);
         tmp_model->CalculateModelMatrix();
 
         tmp_model->GetMesh()->Bind();
