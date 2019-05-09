@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Renderer.h"
 #include "Core/Engine.h"
+#include "ImGui/ImGuiSystem.h"
 #include "glad/glad.h"
 #include "glm/glm.hpp"
 #include <glm/gtc/type_ptr.hpp>
@@ -11,6 +12,18 @@ namespace ny::Rendering
         m_camera({0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0})
     {
         glEnable(GL_DEPTH_TEST);
+
+        ImGuiSystem::RegisterFunction(
+            [this]() -> void {
+                if (ImGui::Button("Reinitialize renderer")) Init();
+                if (ImGui::Button("Reset camera position"))
+                {
+                    m_camera = {{0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0}};
+                    m_camera.SetPerspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
+                }
+                ImGui::DragFloat3("Camera position", &m_camera.GetPositionRef().x, 0.01f);
+                m_camera.UpdateView();
+            });
     }
 
     void Renderer::Init()

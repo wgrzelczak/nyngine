@@ -28,7 +28,7 @@ namespace ny::Core
     {
         if (e.keyCode == NY_KEY_F8)
         {
-            Engine::GetApplication()->ToggleDebugLayer();
+            //Engine::GetEngine()->ToggleDebugLayer();
         }
     }
 } // namespace ny::Core

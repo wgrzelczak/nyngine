@@ -39,4 +39,9 @@ namespace ny::Rendering
         m_projection = glm::ortho(left, right, top, bottom, nearClip, farClip);
     }
 
+    glm::vec3& Camera::GetPositionRef()
+    {
+        return m_position;
+    }
+
 } // namespace ny::Rendering

@@ -3,13 +3,12 @@
 #include "Core\Engine.h"
 #include "Core\EngineLayer.h"
 #include "Core\Window.h"
-#include "ImGui\ImGuiLayer.h"
 #include <variant>
 
 using namespace ny;
 using namespace ny::Core;
 
-class NyngineApp : public ny::Core::ApplicationExt<std::variant<EngineLayer, ImGuiLayer>>
+class NyngineApp : public ny::Core::ApplicationExt<std::variant<EngineLayer>>
 {
 public:
     NyngineApp();

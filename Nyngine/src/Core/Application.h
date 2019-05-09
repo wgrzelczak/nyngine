@@ -16,8 +16,6 @@ namespace ny::Core
         virtual void Tick() = 0;
         virtual void Shutdown() = 0;
         virtual void OnEvent(Event&) = 0;
-
-        virtual void ToggleDebugLayer() = 0;
     };
 
     template <class LayerV>
@@ -174,20 +172,5 @@ namespace ny::Core
         std::vector<std::unique_ptr<LayersVariant>> m_layers;
 
     private:
-        virtual void ToggleDebugLayer() override
-        {
-            Layer* layerData = GetLayerData<ImGuiLayer>();
-
-            if (!layerData) return;
-
-            if (!layerData->IsEnabled())
-            {
-                EnableLayer<ImGuiLayer>();
-            }
-            else
-            {
-                DisableLayer<ImGuiLayer>();
-            }
-        }
     };
 } // namespace ny::Core

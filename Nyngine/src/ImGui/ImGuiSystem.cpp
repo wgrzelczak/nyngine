@@ -1,13 +1,16 @@
 #include "pch.h"
-#include "ImGuiLayer.h"
+#include "ImGuiSystem.h"
 #include "Core\Engine.h"
-#include "Debug/Core.h"
-#include "imgui.h"
-#include "imgui_bridge.h"
 
 namespace ny
 {
-    ImGuiLayer::ImGuiLayer()
+    ImGuiSystem* ImGuiSystem::GetInstance()
+    {
+        static ImGuiSystem instance;
+        return &instance;
+    }
+
+    ImGuiSystem::ImGuiSystem()
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -36,29 +39,50 @@ namespace ny
         ImGui_ImplOpenGL3_Init("#version 410");
     }
 
-    ImGuiLayer::~ImGuiLayer()
+    ImGuiSystem::~ImGuiSystem()
     {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
     }
 
-    void ImGuiLayer::OnEnable()
+    void ImGuiSystem::Update()
     {
+        NewFrame();
+
+        ImGui::Begin("Window");
+        for (const auto& f : m_drawFunctions)
+        {
+            if (f) f();
+        }
+        ImGui::End();
+
+        EndFrame();
     }
 
-    void ImGuiLayer::OnDisable()
+    void ImGuiSystem::Clear()
     {
+        m_drawFunctions.clear();
     }
 
-    void ImGuiLayer::OnEarlyUpdate()
+    void ImGuiSystem::RegisterFunction(Function function)
+    {
+        GetInstance()->RegisterFunctionImpl(function);
+    }
+
+    void ImGuiSystem::RegisterFunctionImpl(Function function)
+    {
+        m_drawFunctions.push_back(std::move(function));
+    }
+
+    void ImGuiSystem::NewFrame()
     {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
     }
 
-    void ImGuiLayer::OnLateUpdate()
+    void ImGuiSystem::EndFrame()
     {
         ImGuiIO& io = ImGui::GetIO();
 
@@ -76,11 +100,4 @@ namespace ny
         }
     }
 
-    void ImGuiLayer::OnUpdate()
-    {
-        //static bool show = true;
-        //ImGui::ShowDemoWindow(&show);
-
-        Debug::Core::Draw();
-    }
 } // namespace ny

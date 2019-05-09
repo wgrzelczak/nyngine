@@ -19,6 +19,8 @@ namespace ny::Rendering
         void SetPerspective(f32 fov, f32 aspect, f32 nearClip, f32 farClip);
         void SetOrtographic(f32 left, f32 right, f32 top, f32 bottom, f32 nearClip, f32 farClip);
 
+        glm::vec3& GetPositionRef();
+
     private:
         glm::vec3 m_front = {0.0f, 0.0f, -1.0f};
         glm::vec3 m_up = {0.0f, 1.0f, 0.0f};

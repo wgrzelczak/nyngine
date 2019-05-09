@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Engine.h"
 #include "Application.h"
+#include "ImGui/ImGuiSystem.h"
 
 namespace ny::Core
 {
@@ -52,6 +53,7 @@ namespace ny::Core
 
         Time::Update();
         m_renderer->BeginFrame();
+        ImGuiSystem::GetInstance()->Update();
 
         m_app->Tick();
 
