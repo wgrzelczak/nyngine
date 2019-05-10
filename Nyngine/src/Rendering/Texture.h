@@ -14,7 +14,9 @@ namespace ny::Rendering
     private:
         void GenerateTexture();
 
-        u32 m_id;
+        std::string m_name = "";
+
+        u32 m_id = 0;
 
         i32 m_width = 0;
         i32 m_height = 0;

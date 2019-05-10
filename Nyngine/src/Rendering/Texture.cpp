@@ -7,13 +7,16 @@
 
 namespace ny::Rendering
 {
-    Texture::Texture(std::string filename)
+    Texture::Texture(std::string filename) :
+        m_name(filename)
     {
+        NY_INFO("[Resources] Loading texture {}...", m_name);
         stbi_set_flip_vertically_on_load(true);
         m_data = stbi_load(filename.c_str(), &m_width, &m_height, &m_channelsNumber, 0);
         NY_ASSERT(m_data != nullptr, "Cannot load texture {}", filename);
 
         GenerateTexture();
+        NY_INFO("[Resources] Texture {} loaded", m_name);
     }
 
     Texture::~Texture()
@@ -24,8 +27,10 @@ namespace ny::Rendering
 
     void Texture::UnloadData()
     {
+        NY_INFO("[Resources] Unloading texture {}...", m_name);
         stbi_image_free(m_data);
         m_data = nullptr;
+        NY_INFO("[Resources] Texture {} unloaded", m_name);
     }
 
     void Texture::GenerateTexture()
