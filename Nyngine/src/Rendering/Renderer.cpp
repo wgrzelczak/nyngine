@@ -10,27 +10,14 @@ namespace ny::Rendering
 {
     static glm::quat tmpQuat{1.f, 0.f, 0.f, 0.f};
     static glm::quat tmpQuatN{1.f, 0.f, 0.f, 0.f};
+
     Renderer::Renderer() :
         m_camera({0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0})
     {
-        glEnable(GL_DEPTH_TEST);
+        RegisterImGuiDebug();
 
-        ImGuiSystem::RegisterFunction(
-            [this]() -> void {
-                if (ImGui::Button("Reinitialize renderer")) Init();
-                if (ImGui::Button("Reset camera position"))
-                {
-                    m_camera = {{0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0}};
-                    m_camera.SetPerspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
-                }
-                ImGui::DragFloat3("Camera position", &m_camera.GetPositionRef().x, 0.01f);
-                m_camera.UpdateView();
-                ImGui::DragFloat4("Model rotation", &tmp_model->GetRotationRef().x, 0.01f);
-                tmp_model->NormalizeRotation();
-                ImGui::DragFloat4("Rotate0", &tmpQuat.x, 0.0001f, -1.f, 1.f, "%.5f");
-                tmpQuatN = glm::normalize(tmpQuat);
-                ImGui::DragFloat4("Rotate1", &tmpQuatN.x, 0.01f);
-            });
+        m_commandBuffer = std::make_unique<CommandBuffer>();
+        glEnable(GL_DEPTH_TEST);
     }
 
     void Renderer::Init()
@@ -82,7 +69,7 @@ namespace ny::Rendering
         NY_INFO("[Rendering] Initialized");
     }
 
-    void Renderer::BeginFrame()
+    void Renderer::Render()
     {
         glClearColor(0.25f, 0.25f, 0.25f, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -96,16 +83,42 @@ namespace ny::Rendering
 
         glm::mat4 PV = m_camera.Projection() * m_camera.View();
 
+        //++TMP
         f32 delta = (float)ny::Core::Time::Delta() * 0.0001f;
         tmp_model->AddRotation(tmpQuatN * delta);
         tmp_model->CalculateModelMatrix();
+        m_commandBuffer->PushCommand(Command(tmp_model->GetMaterial(), tmp_model->GetMesh(), tmp_model->GetModelMatrix()));
+        //--TMP
 
-        tmp_model->GetMesh()->Bind();
+        for (const auto& cmd : m_commandBuffer->GetCommands())
+        {
+            cmd.m_material->Bind();
+            cmd.m_material->GetProgram()->SetUint("time", ny::Core::Time::DeltaFromStart());
+            cmd.m_material->GetProgram()->SetMatrix("MVP", (PV * cmd.m_transform));
+            cmd.m_mesh->Bind();
 
-        m_material->Bind();
-        m_material->GetProgram()->SetUint("time", ny::Core::Time::DeltaFromStart());
-        m_material->GetProgram()->SetMatrix("MVP", (PV * tmp_model->GetModelMatrix()));
+            glDrawElements(GL_TRIANGLES, cmd.m_mesh->m_indicies.size(), GL_UNSIGNED_INT, 0);
+        }
+        m_commandBuffer->Clear();
+    }
 
-        glDrawElements(GL_TRIANGLES, tmp_model->GetMesh()->m_indicies.size(), GL_UNSIGNED_INT, 0);
+    void Renderer::RegisterImGuiDebug()
+    {
+        ImGuiSystem::RegisterFunction(
+            [this]() -> void {
+                if (ImGui::Button("Reinitialize renderer")) Init();
+                if (ImGui::Button("Reset camera position"))
+                {
+                    m_camera = {{0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0}};
+                    m_camera.SetPerspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
+                }
+                ImGui::DragFloat3("Camera position", &m_camera.GetPositionRef().x, 0.01f);
+                m_camera.UpdateView();
+                ImGui::DragFloat4("Model rotation", &tmp_model->GetRotationRef().x, 0.01f);
+                tmp_model->NormalizeRotation();
+                ImGui::DragFloat4("Rotate0", &tmpQuat.x, 0.0001f, -1.f, 1.f, "%.5f");
+                tmpQuatN = glm::normalize(tmpQuat);
+                ImGui::DragFloat4("Rotate1", &tmpQuatN.x, 0.01f);
+            });
     }
 } // namespace ny::Rendering

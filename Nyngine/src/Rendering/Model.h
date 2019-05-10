@@ -27,6 +27,7 @@ namespace ny::Rendering
 
         glm::mat4 GetModelMatrix() const;
         Mesh* GetMesh() const;
+        Material* GetMaterial() const;
 
         glm::quat& GetRotationRef();
         void NormalizeRotation();

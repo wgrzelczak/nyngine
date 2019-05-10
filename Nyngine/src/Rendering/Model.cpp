@@ -54,6 +54,11 @@ namespace ny::Rendering
         return m_mesh;
     }
 
+    Material* Model::GetMaterial() const
+    {
+        return m_material;
+    }
+
     glm::quat& Model::GetRotationRef()
     {
         return m_rotation;
