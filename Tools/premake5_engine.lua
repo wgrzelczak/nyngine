@@ -15,7 +15,8 @@ project "Nyngine"
         "%{prj.location}/src/**.h",
         "%{prj.location}/src/**.hpp",
         "%{prj.location}/src/**.c",
-        "%{prj.location}/src/**.cpp"
+        "%{prj.location}/src/**.cpp",
+        "%{prj.location}/src/**.inl"
     }
 
     includedirs
