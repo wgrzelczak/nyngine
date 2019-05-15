@@ -1,30 +1,36 @@
 #pragma once
 #include "Preinclude.h"
-#include "SystemBase.h"
+#include "System.h"
 #include <list>
 #include <memory>
 
-namespace engine::ecs
+namespace ny::Ecs
 {
     class SystemManager
     {
     public:
-        SystemManager();
         ~SystemManager();
 
         template <class T>
-        std::weak_ptr<T> CreateSystem();
-        void RemoveSystem(const std::weak_ptr<core::SystemBase>& sys);
+        std::shared_ptr<T> CreateSystem();
+        void RemoveSystem(const std::weak_ptr<SystemBase>& sys);
         void RemoveSystems();
         void Update();
 
     private:
-        void RegisterSystem(const std::shared_ptr<core::SystemBase>& sys);
-        void UnregisterSystem(const std::shared_ptr<core::SystemBase>& sys);
+        void RegisterSystem(const std::shared_ptr<SystemBase>& sys);
+        void UnregisterSystem(const std::shared_ptr<SystemBase>& sys);
         void UnregisterSystems();
 
-        std::list<std::shared_ptr<core::SystemBase>> mSystems;
+        std::list<std::shared_ptr<SystemBase>> m_systems;
     };
 
-#include "SystemManager.inl"
-} // namespace engine::ecs
+    template <class T>
+    inline std::shared_ptr<T> SystemManager::CreateSystem()
+    {
+        static_assert(std::is_base_of<SystemBase, T>(), "Template param should derive from System: " __FUNCSIG__);
+        std::shared_ptr<T> sys(new T());
+        RegisterSystem(sys);
+        return sys;
+    }
+} // namespace ny::Ecs

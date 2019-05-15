@@ -1,24 +1,42 @@
 #pragma once
 #include "Component.h"
-#include "ComponentContainerBase.h"
 #include "Preinclude.h"
-#include <algorithm>
-#include <memory>
-#include <vector>
 
-namespace engine::ecs::core
+namespace ny::Ecs
 {
+    class ComponentContainerBase
+    {
+    };
+
     template <class T>
     class ComponentContainer : public ComponentContainerBase
     {
     public:
-        std::weak_ptr<T> GetComponent(const id::Entity& id);
-        std::weak_ptr<T> AddComponent(const id::Entity& id);
+        std::shared_ptr<T> GetComponent(const u32 id);
+        std::shared_ptr<T> AddComponent(const u32 id);
 
     private:
-        using Pair = std::pair<id::Entity, std::shared_ptr<T>>;
-        std::vector<Pair> mComponents;
+        using Pair = std::pair<u32, std::shared_ptr<T>>;
+        std::vector<Pair> m_components;
     };
 
-#include "ComponentContainer.inl"
-} // namespace engine::ecs::core
+    template <class T>
+    std::shared_ptr<T> ComponentContainer<T>::GetComponent(const u32 id)
+    {
+        auto getById = [&id](const Pair& p) {
+            return p.first == id;
+        };
+
+        auto it = std::find_if(std::begin(m_components), std::end(m_components), getById);
+        return it != std::end(m_components) ? it->second : nullptr;
+    }
+
+    template <class T>
+    inline std::shared_ptr<T> ComponentContainer<T>::AddComponent(const u32 id)
+    {
+        std::shared_ptr<T> component(new T());
+        std::static_pointer_cast<Component<T>>(component)->SetEntityId(id);
+        m_components.emplace_back(id, component);
+        return component;
+    }
+} // namespace ny::Ecs

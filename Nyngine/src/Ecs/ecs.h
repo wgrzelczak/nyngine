@@ -6,41 +6,39 @@
 #include "Preinclude.h"
 #include "SystemManager.h"
 
-namespace engine
+namespace ny::Ecs
 {
-    using namespace ecs;
-
-    class ECS final
+    class Ecs final
     {
     public:
-        static ECS* const Get()
+        static Ecs* const Get()
         {
-            static ECS mInstance;
-            return &mInstance;
+            static Ecs instance;
+            return &instance;
         }
 
-        ComponentManager* const GetComponentManager()
+        static ComponentManager* GetComponentManager()
         {
-            return &mComponentManager;
+            return &Get()->m_componentManager;
         }
 
-        SystemManager* const GetSystemManager()
+        static SystemManager* GetSystemManager()
         {
-            return &mSystemManager;
+            return &Get()->m_systemManager;
         }
 
-        EventManager* const GetEventManager()
+        static EventManager* GetEventManager()
         {
-            return &mEventManager;
+            return &Get()->m_eventManager;
         }
 
     private:
-        //todo disable all constructs and operators
-        ECS() {}
+        Ecs() {}
 
-        //move in to heap (?)
-        ComponentManager mComponentManager;
-        SystemManager mSystemManager;
-        EventManager mEventManager;
+        ComponentManager m_componentManager;
+        SystemManager m_systemManager;
+        EventManager m_eventManager;
     };
-} // namespace engine
+} // namespace ny::Ecs
+
+using ECS = ny::Ecs::Ecs;

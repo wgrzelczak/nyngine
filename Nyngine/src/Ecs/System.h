@@ -1,29 +1,47 @@
 #pragma once
-#include "SystemBase.h"
-#include "ecs.h"
-#include <algorithm>
-#include <functional>
-#include <list>
-#include <memory>
-#include <tuple>
-namespace engine::ecs
+#include "Entity.h"
+
+namespace ny::Ecs
 {
-    template <class RequiredComponent, Priority P = Priority::UNDEFINED>
-    class System : public core::SystemBase
+    class SystemBase
     {
     public:
-        void Update() override;
+        virtual void Update() = 0;
+        virtual void RegisterEntity(Entity* const entity) = 0;
+    };
 
-        void RegisterEntity(core::Entity* const entity) override;
+    template <class RequiredComponent>
+    class System : public SystemBase
+    {
+    public:
+        void Update();
+        void RegisterEntity(Entity* const entity);
 
     protected:
-        System();
-
-        //todo change to std::function (?)
-        using pFuncUpdate = void (*)(const std::weak_ptr<RequiredComponent>&);
+        using pFuncUpdate = void (*)(const std::shared_ptr<RequiredComponent>&);
         pFuncUpdate UpdateComponent;
 
-        std::list<std::weak_ptr<RequiredComponent>> mComponents;
+        std::list<std::shared_ptr<RequiredComponent>> m_components;
     };
-#include "System.inl"
-} // namespace engine::ecs
+
+    template <class RequiredComponent>
+    inline void System<RequiredComponent>::Update()
+    {
+        std::for_each(std::begin(m_components), std::end(m_components), UpdateComponent);
+    }
+
+    template <class RequiredComponent>
+    inline void System<RequiredComponent>::RegisterEntity(Entity* const entity)
+    {
+        if (auto weak = entity->GetComponent<RequiredComponent>(); !weak.lock())
+        {
+            //_ASSERT(false);
+            weak = entity->AddComponent<RequiredComponent>();
+            m_components.push_back(weak);
+        }
+        else
+        {
+            m_components.push_back(weak);
+        }
+    }
+} // namespace ny::Ecs

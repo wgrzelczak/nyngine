@@ -1,15 +1,16 @@
+#include "pch.h"
 #include "Entity.h"
 
-namespace engine::ecs::core
+namespace ny::Ecs
 {
-    id::Entity Entity::NEXT_ID = 0;
+    static u32 NEXT_ENTITY_ID = 0;
 
     Entity::Entity() :
-        mId(NEXT_ID++)
+        m_id(NEXT_ENTITY_ID++)
     {
     }
-
-    Entity::~Entity()
+    inline u32 Entity::GetId() const
     {
+        return m_id;
     }
-} // namespace engine::ecs::core
+} // namespace ny::Ecs

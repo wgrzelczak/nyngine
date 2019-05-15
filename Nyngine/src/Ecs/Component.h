@@ -1,22 +1,33 @@
 #pragma once
-#include "ComponentBase.h"
 #include "ComponentManager.h"
 
-namespace engine::ecs
+namespace ny::Ecs
 {
-    template <class T>
-    class Component : public core::ComponentBase
+    class ComponentBase
     {
     public:
-        static id::Component GetId() { return mId; }
+        ComponentBase() :
+            m_enabled(true)
+        {}
 
-        void SetEntityId(const id::Entity& id) { mEntityId = id; }
-        id::Entity GetEntityId() const { return mEntityId; }
-
-    private:
-        const static id::Component mId;
-        id::Entity mEntityId;
+        bool m_enabled;
     };
 
-#include "Component.inl"
-} // namespace engine::ecs
+    template <class T>
+    class Component : public ComponentBase
+    {
+    public:
+        static u32 GetId() { return Id; }
+
+        void SetEntityId(const u32 id) { m_id = id; }
+        u32 GetEntityId() const { return m_id; }
+
+    private:
+        const static u32 Id;
+        u32 m_id;
+    };
+
+    static u32 NEXT_COMPONENT_ID = 0;
+    template <class T>
+    const u32 Component<T>::Id = NEXT_COMPONENT_ID++;
+} // namespace ny::Ecs

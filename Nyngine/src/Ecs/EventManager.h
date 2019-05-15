@@ -1,22 +1,27 @@
 #pragma once
-#include "EventBase.h"
+#include "Event.h"
 #include "Preinclude.h"
 #include <map>
-#include <memory>
-namespace engine::ecs
+namespace ny::Ecs
 {
     class EventManager
     {
     public:
-        EventManager() {}
-        ~EventManager() {}
-
         template <class E>
-        std::weak_ptr<E> GetEvent(const id::Event& ID);
+        std::shared_ptr<E> GetEvent(const u32 id);
 
     private:
-        std::map<id::Event, std::shared_ptr<core::EventBase>> mEvents;
+        std::map<u32, std::shared_ptr<EventBase>> m_events;
     };
 
-#include "EventManager.inl"
-} // namespace engine::ecs
+    template <class E>
+    inline std::shared_ptr<E> EventManager::GetEvent(const u32 id)
+    {
+        auto ptr = m_events.find(id);
+        if (ptr != std::end(m_events))
+            return nullptr;
+
+        return ptr;
+    }
+
+} // namespace ny::Ecs

@@ -1,46 +1,31 @@
+#include "pch.h"
 #include "SystemManager.h"
-#include <algorithm>
+#include "Core\FieldDetection.h"
 
-namespace engine::ecs
+namespace ny::Ecs
 {
-    SystemManager::SystemManager()
-    {
-    }
-
     SystemManager::~SystemManager()
     {
         RemoveSystems();
     }
 
-    void SystemManager::RegisterSystem(const std::shared_ptr<core::SystemBase>& sys)
+    void SystemManager::RegisterSystem(const std::shared_ptr<SystemBase>& sys)
     {
-        const auto desiredPriority = sys->mPriority;
-        auto comp = [&desiredPriority](const std::shared_ptr<core::SystemBase>& lhs) {
-            return lhs->mPriority >= desiredPriority;
-        };
-
-        if (auto crIt = std::find_if(std::crbegin(mSystems), std::crend(mSystems), comp); crIt != std::crend(mSystems))
-        {
-            mSystems.insert(crIt.base(), sys);
-        }
-        else
-        {
-            mSystems.push_front(sys);
-        }
+        m_systems.push_front(sys);
     }
 
-    void SystemManager::UnregisterSystem(const std::shared_ptr<core::SystemBase>& sys)
+    void SystemManager::UnregisterSystem(const std::shared_ptr<SystemBase>& sys)
     {
-        mSystems.remove(sys);
+        m_systems.remove(sys);
     }
 
     void SystemManager::UnregisterSystems()
     {
         //todo check leaks
-        mSystems.clear();
+        m_systems.clear();
     }
 
-    void SystemManager::RemoveSystem(const std::weak_ptr<core::SystemBase>& sys)
+    void SystemManager::RemoveSystem(const std::weak_ptr<SystemBase>& sys)
     {
         if (auto shared = sys.lock())
         {
@@ -55,6 +40,12 @@ namespace engine::ecs
 
     void SystemManager::Update()
     {
-        std::for_each(std::begin(mSystems), std::end(mSystems), [](std::shared_ptr<core::SystemBase> sys) { sys->Update(); });
+        auto Update = [](std::shared_ptr<SystemBase> sys) {
+            //if constexpr(HasUpdate)
+            //sys->OnUpdate();
+            sys->Update();
+        };
+
+        std::for_each(std::begin(m_systems), std::end(m_systems), Update);
     }
-} // namespace engine::ecs
+} // namespace ny::Ecs

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "NyngineApp.h"
+#include "Ecs\ecs.h"
 
 NyngineApp::NyngineApp()
 {
@@ -23,6 +24,7 @@ void NyngineApp::Init()
 void NyngineApp::Tick()
 {
     UpdateLayers();
+    ECS::Get()->GetSystemManager()->Update();
 }
 
 void NyngineApp::Shutdown()
