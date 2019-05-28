@@ -30,9 +30,8 @@ namespace ny::Core
 
         void Run(Application* app);
 
-        void OnEvent(Event& e);
-
-        void RegisterWindow();
+        void Invoke(Event& e);
+        void OnEvent(WindowClosedEvent& e);
 
         void SetState(State state) { m_state = state; }
         Window& GetWindow() const { return *m_window; }
@@ -48,15 +47,8 @@ namespace ny::Core
 
         std::unique_ptr<Renderer> m_renderer = nullptr;
         std::unique_ptr<Window> m_window = nullptr;
-
-        friend class EngineLayer;
     };
 
 #define IEngine Core::Engine::GetInstance()
 
-    inline void Engine::OnEvent(Event& e)
-    {
-        NY_ASSERT(m_app, "");
-        m_app->OnEvent(e);
-    }
 } // namespace ny::Core

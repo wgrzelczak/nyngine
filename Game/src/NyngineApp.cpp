@@ -14,16 +14,11 @@ void NyngineApp::Init()
 {
     NY_TRACE("Initializing...");
 
-    PushLayer<EngineLayer>();
-
-    EnableLayer<EngineLayer>();
-
     NY_TRACE("Initialized");
 }
 
 void NyngineApp::Tick()
 {
-    UpdateLayers();
     ECS::Get()->GetSystemManager()->Update();
 }
 

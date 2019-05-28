@@ -47,6 +47,31 @@ namespace ny::Core
         m_state = State::Running;
     }
 
+    void Engine::Invoke(Event& e)
+    {
+        NY_ASSERT(m_app, "");
+
+        auto DispatchEvent = [&](auto&& listener) {
+            EVENT_DISPATCH(listener, e, WindowClosedEvent);
+            EVENT_DISPATCH(listener, e, WindowResizedEvent);
+            EVENT_DISPATCH(listener, e, KeyPressedEvent);
+            EVENT_DISPATCH(listener, e, KeyReleasedEvent);
+            EVENT_DISPATCH(listener, e, KeyTypedEvent);
+            EVENT_DISPATCH(listener, e, MouseButtonPressedEvent);
+            EVENT_DISPATCH(listener, e, MouseButtonReleasedEvent);
+            EVENT_DISPATCH(listener, e, MouseScrolledEvent);
+            EVENT_DISPATCH(listener, e, MouseMovedEvent);
+        };
+
+        DispatchEvent(*this);
+        DispatchEvent(m_app);
+    }
+
+    void Engine::OnEvent(WindowClosedEvent& e)
+    {
+        SetState(State::ShuttingDown);
+    }
+
     void Engine::Tick()
     {
         NY_ASSERT(m_app, "");

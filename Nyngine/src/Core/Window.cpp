@@ -50,7 +50,7 @@ namespace ny::Core
     void Window::RegisterCallbacks()
     {
         glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) {
-            Engine::GetInstance()->OnEvent(WindowClosedEvent());
+            Engine::GetInstance()->Invoke(WindowClosedEvent());
         });
 
         glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
@@ -58,49 +58,49 @@ namespace ny::Core
             windowData.width = width;
             windowData.height = height;
 
-            Engine::GetInstance()->OnEvent(WindowResizedEvent(width, height));
+            Engine::GetInstance()->Invoke(WindowResizedEvent(width, height));
         });
 
         glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
             switch (action)
             {
             case GLFW_PRESS:
-                Engine::GetInstance()->OnEvent(KeyPressedEvent(key, 0));
+                Engine::GetInstance()->Invoke(KeyPressedEvent(key, 0));
                 break;
 
             case GLFW_RELEASE:
-                Engine::GetInstance()->OnEvent(KeyReleasedEvent(key));
+                Engine::GetInstance()->Invoke(KeyReleasedEvent(key));
                 break;
 
             case GLFW_REPEAT:
-                Engine::GetInstance()->OnEvent(KeyPressedEvent(key, 1));
+                Engine::GetInstance()->Invoke(KeyPressedEvent(key, 1));
                 break;
             }
         });
 
         glfwSetCharCallback(m_window, [](GLFWwindow* window, unsigned int keycode) {
-            Engine::GetInstance()->OnEvent(KeyTypedEvent(keycode));
+            Engine::GetInstance()->Invoke(KeyTypedEvent(keycode));
         });
 
         glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
             switch (action)
             {
             case GLFW_PRESS:
-                Engine::GetInstance()->OnEvent(MouseButtonPressedEvent(button));
+                Engine::GetInstance()->Invoke(MouseButtonPressedEvent(button));
                 break;
 
             case GLFW_RELEASE:
-                Engine::GetInstance()->OnEvent(MouseButtonReleasedEvent(button));
+                Engine::GetInstance()->Invoke(MouseButtonReleasedEvent(button));
                 break;
             }
         });
 
         glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset) {
-            Engine::GetInstance()->OnEvent(MouseScrolledEvent(static_cast<f32>(xOffset), static_cast<f32>(yOffset)));
+            Engine::GetInstance()->Invoke(MouseScrolledEvent(static_cast<f32>(xOffset), static_cast<f32>(yOffset)));
         });
 
         glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xPos, double yPos) {
-            Engine::GetInstance()->OnEvent(MouseMovedEvent(static_cast<f32>(xPos), static_cast<f32>(yPos)));
+            Engine::GetInstance()->Invoke(MouseMovedEvent(static_cast<f32>(xPos), static_cast<f32>(yPos)));
         });
     }
 } // namespace ny::Core
