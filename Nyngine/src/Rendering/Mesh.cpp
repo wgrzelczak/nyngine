@@ -4,15 +4,17 @@
 
 namespace ny::Rendering
 {
+    Mesh::Mesh()
+    {
+    }
+
     Mesh::Mesh(std::vector<glm::vec3> positions, std::vector<u32> indicies) :
         m_positions(positions), m_indicies(indicies)
     {
-        Generate();
     }
     Mesh::Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uvs, std::vector<u32> indicies) :
         m_positions(positions), m_uvs(uvs), m_indicies(indicies)
     {
-        Generate();
     }
 
     Mesh::~Mesh()

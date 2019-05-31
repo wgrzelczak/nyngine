@@ -5,7 +5,7 @@
 #define NY_INFO(...) ny::Core::Log::Core()->info(__VA_ARGS__);
 #define NY_WARN(...) ny::Core::Log::Core()->warn(__VA_ARGS__);
 #define NY_ERROR(...) ny::Core::Log::Core()->error(__VA_ARGS__);
-#define NY_CRITICAL_ERROR(...) ny::Core::Log::Core()->critical__VA_ARGS__);
+#define NY_CRITICAL_ERROR(...) ny::Core::Log::Core()->critical(__VA_ARGS__);
 
 #define NY_BREAK() __debugbreak();
 #define NY_ASSERT(x, ...)      \

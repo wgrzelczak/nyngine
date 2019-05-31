@@ -12,6 +12,7 @@ namespace ny::Rendering
     public:
         Model();
         Model(Material* material, Mesh* mesh);
+        Model(Material* material, std::string filename);
 
         void SetPosition(const glm::vec3& position);
 

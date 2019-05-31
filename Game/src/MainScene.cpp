@@ -47,7 +47,9 @@ void MainScene::Init()
 
     ny::Rendering::Material* matTmp = new ny::Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/texture.jpg");
     ny::Rendering::Mesh* meshTmp = new ny::Rendering::Mesh(positions, uvs, indicies);
-    ny::Rendering::Model* modelTmp = new ny::Rendering::Model(matTmp, meshTmp);
+    //ny::Rendering::Model* modelTmp = new ny::Rendering::Model(matTmp, meshTmp);
+
+    ny::Rendering::Model* modelTmp = new ny::Rendering::Model(matTmp, "Assets/Models/cube.obj");
 
     boxMeshRendererComponent->m_model.reset(modelTmp);
 

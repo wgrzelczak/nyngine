@@ -6,6 +6,7 @@ namespace ny::Rendering
 {
     struct Mesh
     {
+        Mesh();
         Mesh(std::vector<glm::vec3> positions, std::vector<u32> indicies);
         Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uvs, std::vector<u32> indicies);
         ~Mesh();

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Model.h"
+#include "ModelLoader.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/quaternion.hpp"
 
@@ -12,6 +13,14 @@ namespace ny::Rendering
     Model::Model(Material* material, Mesh* mesh) :
         m_material(material), m_mesh(mesh)
     {
+        m_mesh->Generate();
+    }
+
+    Model::Model(Material* material, std::string filename) :
+        m_material(material), m_mesh(new Mesh())
+    {
+        ModelLoader::LoadModel(*this, filename);
+        m_mesh->Generate();
     }
 
     void Model::SetPosition(const glm::vec3& position)
