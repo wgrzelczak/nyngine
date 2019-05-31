@@ -4,7 +4,9 @@ Standard: Cpp11
 SortIncludes: true
 IncludeCategories:
   - Regex:           'pch\.h'
-    Priority:        -1
+    Priority:        -2
+  - Regex:           'Preinclude\.h'
+    Priority:        -2
   - Regex:           '^"(llvm|llvm-c|clang|clang-c)/'
     Priority:        2
   - Regex:           '^(<|"(gtest|gmock|isl|json)/)'
