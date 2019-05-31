@@ -13,13 +13,11 @@ namespace ny::Rendering
         void Init();
         void Render();
 
+        void PushCommand(Command&& cmd);
+
     private:
         Camera m_camera;
-        std::shared_ptr<Material> m_material = nullptr;
         std::unique_ptr<CommandBuffer> m_commandBuffer = nullptr;
-
-        Model* tmp_model = nullptr;
-        Mesh* tmp_mesh = nullptr;
 
         void RegisterImGuiDebug();
     };

@@ -1,5 +1,6 @@
 #pragma once
 #include "ECSCore\Ecs.h"
+#include "ImGui\ImGuiSystem.h"
 
 namespace ny
 {

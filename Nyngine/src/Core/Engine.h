@@ -35,6 +35,7 @@ namespace ny::Core
 
         void SetState(State state) { m_state = state; }
         Window& GetWindow() const { return *m_window; }
+        Renderer& GetRenderer() const { return *m_renderer; }
 
     private:
         void Init();

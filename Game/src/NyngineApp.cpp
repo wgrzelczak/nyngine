@@ -22,6 +22,7 @@ void NyngineApp::Init()
 
 void NyngineApp::Tick()
 {
+    m_currentScene->Update();
     Ecs::Get()->GetSystemManager()->Update();
 }
 
