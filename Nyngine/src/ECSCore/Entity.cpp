@@ -9,7 +9,8 @@ namespace ny::ECS::Core
         m_id(NEXT_ENTITY_ID++)
     {
     }
-    inline u32 Entity::GetId() const
+
+    u32 Entity::GetId() const
     {
         return m_id;
     }

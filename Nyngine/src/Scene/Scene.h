@@ -1,15 +1,13 @@
 #pragma once
+#include "ECSCore\Ecs.h"
 
 namespace ny
 {
     class Scene
     {
     public:
-        Scene() {}
-        ~Scene() {}
-
-        void Init();
-        void Destroy();
-        void Update();
+        virtual void Init() = 0;
+        virtual void Destroy() = 0;
+        virtual void Update() = 0;
     };
 } // namespace ny

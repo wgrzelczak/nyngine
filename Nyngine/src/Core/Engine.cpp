@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Engine.h"
 #include "Application.h"
+#include "ECSCore\Ecs.h"
 #include "ImGui/ImGuiSystem.h"
 
 namespace ny::Core

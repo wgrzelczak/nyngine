@@ -9,7 +9,7 @@ namespace ny::ECS::Core
         ~SystemManager();
 
         template <class T>
-        std::shared_ptr<T> CreateSystem();
+        std::shared_ptr<T> RegisterSystem();
         void RemoveSystem(const std::weak_ptr<SystemBase>& sys);
         void RemoveSystems();
         void Update();
@@ -23,7 +23,7 @@ namespace ny::ECS::Core
     };
 
     template <class T>
-    inline std::shared_ptr<T> SystemManager::CreateSystem()
+    inline std::shared_ptr<T> SystemManager::RegisterSystem()
     {
         static_assert(std::is_base_of<SystemBase, T>(), "Template param should derive from System: " __FUNCSIG__);
         std::shared_ptr<T> sys(new T());

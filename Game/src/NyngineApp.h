@@ -2,7 +2,7 @@
 #include "Core\Application.h"
 #include "Core\Engine.h"
 #include "Core\Window.h"
-#include <variant>
+#include "MainScene.h"
 
 using namespace ny;
 using namespace ny::Core;
@@ -15,4 +15,7 @@ public:
     virtual void Init() override;
     virtual void Tick() override;
     virtual void Shutdown() override;
+
+private:
+    Scene* m_currentScene = nullptr;
 };

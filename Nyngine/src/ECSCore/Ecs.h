@@ -41,6 +41,8 @@ namespace ny::ECS::Core
 
 using Ecs = ny::ECS::Core::EcsManager;
 
+using EcsEntity = ny::ECS::Core::Entity;
+
 template <class T>
 using EcsComponent = ny::ECS::Core::Component<T>;
 

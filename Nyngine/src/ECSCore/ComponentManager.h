@@ -45,7 +45,7 @@ namespace ny::ECS::Core
     template <class T>
     inline std::shared_ptr<T> ComponentManager::AddEntityComponent(const u32 id)
     {
-        const u32 component = Component<T>::GetId();
+        const u32 componentId = Component<T>::GetId();
 
         {
             auto container = std::static_pointer_cast<ComponentContainer<T>>(m_components[componentId]);

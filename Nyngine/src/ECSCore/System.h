@@ -1,4 +1,5 @@
 #pragma once
+#include "Preinclude.h"
 #include "Entity.h"
 
 namespace ny::ECS::Core
@@ -14,12 +15,12 @@ namespace ny::ECS::Core
     class System : public SystemBase
     {
     public:
-        void Update();
-        void RegisterEntity(Entity* const entity);
+        virtual void Update() final;
+        virtual void RegisterEntity(Entity* const entity) final;
 
     protected:
         using pFuncUpdate = void (*)(const std::shared_ptr<RequiredComponent>&);
-        pFuncUpdate UpdateComponent;
+        pFuncUpdate m_updateCallback = nullptr;
 
         std::list<std::shared_ptr<RequiredComponent>> m_components;
     };
@@ -27,21 +28,22 @@ namespace ny::ECS::Core
     template <class RequiredComponent>
     inline void System<RequiredComponent>::Update()
     {
-        std::for_each(std::begin(m_components), std::end(m_components), UpdateComponent);
+        std::for_each(std::begin(m_components), std::end(m_components), m_updateCallback);
     }
 
     template <class RequiredComponent>
     inline void System<RequiredComponent>::RegisterEntity(Entity* const entity)
     {
-        if (auto weak = entity->GetComponent<RequiredComponent>(); !weak.lock())
+        if (auto ptr = entity->GetComponent<RequiredComponent>())
         {
-            //_ASSERT(false);
-            weak = entity->AddComponent<RequiredComponent>();
-            m_components.push_back(weak);
+            m_components.push_back(ptr);
         }
         else
         {
-            m_components.push_back(weak);
+            NY_WARN("[ECS] Entity {} has NOT requred component!", entity->GetId());
+
+            ptr = entity->AddComponent<RequiredComponent>();
+            m_components.push_back(ptr);
         }
     }
 } // namespace ny::ECS::Core
