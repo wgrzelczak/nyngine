@@ -1,19 +1,17 @@
 #pragma once
-#include "Component.h"
 #include "ComponentManager.h"
 #include "Entity.h"
 #include "EventManager.h"
-#include "Preinclude.h"
 #include "SystemManager.h"
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
-    class Ecs final
+    class EcsManager final
     {
     public:
-        static Ecs* const Get()
+        static EcsManager* const Get()
         {
-            static Ecs instance;
+            static EcsManager instance;
             return &instance;
         }
 
@@ -33,12 +31,21 @@ namespace ny::Ecs
         }
 
     private:
-        Ecs() {}
+        EcsManager() {}
 
         ComponentManager m_componentManager;
         SystemManager m_systemManager;
         EventManager m_eventManager;
     };
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core
 
-using ECS = ny::Ecs::Ecs;
+using Ecs = ny::ECS::Core::EcsManager;
+
+template <class T>
+using EcsComponent = ny::ECS::Core::Component<T>;
+
+template <class T>
+using EcsSystem = ny::ECS::Core::System<T>;
+
+template <class T, class D>
+using EcsEvent = ny::ECS::Core::Event<T, D>;

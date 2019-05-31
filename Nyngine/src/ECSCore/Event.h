@@ -1,8 +1,8 @@
 #pragma once
-#include "EventListener.h"
 #include "Preinclude.h"
+#include "EventListener.h"
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
     class EventBase
     {
@@ -68,4 +68,4 @@ namespace ny::Ecs
             (*listener)(data);
         });
     }
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core

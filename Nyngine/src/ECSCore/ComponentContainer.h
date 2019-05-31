@@ -1,8 +1,8 @@
 #pragma once
-#include "Component.h"
 #include "Preinclude.h"
+#include "Component.h"
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
     class ComponentContainerBase
     {
@@ -39,4 +39,4 @@ namespace ny::Ecs
         m_components.emplace_back(id, component);
         return component;
     }
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core

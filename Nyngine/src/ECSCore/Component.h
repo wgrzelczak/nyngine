@@ -1,7 +1,6 @@
 #pragma once
-#include "ComponentManager.h"
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
     class ComponentBase
     {
@@ -30,4 +29,4 @@ namespace ny::Ecs
     static u32 NEXT_COMPONENT_ID = 0;
     template <class T>
     const u32 Component<T>::Id = NEXT_COMPONENT_ID++;
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core

@@ -1,8 +1,7 @@
 #pragma once
 #include "Event.h"
-#include "Preinclude.h"
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
     template <class Data>
     class EventListener
@@ -10,4 +9,4 @@ namespace ny::Ecs
     public:
         virtual void operator()(const Data& sender) {}
     };
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core

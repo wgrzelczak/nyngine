@@ -1,8 +1,7 @@
 #pragma once
 #include "Event.h"
-#include "Preinclude.h"
-#include <map>
-namespace ny::Ecs
+
+namespace ny::ECS::Core
 {
     class EventManager
     {
@@ -24,4 +23,4 @@ namespace ny::Ecs
         return ptr;
     }
 
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core

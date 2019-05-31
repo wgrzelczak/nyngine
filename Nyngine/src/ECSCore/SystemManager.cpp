@@ -2,7 +2,7 @@
 #include "SystemManager.h"
 #include "Core\FieldDetection.h"
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
     SystemManager::~SystemManager()
     {
@@ -41,11 +41,9 @@ namespace ny::Ecs
     void SystemManager::Update()
     {
         auto Update = [](std::shared_ptr<SystemBase> sys) {
-            //if constexpr(HasUpdate)
-            //sys->OnUpdate();
             sys->Update();
         };
 
         std::for_each(std::begin(m_systems), std::end(m_systems), Update);
     }
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core

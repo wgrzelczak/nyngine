@@ -1,5 +1,4 @@
 #pragma once
-#include "Entity.h"
 
 namespace ny
 {
@@ -12,7 +11,5 @@ namespace ny
         void Init();
         void Destroy();
         void Update();
-
-        std::vector<Entity> m_entities;
     };
 } // namespace ny

@@ -1,10 +1,10 @@
 #pragma once
+#include "Preinclude.h"
 #include "Component.h"
 #include "ComponentContainer.h"
 #include "Entity.h"
-#include "Preinclude.h"
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
     class ComponentManager
     {
@@ -59,4 +59,4 @@ namespace ny::Ecs
 
         return nullptr;
     }
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core

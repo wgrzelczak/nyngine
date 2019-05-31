@@ -1,10 +1,7 @@
 #pragma once
-#include "Preinclude.h"
 #include "System.h"
-#include <list>
-#include <memory>
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
     class SystemManager
     {
@@ -33,4 +30,4 @@ namespace ny::Ecs
         RegisterSystem(sys);
         return sys;
     }
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core

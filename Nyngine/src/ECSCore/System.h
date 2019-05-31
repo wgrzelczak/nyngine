@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
     class SystemBase
     {
@@ -44,4 +44,4 @@ namespace ny::Ecs
             m_components.push_back(weak);
         }
     }
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core

@@ -1,10 +1,8 @@
 #pragma once
-#include "Component.h"
 #include "Preinclude.h"
-#include <memory>
-#include <type_traits>
+#include "Component.h"
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
     class Entity
     {
@@ -35,4 +33,4 @@ namespace ny::Ecs
         static_assert(std::is_base_of<ComponentBase, T>(), "Template param should derive from Component: " __FUNCSIG__);
         return ECS::GetComponentManager()->AddEntityComponent<T>(mId);
     }
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core

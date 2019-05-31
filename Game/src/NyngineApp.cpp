@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "NyngineApp.h"
-#include "Ecs\ecs.h"
+#include "ECSCore\ecs.h"
 
 NyngineApp::NyngineApp()
 {
@@ -19,7 +19,7 @@ void NyngineApp::Init()
 
 void NyngineApp::Tick()
 {
-    ECS::Get()->GetSystemManager()->Update();
+    Ecs::Get()->GetSystemManager()->Update();
 }
 
 void NyngineApp::Shutdown()

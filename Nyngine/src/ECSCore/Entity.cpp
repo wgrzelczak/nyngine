@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Entity.h"
 
-namespace ny::Ecs
+namespace ny::ECS::Core
 {
     static u32 NEXT_ENTITY_ID = 0;
 
@@ -13,4 +13,4 @@ namespace ny::Ecs
     {
         return m_id;
     }
-} // namespace ny::Ecs
+} // namespace ny::ECS::Core
