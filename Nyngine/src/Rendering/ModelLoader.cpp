@@ -4,16 +4,23 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
+#define DEBUG_LOADING (0)
+
 namespace ny::Rendering::ModelLoader
 {
+    struct face
+    {
+        i32 vertexIndex;
+        i32 normalIndex;
+        i32 texcoordIndex;
+    };
+
     struct tinobjloaderMesh
     {
         std::vector<glm::vec3> vertices;
         std::vector<glm::vec3> normals;
         std::vector<glm::vec2> texcoords;
-        std::vector<u32> v_indices;
-        std::vector<u32> vn_indices;
-        std::vector<u32> vt_indices;
+        std::vector<face> faces;
 
         std::vector<tinyobj::material_t> materials;
     };
@@ -21,8 +28,9 @@ namespace ny::Rendering::ModelLoader
     void vertex_cb(void* user_data, float x, float y, float z, float w)
     {
         tinobjloaderMesh* mesh = reinterpret_cast<tinobjloaderMesh*>(user_data);
+#if DEBUG_LOADING
         NY_DEBUG("v[{}] = {}, {}, {}", mesh->vertices.size(), x, y, z, w);
-
+#endif
         mesh->vertices.push_back({x, y, z});
         // Discard w
     }
@@ -30,16 +38,18 @@ namespace ny::Rendering::ModelLoader
     void normal_cb(void* user_data, float x, float y, float z)
     {
         tinobjloaderMesh* mesh = reinterpret_cast<tinobjloaderMesh*>(user_data);
+#if DEBUG_LOADING
         NY_DEBUG("vn[{}] = {}, {}, {}", mesh->normals.size(), x, y, z);
-
+#endif
         mesh->normals.push_back({x, y, z});
     }
 
     void texcoord_cb(void* user_data, float x, float y, float z)
     {
         tinobjloaderMesh* mesh = reinterpret_cast<tinobjloaderMesh*>(user_data);
+#if DEBUG_LOADING
         NY_DEBUG("vt[{}] = {}, {}, {}", mesh->texcoords.size(), x, y, z);
-
+#endif
         mesh->texcoords.push_back({x, y});
         // Discrad z
     }
@@ -59,39 +69,42 @@ namespace ny::Rendering::ModelLoader
         for (int i = 0; i < num_indices; i++)
         {
             tinyobj::index_t idx = indices[i];
-            NY_DEBUG("(Need fixIndex()) idx[{}] = {}, {}, {}", mesh->v_indices.size(), idx.vertex_index, idx.normal_index, idx.texcoord_index);
+#if DEBUG_LOADING
+            NY_DEBUG("(Need fixIndex()) face[{}] = {}, {}, {}", mesh->faces.size(), idx.vertex_index, idx.normal_index, idx.texcoord_index);
+#endif
+            int vertexIndex = 0;
+            int normalIndex = 0;
+            int texcoordIndex = 0;
 
-            int tmp = 0;
+            tinyobj::fixIndex(idx.vertex_index, num_indices, &vertexIndex);
+            tinyobj::fixIndex(idx.normal_index, num_indices, &normalIndex);
+            tinyobj::fixIndex(idx.texcoord_index, num_indices, &texcoordIndex);
 
-            tinyobj::fixIndex(idx.vertex_index, num_indices, &tmp);
-            mesh->v_indices.push_back(tmp);
-
-            tinyobj::fixIndex(idx.normal_index, num_indices, &tmp);
-            mesh->vn_indices.push_back(tmp);
-
-            tinyobj::fixIndex(idx.texcoord_index, num_indices, &tmp);
-            //mesh->vt_indices.push_back(tmp);
+            mesh->faces.push_back({vertexIndex, num_indices, texcoordIndex});
         }
     }
 
     void usemtl_cb(void* user_data, const char* name, int material_idx)
     {
+#if DEBUG_LOADING
         tinobjloaderMesh* mesh = reinterpret_cast<tinobjloaderMesh*>(user_data);
         if ((material_idx > -1) && (material_idx < mesh->materials.size()))
         {
-            printf("usemtl. material id = %d(name = %s)\n", material_idx,
-                   mesh->materials[material_idx].name.c_str());
+            NY_DEBUG("usemtl. material id = {}(name = {})", material_idx, mesh->materials[material_idx].name.c_str());
         }
         else
         {
-            printf("usemtl. name = %s\n", name);
+            NY_DEBUG("usemtl. name = {}", name);
         }
+#endif
     }
 
     void mtllib_cb(void* user_data, const tinyobj::material_t* materials, int num_materials)
     {
         tinobjloaderMesh* mesh = reinterpret_cast<tinobjloaderMesh*>(user_data);
-        printf("mtllib. # of materials = %d\n", num_materials);
+#if DEBUG_LOADING
+        NY_DEBUG("mtllib. # of materials = {}", num_materials);
+#endif
 
         for (int i = 0; i < num_materials; i++)
         {
@@ -101,19 +114,20 @@ namespace ny::Rendering::ModelLoader
 
     void group_cb(void* user_data, const char** names, int num_names)
     {
-        // MyMesh *mesh = reinterpret_cast<MyMesh*>(user_data);
-        printf("group : name = \n");
-
+#if DEBUG_LOADING
+        NY_DEBUG("group : name = ");
         for (int i = 0; i < num_names; i++)
         {
-            printf("  %s\n", names[i]);
+            NY_DEBUG("  {}", names[i]);
         }
+#endif
     }
 
     void object_cb(void* user_data, const char* name)
     {
-        // MyMesh *mesh = reinterpret_cast<MyMesh*>(user_data);
-        printf("object : name = %s\n", name);
+#if DEBUG_LOADING
+        NY_DEBUG("object : name = {}", name);
+#endif
     }
 
     void LoadModel(Model& model, std::string filename)
@@ -156,13 +170,24 @@ namespace ny::Rendering::ModelLoader
 
         auto mesh = model.GetMesh();
         NY_ASSERT(mesh, "Error! Model should have a mesh!");
+
         mesh->m_indicies.clear();
-        mesh->m_indicies.swap(tolMesh.v_indices);
-
         mesh->m_positions.clear();
-        mesh->m_positions.swap(tolMesh.vertices);
-
         mesh->m_uvs.clear();
-        mesh->m_uvs.swap(tolMesh.texcoords);
+
+        u32 index = 0;
+        for (const auto& f : tolMesh.faces)
+        {
+            mesh->m_positions.push_back(tolMesh.vertices.at(f.vertexIndex));
+            if (tolMesh.texcoords.size() > 0)
+            {
+                mesh->m_uvs.push_back(tolMesh.texcoords.at(f.texcoordIndex));
+            }
+            //mesh->m_texcoords.push_back(tolMesh.normals.at(f.texcoordIndex));
+
+            //TODO: proper dealing with indices (hash vertexIndex, normalIndex and texcoordIndex and deduplicate)
+            mesh->m_indicies.push_back(index);
+            index++;
+        }
     }
 } // namespace ny::Rendering::ModelLoader

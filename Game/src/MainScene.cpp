@@ -12,43 +12,7 @@ void MainScene::Init()
     auto boxMeshRendererComponent = m_box.AddComponent<ny::ECS::MeshRendererComponent>();
     meshRendererSystem->RegisterEntity(&m_box);
 
-    std::vector<glm::vec3> positions = {
-        {-1.f, 1.f, 1.f},
-        {1.f, 1.f, 1.f},
-        {-1.f, -1.f, 1.f},
-        {1.f, -1.f, 1.f},
-
-        {-1.f, 1.f, -1.f},
-        {1.f, 1.f, -1.f},
-        {-1.f, -1.f, -1.f},
-        {1.f, -1.f, -1.f}};
-
-    std::vector<glm::vec2> uvs = {
-        {0.0f, 1.0f},
-        {1.0f, 1.0f},
-        {0.0f, 0.0f},
-        {1.0f, 0.0f},
-
-        {0.0f, 1.0f},
-        {1.0f, 1.0f},
-        {0.0f, 0.0f},
-        {1.0f, 0.0f}};
-
-    std::vector<u32> indicies = {
-        0, 1, 2, 1, 3, 2, //front
-        4, 5, 6, 5, 7, 6, //back
-
-        0, 1, 4, 1, 4, 5, //up
-        2, 6, 3, 6, 3, 7, //down
-
-        0, 2, 4, 2, 4, 6, //left
-        1, 3, 5, 3, 5, 7  //right
-    };
-
-    ny::Rendering::Material* matTmp = new ny::Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/texture.jpg");
-    ny::Rendering::Mesh* meshTmp = new ny::Rendering::Mesh(positions, uvs, indicies);
-    //ny::Rendering::Model* modelTmp = new ny::Rendering::Model(matTmp, meshTmp);
-
+    ny::Rendering::Material* matTmp = new ny::Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/debug.jpeg");
     ny::Rendering::Model* modelTmp = new ny::Rendering::Model(matTmp, "Assets/Models/cube.obj");
 
     boxMeshRendererComponent->m_model.reset(modelTmp);
