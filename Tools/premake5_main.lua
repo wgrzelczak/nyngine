@@ -20,7 +20,6 @@ IncludeDir["GLAD"] = "%{wks.location}/External/glad/include"
 IncludeDir["ImGui"] = "%{wks.location}/External/ImGui"
 IncludeDir["GLM"] = "%{wks.location}/External/glm"
 IncludeDir["STB"] = "%{wks.location}/External/stb"
-IncludeDir["tinyobjloader"] = "%{wks.location}/External/tinyobjloader"
 IncludeDir["fx-gltf"] = "%{wks.location}/External/fx-gltf/include"
 
 

@@ -6,7 +6,6 @@ Window's sandbox in C++.
 * GLAD
 * ImGUI
 * spdlog
-* tinyobjloader
 * fx-gltf
 
 ## Requirements
