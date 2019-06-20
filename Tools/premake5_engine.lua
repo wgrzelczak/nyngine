@@ -22,13 +22,7 @@ project "Nyngine"
     includedirs
     {
         "%{prj.location}/src",
-        "%{IncludeDir.SPDLOG}",
-        "%{IncludeDir.GLFW}",
-        "%{IncludeDir.GLAD}",
-        "%{IncludeDir.ImGui}",
-        "%{IncludeDir.GLM}",
-        "%{IncludeDir.STB}",
-        "%{IncludeDir.tinyobjloader}"
+        IncludeDir
     }
 
     links 

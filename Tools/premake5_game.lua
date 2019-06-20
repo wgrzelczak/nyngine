@@ -26,13 +26,7 @@ project "Game"
     {
         "%{prj.location}/src",
         "%{wks.location}/Nyngine/src",
-        "%{IncludeDir.SPDLOG}",
-        "%{IncludeDir.GLFW}",
-        "%{IncludeDir.GLAD}",
-        "%{IncludeDir.ImGui}",
-        "%{IncludeDir.GLM}",
-        "%{IncludeDir.STB}",
-        "%{IncludeDir.tinyobjloader}"
+        IncludeDir
     }
 
     links 

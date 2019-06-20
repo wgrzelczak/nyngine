@@ -23,3 +23,7 @@
 	path = External/tinyobjloader
 	url = https://github.com/syoyo/tinyobjloader
 	ignore = dirty
+[submodule "External/fx-gltf"]
+	path = External/fx-gltf
+	url = https://github.com/jessey-git/fx-gltf
+	ignore = dirty

@@ -6,11 +6,14 @@ Window's sandbox in C++.
 * GLAD
 * ImGUI
 * spdlog
+* tinyobjloader
+* fx-gltf
 
 ## Requirements
 * python3
 
 ## Installation
+0. ```git submodule update --init --recursive```
 1. ```Tools/_generate_sln.py```
 2. ```Tools/git_copy_hooks.py```
 
