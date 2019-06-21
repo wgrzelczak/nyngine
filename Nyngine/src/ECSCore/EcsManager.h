@@ -38,16 +38,3 @@ namespace ny::ECS::Core
         EventManager m_eventManager;
     };
 } // namespace ny::ECS::Core
-
-using Ecs = ny::ECS::Core::EcsManager;
-
-using EcsEntity = ny::ECS::Core::Entity;
-
-template <class T>
-using EcsComponent = ny::ECS::Core::Component<T>;
-
-template <class T>
-using EcsSystem = ny::ECS::Core::System<T>;
-
-template <class T, class D>
-using EcsEvent = ny::ECS::Core::Event<T, D>;

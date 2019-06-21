@@ -8,9 +8,9 @@ namespace ny::ECS
     {
         m_updateCallback = [](const std::shared_ptr<MeshRendererComponent>& component) {
             ny::Rendering::Command cmd;
-            cmd.m_material = component->m_model->GetMaterial();
-            cmd.m_mesh = component->m_model->GetMesh();
-            cmd.m_transform = component->m_model->GetModelMatrix();
+            cmd.m_material = component->m_material;
+            cmd.m_mesh = component->m_mesh;
+            cmd.m_transform = component->CalculateModelMatrix();
 
             ny::IEngine->GetRenderer().PushCommand(std::move(cmd));
         };

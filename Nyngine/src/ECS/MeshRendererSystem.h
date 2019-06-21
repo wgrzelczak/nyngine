@@ -1,5 +1,5 @@
 #pragma once
-#include "ECSCore\Ecs.h"
+#include "ECS\Ecs.h"
 #include "MeshRendererComponent.h"
 
 namespace ny::ECS

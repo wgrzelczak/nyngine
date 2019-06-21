@@ -12,8 +12,8 @@ namespace ny::ECS::Core
     class ComponentContainer : public ComponentContainerBase
     {
     public:
-        std::shared_ptr<T> GetComponent(const u32 id);
-        std::shared_ptr<T> AddComponent(const u32 id);
+        std::shared_ptr<T> GetComponent(const Entity* entity);
+        std::shared_ptr<T> AddComponent(const Entity* entity);
 
     private:
         using Pair = std::pair<u32, std::shared_ptr<T>>;
@@ -21,10 +21,10 @@ namespace ny::ECS::Core
     };
 
     template <class T>
-    std::shared_ptr<T> ComponentContainer<T>::GetComponent(const u32 id)
+    std::shared_ptr<T> ComponentContainer<T>::GetComponent(const Entity* entity)
     {
-        auto getById = [&id](const Pair& p) {
-            return p.first == id;
+        auto getById = [&entity](const Pair& p) {
+            return p.first == entity->GetId();
         };
 
         auto it = std::find_if(std::begin(m_components), std::end(m_components), getById);
@@ -32,11 +32,10 @@ namespace ny::ECS::Core
     }
 
     template <class T>
-    inline std::shared_ptr<T> ComponentContainer<T>::AddComponent(const u32 id)
+    inline std::shared_ptr<T> ComponentContainer<T>::AddComponent(const Entity* entity)
     {
-        std::shared_ptr<T> component(new T());
-        std::static_pointer_cast<Component<T>>(component)->SetEntityId(id);
-        m_components.emplace_back(id, component);
+        std::shared_ptr<T> component(new T(entity));
+        m_components.emplace_back(entity->GetId(), component);
         return component;
     }
 } // namespace ny::ECS::Core

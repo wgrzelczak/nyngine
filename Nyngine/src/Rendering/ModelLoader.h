@@ -1,8 +1,8 @@
 #pragma once
 #include "Preinclude.h"
-#include "Model.h"
+#include "Mesh.h"
 
 namespace ny::Rendering::ModelLoader
 {
-    void LoadModel(Model& model, std::string filename);
+    void LoadObj(Mesh& mesh, std::string filename);
 } // namespace ny::Rendering::ModelLoader

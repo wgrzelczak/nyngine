@@ -17,16 +17,16 @@ namespace ny::ECS::Core
         friend class ComponentBase;
 
         template <class T>
-        std::shared_ptr<T> GetEntityComponent(const u32 id);
+        std::shared_ptr<T> GetEntityComponent(const Entity* entity);
 
         template <class T>
-        std::shared_ptr<T> AddEntityComponent(const u32 id);
+        std::shared_ptr<T> AddEntityComponent(const Entity* entity);
 
         std::map<u32, std::shared_ptr<ComponentContainerBase>> m_components;
     };
 
     template <class T>
-    inline std::shared_ptr<T> ComponentManager::GetEntityComponent(const u32 entity)
+    inline std::shared_ptr<T> ComponentManager::GetEntityComponent(const Entity* entity)
     {
         const u32 component = Component<T>::GetId();
 
@@ -43,7 +43,7 @@ namespace ny::ECS::Core
     }
 
     template <class T>
-    inline std::shared_ptr<T> ComponentManager::AddEntityComponent(const u32 id)
+    inline std::shared_ptr<T> ComponentManager::AddEntityComponent(const Entity* entity)
     {
         const u32 componentId = Component<T>::GetId();
 
@@ -54,7 +54,7 @@ namespace ny::ECS::Core
                 container.reset(new ComponentContainer<T>());
                 m_components[componentId] = container;
             }
-            return container->AddComponent(id);
+            return container->AddComponent(entity);
         }
 
         return nullptr;

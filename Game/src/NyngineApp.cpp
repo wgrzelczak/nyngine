@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "NyngineApp.h"
-#include "ECSCore\ecs.h"
+#include "ECS\Ecs.h"
 
 NyngineApp::NyngineApp()
 {

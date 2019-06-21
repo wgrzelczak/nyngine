@@ -1,4 +1,5 @@
 #pragma once
+#include "Entity.h"
 
 namespace ny::ECS::Core
 {
@@ -16,14 +17,26 @@ namespace ny::ECS::Core
     class Component : public ComponentBase
     {
     public:
+        Component(const Entity* entity) :
+            m_entity(entity) {}
+
         static u32 GetId() { return Id; }
 
-        void SetEntityId(const u32 id) { m_id = id; }
-        u32 GetEntityId() const { return m_id; }
+        u32 GetEntityId() const
+        {
+            NY_ASSERT(m_entity, "Error! Entity not found");
+            return m_entity->GetId();
+        }
+
+        const Entity* GetEntity() const
+        {
+            NY_ASSERT(m_entity, "Error! Entity not found");
+            return m_entity;
+        }
 
     private:
         const static u32 Id;
-        u32 m_id;
+        const Entity* m_entity;
     };
 
     static u32 NEXT_COMPONENT_ID = 0;
