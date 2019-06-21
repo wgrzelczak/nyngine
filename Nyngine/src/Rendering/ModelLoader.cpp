@@ -73,17 +73,23 @@ namespace ny::Rendering::ModelLoader
 
         mesh.m_indicies.clear();
         mesh.m_positions.clear();
-        mesh.m_uvs.clear();
+        mesh.m_normals.clear();
+        mesh.m_texcoords.clear();
 
         u32 index = 0;
         for (const auto& f : obj.faces)
         {
             mesh.m_positions.push_back(obj.vertices.at(f.vertexIndex - 1));
+
+            if (obj.normals.size() > 0)
+            {
+                mesh.m_normals.push_back(obj.normals.at(f.normalIndex - 1));
+            }
+
             if (obj.texcoords.size() > 0)
             {
-                mesh.m_uvs.push_back(obj.texcoords.at(f.texcoordIndex - 1));
+                mesh.m_texcoords.push_back(obj.texcoords.at(f.texcoordIndex - 1));
             }
-            //mesh.m_texcoords.push_back(obj.normals.at(f.normalIndex - 1));
 
             //TODO: proper dealing with indices (hash vertexIndex, normalIndex and texcoordIndex and deduplicate)
             mesh.m_indicies.push_back(index);

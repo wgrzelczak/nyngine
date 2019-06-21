@@ -8,15 +8,6 @@ namespace ny::Rendering
     {
     }
 
-    Mesh::Mesh(std::vector<glm::vec3> positions, std::vector<u32> indicies) :
-        m_positions(positions), m_indicies(indicies)
-    {
-    }
-    Mesh::Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uvs, std::vector<u32> indicies) :
-        m_positions(positions), m_uvs(uvs), m_indicies(indicies)
-    {
-    }
-
     Mesh::~Mesh()
     {
         if (m_ebo != 0)
@@ -33,7 +24,8 @@ namespace ny::Rendering
         u32 attribsOffset = 0;
         u32 attribsStride = 0;
         attribsStride += sizeof(f32) * 3;
-        if (m_uvs.size() > 0) attribsStride += sizeof(f32) * 2;
+        if (m_normals.size() > 0) attribsStride += sizeof(f32) * 3;
+        if (m_texcoords.size() > 0) attribsStride += sizeof(f32) * 2;
 
         std::vector<f32> data;
         data.reserve(m_positions.size() * attribsStride);
@@ -44,10 +36,17 @@ namespace ny::Rendering
             data.push_back(m_positions.at(i).y);
             data.push_back(m_positions.at(i).z);
 
-            if (m_uvs.size() > 0)
+            if (m_normals.size() > 0)
             {
-                data.push_back(m_uvs.at(i).x);
-                data.push_back(m_uvs.at(i).y);
+                data.push_back(m_normals.at(i).x);
+                data.push_back(m_normals.at(i).y);
+                data.push_back(m_normals.at(i).z);
+            }
+
+            if (m_texcoords.size() > 0)
+            {
+                data.push_back(m_texcoords.at(i).x);
+                data.push_back(m_texcoords.at(i).y);
             }
         }
 
@@ -66,10 +65,18 @@ namespace ny::Rendering
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, attribsStride, (void*)attribsOffset);
         glEnableVertexAttribArray(0);
         attribsOffset += 3 * sizeof(f32);
-        if (m_uvs.size() > 0)
+
+        if (m_normals.size() > 0)
         {
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, attribsStride, (void*)attribsOffset);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, attribsStride, (void*)attribsOffset);
             glEnableVertexAttribArray(1);
+            attribsOffset += 3 * sizeof(f32);
+        }
+
+        if (m_texcoords.size() > 0)
+        {
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, attribsStride, (void*)attribsOffset);
+            glEnableVertexAttribArray(2);
             attribsOffset += 2 * sizeof(f32);
         }
 
@@ -77,7 +84,7 @@ namespace ny::Rendering
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 
-        NY_INFO("[Rendering] Mesh created, Positions: {}, UVs: {}, Indicies: {}", m_positions.size(), m_uvs.size(), m_indicies.size());
+        NY_INFO("[Rendering] Mesh created, Positions: {}, Normals: {}, UVs: {}, Indicies: {}", m_positions.size(), m_normals.size(), m_texcoords.size(), m_indicies.size());
     }
 
     void Mesh::Bind() const
