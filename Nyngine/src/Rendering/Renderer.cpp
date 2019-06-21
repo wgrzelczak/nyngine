@@ -42,7 +42,24 @@ namespace ny::Rendering
         for (const auto& cmd : m_commandBuffer->GetCommands())
         {
             cmd.m_material->Bind();
+
+            if (m_directionalLight.m_enabled)
+            {
+                cmd.m_material->GetProgram()->SetVector("DirLightPos", m_directionalLight.m_position);
+                cmd.m_material->GetProgram()->SetVector("DirLightColor", m_directionalLight.m_color);
+                cmd.m_material->GetProgram()->SetFloat("DirLightAmbientStrength", m_directionalLight.m_ambientStrength);
+                cmd.m_material->GetProgram()->SetFloat("DirLightSpecularStrength", m_directionalLight.m_specularStrength);
+                cmd.m_material->GetProgram()->SetFloat("DirLightSpecularShininess", m_directionalLight.m_specularShininess);
+            }
+            else
+            {
+                cmd.m_material->GetProgram()->SetVector("DirLightColor", glm::vec3(1));
+                cmd.m_material->GetProgram()->SetFloat("DirLightAmbientStrength", 1.0);
+            }
+
             cmd.m_material->GetProgram()->SetUint("time", ny::Core::Time::DeltaFromStart());
+            cmd.m_material->GetProgram()->SetMatrix("M", (cmd.m_transform));
+            cmd.m_material->GetProgram()->SetVector("ViewPos", m_camera.GetPosition());
             cmd.m_material->GetProgram()->SetMatrix("MVP", (PV * cmd.m_transform));
             cmd.m_mesh->Bind();
 
@@ -68,6 +85,14 @@ namespace ny::Rendering
                 }
                 ImGui::DragFloat3("Camera position", &m_camera.GetPositionRef().x, 0.01f);
                 m_camera.UpdateView();
+
+                //Directional light
+                if (ImGui::Button("Toggle directional light")) m_directionalLight.m_enabled = !m_directionalLight.m_enabled;
+                ImGui::DragFloat3("Directional Light Position", &m_directionalLight.m_position.x);
+                ImGui::DragFloat3("Directional Light Color", &m_directionalLight.m_color.x, 0.01f, 0.0f);
+                ImGui::DragFloat("Directional Light Ambient Strength", &m_directionalLight.m_ambientStrength, 0.01f);
+                ImGui::DragFloat("Directional Light Specular Strength", &m_directionalLight.m_specularStrength, 0.01f);
+                ImGui::DragInt("Directional Light Specular Shininess", &m_directionalLight.m_specularShininess);
             });
     }
 } // namespace ny::Rendering

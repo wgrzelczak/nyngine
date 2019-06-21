@@ -13,16 +13,25 @@ void MainScene::Init()
     auto boxMeshRendererComponent = m_box.AddComponent<ny::ECS::MeshRendererComponent>();
     meshRendererSystem->RegisterEntity(&m_box);
 
-    ny::Rendering::Material* matTmp = new ny::Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/debug.jpeg");
-    ny::Rendering::Mesh* meshTmp = new ny::Rendering::Mesh();
-    ny::Rendering::ModelLoader::LoadObj(*meshTmp, "");
+    //auto lightMeshRendererComponent = m_directionalLight.AddComponent<ny::ECS::MeshRendererComponent>();
+    //   meshRendererSystem->RegisterEntity(&m_directionalLight);
 
-    boxMeshRendererComponent->m_material = matTmp;
-    boxMeshRendererComponent->m_mesh = meshTmp;
+    ny::Rendering::Mesh* cube = new ny::Rendering::Mesh();
+    ny::Rendering::ModelLoader::LoadObj(*cube, "");
+
+    boxMeshRendererComponent->m_material = new ny::Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/Textures/debug.jpeg");
+    boxMeshRendererComponent->m_mesh = cube;
+
+    //lightMeshRendererComponent->m_material = new ny::Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/unlit.fs", "Assets/Textures/debug.jpeg");
+    //   lightMeshRendererComponent->m_mesh = cube;
 
     m_box.m_transform.SetPosition(glm::vec3{0, 0, 0});
     m_box.m_transform.SetScale(glm::vec3(0.5f, 0.5f, 0.5f));
     m_box.m_transform.SetRotation(glm::quat(0.0f, 0.0f, 0.0f, 0.1f));
+
+    //m_directionalLight.m_transform.SetPosition(glm::vec3{-0.5f, 0.5f, 0});
+    //   m_directionalLight.m_transform.SetScale(glm::vec3(0.3f, 0.3f, 0.3f));
+    //   m_directionalLight.m_transform.SetRotation(glm::quat(0.0f, 0.0f, 0.0f, 1.f));
 
     ny::ImGuiSystem::RegisterFunction(
         [this]() -> void {

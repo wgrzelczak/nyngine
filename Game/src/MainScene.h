@@ -10,4 +10,5 @@ public:
 
 private:
     EcsEntity m_box;
+    EcsEntity m_directionalLight;
 };

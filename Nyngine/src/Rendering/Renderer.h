@@ -2,6 +2,7 @@
 #include "Preinclude.h"
 #include "Camera.h"
 #include "CommandBuffer.h"
+#include "LightDirectional.h"
 
 namespace ny::Rendering
 {
@@ -17,6 +18,8 @@ namespace ny::Rendering
 
     private:
         Camera m_camera;
+        LightDirectional m_directionalLight;
+
         std::unique_ptr<CommandBuffer> m_commandBuffer = nullptr;
 
         void RegisterImGuiDebug();
