@@ -8,10 +8,6 @@ namespace ny::ECS::Core
 {
     class ComponentManager
     {
-    public:
-        ComponentManager(){};
-        ~ComponentManager(){};
-
     private:
         friend class Entity;
         friend class ComponentBase;
@@ -30,13 +26,10 @@ namespace ny::ECS::Core
     {
         const u32 component = Component<T>::GetId();
 
+        if (auto it = m_components.find(component); it != std::end(m_components))
         {
-            auto it = m_components.find(component);
-            if (it != std::end(m_components))
-            {
-                auto container = std::static_pointer_cast<ComponentContainer<T>>(it->second);
-                return container->GetComponent(entity);
-            }
+            auto container = std::static_pointer_cast<ComponentContainer<T>>(it->second);
+            return container->GetComponent(entity);
         }
 
         return nullptr;
@@ -47,16 +40,12 @@ namespace ny::ECS::Core
     {
         const u32 componentId = Component<T>::GetId();
 
+        auto container = std::static_pointer_cast<ComponentContainer<T>>(m_components[componentId]);
+        if (!container)
         {
-            auto container = std::static_pointer_cast<ComponentContainer<T>>(m_components[componentId]);
-            if (container == nullptr)
-            {
-                container.reset(new ComponentContainer<T>());
-                m_components[componentId] = container;
-            }
-            return container->AddComponent(entity);
+            container.reset(new ComponentContainer<T>());
+            m_components[componentId] = container;
         }
-
-        return nullptr;
+        return container->AddComponent(entity);
     }
 } // namespace ny::ECS::Core

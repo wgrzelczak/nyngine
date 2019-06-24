@@ -14,14 +14,14 @@ namespace ny::Rendering
     private:
         void GenerateTexture();
 
-        std::string m_name = "";
+        std::string m_name{""};
 
-        u32 m_id = 0;
+        u32 m_id{0};
 
-        i32 m_width = 0;
-        i32 m_height = 0;
-        i32 m_channelsNumber = 0;
+        i32 m_width{0};
+        i32 m_height{0};
+        i32 m_channelsNumber{0};
 
-        unsigned char* m_data = nullptr;
+        unsigned char* m_data{nullptr};
     };
 } // namespace ny::Rendering

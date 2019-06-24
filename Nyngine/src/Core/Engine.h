@@ -42,14 +42,15 @@ namespace ny::Core
         void Tick();
         void Shutdown();
 
-        State m_state = State::Init;
+        State m_state{State::Init};
+        Application* m_app{nullptr};
 
-        Application* m_app = nullptr;
-
-        std::unique_ptr<Renderer> m_renderer = nullptr;
-        std::unique_ptr<Window> m_window = nullptr;
+        std::unique_ptr<Renderer> m_renderer{nullptr};
+        std::unique_ptr<Window> m_window{nullptr};
     };
-
-#define IEngine Core::Engine::GetInstance()
-
 } // namespace ny::Core
+
+namespace ny
+{
+    using Engine = Core::Engine;
+}

@@ -51,7 +51,7 @@ namespace ny::Rendering
 
     void Shader::Load()
     {
-        std::ifstream in(m_name);
+        std::ifstream in{m_name};
 
         NY_ASSERT(in.good(), "Cannot open file: {}", m_name);
 

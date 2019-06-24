@@ -9,14 +9,14 @@ namespace ny::Rendering
     public:
         Program(std::string vsFilename, std::string fsFilename);
 
-        u32 m_programId;
+        u32 m_programId{0};
 
         std::vector<Uniform> m_uniforms;
         std::vector<Attribute> m_attributes;
 
         void SetBool(std::string location, bool value) const;
         void SetInt(std::string location, i32 value) const;
-        void SetUint(std::string location, i32 value) const;
+        void SetUint(std::string location, u32 value) const;
         void SetFloat(std::string location, f32 value) const;
         void SetVector(std::string location, glm::vec2 value) const;
         void SetVector(std::string location, glm::vec3 value) const;

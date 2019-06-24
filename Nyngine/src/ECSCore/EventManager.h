@@ -16,11 +16,10 @@ namespace ny::ECS::Core
     template <class E>
     inline std::shared_ptr<E> EventManager::GetEvent(const u32 id)
     {
-        auto ptr = m_events.find(id);
-        if (ptr != std::end(m_events))
-            return nullptr;
+        if (auto ptr = m_events.find(id); ptr == std::end(m_events))
+            return ptr;
 
-        return ptr;
+        return nullptr;
     }
 
 } // namespace ny::ECS::Core

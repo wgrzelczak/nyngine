@@ -19,8 +19,8 @@ namespace ny::Core
         static void Update() { return GetInstance()->UpdateImpl(); }
 
         static TimePoint GetLocale() { return GetInstance()->GetLocaleImpl(); }
-        static u32 DeltaFromStart() { return GetInstance()->DeltaFromStartImpl(); }
-        static u32 Delta() { return GetInstance()->DeltaImpl(); }
+        static u64 DeltaFromStart() { return GetInstance()->DeltaFromStartImpl(); }
+        static u64 Delta() { return GetInstance()->DeltaImpl(); }
 
         static us GetDuration(u32 time) { return us(time); }
 
@@ -31,8 +31,8 @@ namespace ny::Core
         void UpdateImpl();
 
         TimePoint GetLocaleImpl() const;
-        u32 DeltaFromStartImpl() const;
-        u32 DeltaImpl() const;
+        u64 DeltaFromStartImpl() const;
+        u64 DeltaImpl() const;
 
         TimePoint m_firstFrame;
         TimePoint m_lastFrame;

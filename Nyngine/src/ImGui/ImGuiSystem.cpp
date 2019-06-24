@@ -86,7 +86,7 @@ namespace ny
     {
         ImGuiIO& io = ImGui::GetIO();
 
-        io.DisplaySize = ImVec2(Core::Engine::GetInstance()->GetWindow().GetWidth(), Core::Engine::GetInstance()->GetWindow().GetHeight());
+        io.DisplaySize = ImVec2(static_cast<f32>(Core::Engine::GetInstance()->GetWindow().GetWidth()), static_cast<f32>(Core::Engine::GetInstance()->GetWindow().GetHeight()));
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

@@ -20,7 +20,7 @@ namespace ny::Rendering
         Camera m_camera;
         LightDirectional m_directionalLight;
 
-        std::unique_ptr<CommandBuffer> m_commandBuffer = nullptr;
+        std::unique_ptr<CommandBuffer> m_commandBuffer{nullptr};
 
         void RegisterImGuiDebug();
     };

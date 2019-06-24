@@ -28,12 +28,12 @@ namespace ny::Core
         return Clock::now();
     }
 
-    u32 Time::DeltaFromStartImpl() const
+    u64 Time::DeltaFromStartImpl() const
     {
         return std::chrono::duration_cast<us>(m_currentFrame - m_firstFrame).count();
     }
 
-    u32 Time::DeltaImpl() const
+    u64 Time::DeltaImpl() const
     {
         return std::chrono::duration_cast<us>(m_currentFrame - m_lastFrame).count();
     }

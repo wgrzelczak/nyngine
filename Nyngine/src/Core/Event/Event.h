@@ -41,7 +41,7 @@ namespace ny::Core
 
         virtual EventType GetEventType() const = 0;
 
-        const EventType m_type;
-        bool m_handled;
+        const EventType m_type{EventType::Undefined};
+        bool m_handled{false};
     };
 } // namespace ny::Core

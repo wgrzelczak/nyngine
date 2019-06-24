@@ -33,7 +33,7 @@ namespace ny::ECS::Core
         std::vector<Listener> m_listeners;
     };
 
-    static u32 EVENT_NEXT_ID = 0;
+    static u32 EVENT_NEXT_ID{0};
     template <class T, class Data>
     const u32 Event<T, Data>::Id = EVENT_NEXT_ID++;
 

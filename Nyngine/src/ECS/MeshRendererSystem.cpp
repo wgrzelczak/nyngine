@@ -12,7 +12,7 @@ namespace ny::ECS
             cmd.m_mesh = component->m_mesh;
             cmd.m_transform = component->CalculateModelMatrix();
 
-            ny::IEngine->GetRenderer().PushCommand(std::move(cmd));
+            Engine::GetInstance()->GetRenderer().PushCommand(std::move(cmd));
         };
     }
 } // namespace ny::ECS

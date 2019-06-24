@@ -21,8 +21,8 @@ namespace ny::Rendering
     {
         NY_INFO("[Rendering] Creating mesh...");
 
-        u32 attribsOffset = 0;
-        u32 attribsStride = 0;
+        u64 attribsOffset{0};
+        u32 attribsStride{0};
         attribsStride += sizeof(f32) * 3;
         if (m_normals.size() > 0) attribsStride += sizeof(f32) * 3;
         if (m_texcoords.size() > 0) attribsStride += sizeof(f32) * 2;

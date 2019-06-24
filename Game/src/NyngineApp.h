@@ -17,5 +17,5 @@ public:
     virtual void Shutdown() override;
 
 private:
-    Scene* m_currentScene = nullptr;
+    Scene* m_currentScene{nullptr};
 };

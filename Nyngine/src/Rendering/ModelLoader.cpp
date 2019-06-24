@@ -76,7 +76,7 @@ namespace ny::Rendering::ModelLoader
         mesh.m_normals.clear();
         mesh.m_texcoords.clear();
 
-        u32 index = 0;
+        u32 index{0};
         for (const auto& f : obj.faces)
         {
             mesh.m_positions.push_back(obj.vertices.at(f.vertexIndex - 1));

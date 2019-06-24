@@ -11,7 +11,7 @@ uniform vec3 DirLightPos;
 uniform vec3 DirLightColor;
 uniform float DirLightAmbientStrength;
 uniform float DirLightSpecularStrength;
-uniform float DirLightSpecularShininess;
+uniform uint DirLightSpecularShininess;
 
 uniform sampler2D ourTexture;
 

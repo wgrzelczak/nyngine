@@ -20,7 +20,7 @@ namespace ny::ECS::Core
 
     protected:
         using pFuncUpdate = void (*)(const std::shared_ptr<RequiredComponent>&);
-        pFuncUpdate m_updateCallback = nullptr;
+        pFuncUpdate m_updateCallback{nullptr};
 
         std::list<std::shared_ptr<RequiredComponent>> m_components;
     };

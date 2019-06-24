@@ -17,7 +17,7 @@ namespace ny::Rendering
     private:
         void CreateProgram(std::string vertexShader, std::string fragmentShader);
 
-        Program* m_program = nullptr;
-        u32 m_textureId = 0;
+        Program* m_program{nullptr};
+        u32 m_textureId{0};
     };
 } // namespace ny::Rendering

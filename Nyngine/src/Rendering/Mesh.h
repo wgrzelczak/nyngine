@@ -14,9 +14,9 @@ namespace ny::Rendering
         std::vector<glm::vec2> m_texcoords;
         std::vector<u32> m_indicies;
 
-        u32 m_vao = 0;
-        u32 m_vbo = 0;
-        u32 m_ebo = 0;
+        u32 m_vao{0};
+        u32 m_vbo{0};
+        u32 m_ebo{0};
 
         void Generate();
         void Bind() const;

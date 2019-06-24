@@ -36,10 +36,10 @@ namespace ny::ECS::Core
 
     private:
         const static u32 Id;
-        const Entity* m_entity;
+        const Entity* m_entity{nullptr};
     };
 
-    static u32 NEXT_COMPONENT_ID = 0;
+    static u32 NEXT_COMPONENT_ID{0};
     template <class T>
     const u32 Component<T>::Id = NEXT_COMPONENT_ID++;
 } // namespace ny::ECS::Core

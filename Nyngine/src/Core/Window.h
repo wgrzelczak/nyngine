@@ -7,9 +7,9 @@ namespace ny::Core
 {
     struct WindowSettings
     {
-        std::string title = "Title";
-        u32 width = 800;
-        u32 height = 600;
+        std::string title{"Title"};
+        u32 width{800};
+        u32 height{600};
     };
 
     class Window
@@ -27,7 +27,7 @@ namespace ny::Core
     private:
         void RegisterCallbacks();
 
-        GLFWwindow* m_window = nullptr;
+        GLFWwindow* m_window{nullptr};
 
         struct WindowData
         {
