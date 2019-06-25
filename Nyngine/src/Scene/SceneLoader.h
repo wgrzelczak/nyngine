@@ -1,5 +1,6 @@
 #pragma once
 #include "ECS/Ecs.h"
+#include "Rendering/Mesh.h"
 #include "Scene.h"
 #include "fx/gltf.h"
 
@@ -18,7 +19,7 @@ namespace ny
         void LoadTransform(fx::gltf::Node& node, ECS::Transform& transform);
         void LoadMesh(fx::gltf::Mesh& inMesh, EcsEntity* entity);
 
-        void GetAccessorData(i32 accessorId, u8& elementSize, u32& elementsNum, void*& data);
+        void GetAccessorData(i32 accessorId, Rendering::Mesh::VertexAttributesSettings::Data& data);
 
         fx::gltf::Document m_doc;
     };

@@ -2,6 +2,13 @@
 #include "Preinclude.h"
 #include "glad/glad.h"
 
+#define GL_ATTRIB_LOCATION_POSITION (0)
+#define GL_ATTRIB_LOCATION_NORMALS (1)
+#define GL_ATTRIB_LOCATION_TEXCOORDS0 (2)
+#define GL_ATTRIB_LOCATION_TEXCOORDS1 (3)
+
+#define GL_ATTRIB_NUM (4)
+
 namespace ny::Rendering
 {
     enum class GLSLType

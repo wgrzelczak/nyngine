@@ -96,6 +96,6 @@ namespace ny::Rendering::ModelLoader
             index++;
         }
 
-        mesh.Generate();
+        //mesh.Generate();
     }
 } // namespace ny::Rendering::ModelLoader

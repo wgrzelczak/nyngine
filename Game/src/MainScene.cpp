@@ -11,7 +11,7 @@ void MainScene::Init()
 {
     auto loader = ny::SceneLoader("Assets/glTF/Duck/Duck.gltf");
     auto box = loader.CreateEntityByNodeIndex(2);
-
+    box->m_transform.SetScale({0.01, 0.01, 0.01});
     //    auto meshRendererSystem = Ecs::GetSystemManager()->RegisterSystem<ny::ECS::MeshRendererSystem>();
     //
     //    auto boxMeshRendererComponent = m_box.AddComponent<ny::ECS::MeshRendererComponent>();

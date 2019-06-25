@@ -5,6 +5,13 @@
 
 #define GLTF_INVALID_INDEX (-1)
 #define GLTF_KEY_ATTRIBUTE_POSITION "POSITION"
+#define GLTF_KEY_ATTRIBUTE_NORMAL "NORMAL"
+#define GLTF_KEY_ATTRIBUTE_TANGENT "TANGENT"
+#define GLTF_KEY_ATTRIBUTE_TEXCOORD0 "TEXCOORD_0"
+#define GLTF_KEY_ATTRIBUTE_TEXCOORD1 "TEXCOORD_1"
+#define GLTF_KEY_ATTRIBUTE_COLOR0 "COLOR_0"
+#define GLTF_KEY_ATTRIBUTE_JOINTS0 "JOINTS_0"
+#define GLTF_KEY_ATTRIBUTE_WEIGHTS0 "WEIGHTS_0"
 
 namespace ny
 {
@@ -50,11 +57,15 @@ namespace ny
 
         NY_DEBUG("Loading indices...")
         auto accessorId = inMesh.primitives[0].indices;
-        GetAccessorData(accessorId, settings.m_indicesStride, settings.m_indicesNum, settings.p_indices);
+        GetAccessorData(accessorId, settings.indices);
 
-        accessorId = inMesh.primitives[0].attributes[GLTF_KEY_ATTRIBUTE_POSITION];
         NY_DEBUG("Loading positions...")
-        GetAccessorData(accessorId, settings.m_positionsStride, settings.m_positionsNum, settings.p_positions);
+        accessorId = inMesh.primitives[0].attributes[GLTF_KEY_ATTRIBUTE_POSITION];
+        GetAccessorData(accessorId, settings.positions);
+
+        NY_DEBUG("Loading normals...")
+        accessorId = inMesh.primitives[0].attributes[GLTF_KEY_ATTRIBUTE_NORMAL];
+        GetAccessorData(accessorId, settings.normals);
 
         ny::Rendering::Mesh* mesh = new ny::Rendering::Mesh();
 
@@ -70,11 +81,11 @@ namespace ny
 
         sys->RegisterEntity(entity);
 
-        component->m_material = new ny::Rendering::Material("Assets/Shaders/pos.vs", "Assets/Shaders/unlit.fs", "Assets/Textures/debug.jpeg");
+        component->m_material = new ny::Rendering::Material("Assets/Shaders/pos.vs", "Assets/Shaders/uv.fs", "Assets/Textures/debug.jpeg");
         component->m_mesh = mesh;
     }
 
-    void SceneLoader::GetAccessorData(i32 accessorId, u8& elementSize, u32& elementsNum, void*& data)
+    void SceneLoader::GetAccessorData(i32 accessorId, Mesh::VertexAttributesSettings::Data& data)
     {
         if (accessorId == GLTF_INVALID_INDEX)
         {
@@ -83,34 +94,63 @@ namespace ny
 
         NY_ASSERT(accessorId < m_doc.accessors.size(), "Error! Invalid gltf id");
 
-        switch (m_doc.accessors.at(accessorId).componentType)
+        fx::gltf::Accessor& accessor{m_doc.accessors.at(accessorId)};
+
+        switch (accessor.componentType)
         {
         case fx::gltf::Accessor::ComponentType::None:
-            elementSize = 0;
+            data.fieldsTypeSize = 0;
             break;
         case fx::gltf::Accessor::ComponentType::Byte:
         case fx::gltf::Accessor::ComponentType::UnsignedByte:
-            elementSize = 1;
+            data.fieldsTypeSize = 1;
             break;
         case fx::gltf::Accessor::ComponentType::Short:
         case fx::gltf::Accessor::ComponentType::UnsignedShort:
-            elementSize = 2;
+            data.fieldsTypeSize = 2;
             break;
         case fx::gltf::Accessor::ComponentType::UnsignedInt:
         case fx::gltf::Accessor::ComponentType::Float:
-            elementSize = 4;
+            data.fieldsTypeSize = 4;
             break;
         }
 
-        elementsNum = m_doc.accessors.at(accessorId).count;
+        data.num = accessor.count;
+        switch (accessor.type)
+        {
+        case fx::gltf::Accessor::Type::None:
+            data.fieldsNum = 0;
+            break;
+        case fx::gltf::Accessor::Type::Scalar:
+            data.fieldsNum = 1;
+            break;
+        case fx::gltf::Accessor::Type::Vec2:
+            data.fieldsNum = 2;
+            break;
+        case fx::gltf::Accessor::Type::Vec3:
+            data.fieldsNum = 3;
+            break;
+        case fx::gltf::Accessor::Type::Vec4:
+            data.fieldsNum = 4;
+            break;
+        case fx::gltf::Accessor::Type::Mat2:
+            data.fieldsNum = 4;
+            break;
+        case fx::gltf::Accessor::Type::Mat3:
+            data.fieldsNum = 9;
+            break;
+        case fx::gltf::Accessor::Type::Mat4:
+            data.fieldsNum = 16;
+            break;
+        }
 
-        auto bufferViewId = m_doc.accessors.at(accessorId).bufferView;
-        auto bufferViewByteOffset = m_doc.accessors.at(accessorId).byteOffset;
+        auto bufferViewId = accessor.bufferView;
+        auto bufferViewByteOffset = accessor.byteOffset;
         auto bufferId = m_doc.bufferViews.at(bufferViewId).buffer;
         auto bufferOffset = m_doc.bufferViews.at(bufferViewId).byteOffset;
         auto bufferPointer = m_doc.buffers.at(bufferId).data.data();
 
-        data = (bufferPointer + bufferOffset + bufferViewByteOffset);
+        data.dataPtr = (bufferPointer + bufferOffset + bufferViewByteOffset);
     }
 
 } // namespace ny
