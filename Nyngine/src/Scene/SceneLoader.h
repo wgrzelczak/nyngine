@@ -17,7 +17,7 @@ namespace ny
 
     private:
         void LoadTransform(fx::gltf::Node& node, ECS::Transform& transform);
-        void LoadMesh(fx::gltf::Mesh& inMesh, EcsEntity* entity);
+        Rendering::Mesh* LoadMesh(fx::gltf::Mesh& inMesh);
 
         void GetAccessorData(i32 accessorId, Rendering::Mesh::VertexAttributesSettings::Data& data);
 

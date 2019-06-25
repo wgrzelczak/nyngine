@@ -17,7 +17,7 @@ uniform sampler2D ourTexture;
 
 void main()
 {
-    vec3 objColor = vec3(1, 1, 1); //(vec4(abs(Normal), 1.0) + texture(ourTexture, TexCoord)) * 0.5;
+    vec4 albedo = texture(ourTexture, TexCoord);
     
     //Ambient
     vec3 ambient = DirLightAmbientStrength * DirLightColor;
@@ -33,6 +33,6 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), DirLightSpecularShininess);
     vec3 specular = DirLightSpecularStrength * spec * DirLightColor;
     
-    vec3 result = (ambient + diffuse + specular) * objColor;
-    FragColor = vec4(result, 1.0);
+    vec4 result = vec4((ambient + diffuse + specular), 0.0) * albedo;
+    FragColor = result;
 }

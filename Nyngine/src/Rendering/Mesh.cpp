@@ -8,6 +8,11 @@ namespace ny::Rendering
     {
     }
 
+    Mesh::Mesh(const VertexAttributesSettings& settings)
+    {
+        Generate(settings);
+    }
+
     Mesh::~Mesh()
     {
         for (u32 i{0}; i < GL_ATTRIB_NUM; ++i)

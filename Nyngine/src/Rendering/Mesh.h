@@ -28,6 +28,7 @@ namespace ny::Rendering
         };
 
         Mesh();
+        Mesh(const VertexAttributesSettings& settings);
         ~Mesh();
 
         std::vector<glm::vec3> m_positions;

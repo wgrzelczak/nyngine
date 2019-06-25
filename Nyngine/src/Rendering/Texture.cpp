@@ -11,9 +11,9 @@ namespace ny::Rendering
         m_name(filename)
     {
         NY_INFO("[Resources] Loading texture {}...", m_name);
-        stbi_set_flip_vertically_on_load(true);
+        stbi_set_flip_vertically_on_load(false);
         m_data = stbi_load(filename.c_str(), &m_width, &m_height, &m_channelsNumber, 0);
-        NY_ASSERT(m_data != nullptr, "Cannot load texture {}", filename);
+        NY_ASSERT(m_data != nullptr, "Cannot load texture {}, reason: {}", filename, stbi_failure_reason());
 
         GenerateTexture();
         NY_INFO("[Resources] Texture {} loaded", m_name);

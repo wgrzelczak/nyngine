@@ -34,12 +34,25 @@ namespace ny
 
         LoadTransform(node, entity->m_transform);
 
+        Rendering::Mesh* pMesh = nullptr;
         if (node.mesh != GLTF_INVALID_INDEX)
         {
             NY_DEBUG("Loadig mesh...");
             NY_ASSERT(node.mesh < m_doc.meshes.size(), "Error! Invalid gltf id");
-            LoadMesh(m_doc.meshes.at(node.mesh), entity);
+            pMesh = LoadMesh(m_doc.meshes.at(node.mesh));
         }
+
+        auto sys = Ecs::GetSystemManager()->GetSystem<ECS::MeshRendererSystem>();
+        auto component = entity->GetComponent<ECS::MeshRendererComponent>();
+        if (!component)
+        {
+            component = entity->AddComponent<ECS::MeshRendererComponent>();
+        }
+
+        sys->RegisterEntity(entity);
+
+        component->m_material = new Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/glTF/Duck/" + m_doc.images.at(0).uri);
+        component->m_mesh = pMesh;
 
         return entity;
     }
@@ -54,7 +67,7 @@ namespace ny
         transform.SetScale({node.scale.at(0), node.scale.at(1), node.scale.at(2)});
     }
 
-    void SceneLoader::LoadMesh(fx::gltf::Mesh& inMesh, EcsEntity* entity)
+    Rendering::Mesh* SceneLoader::LoadMesh(fx::gltf::Mesh& inMesh)
     {
         ny::Rendering::Mesh::VertexAttributesSettings settings;
 
@@ -70,22 +83,11 @@ namespace ny
         accessorId = inMesh.primitives[0].attributes[GLTF_KEY_ATTRIBUTE_NORMAL];
         GetAccessorData(accessorId, settings.normals);
 
-        ny::Rendering::Mesh* mesh = new ny::Rendering::Mesh();
+        NY_DEBUG("Loading texcoords0...")
+        accessorId = inMesh.primitives[0].attributes[GLTF_KEY_ATTRIBUTE_TEXCOORD0];
+        GetAccessorData(accessorId, settings.texcoords);
 
-        mesh->Generate(settings);
-
-        auto sys = Ecs::GetSystemManager()->GetSystem<ECS::MeshRendererSystem>();
-
-        auto component = entity->GetComponent<ny::ECS::MeshRendererComponent>();
-        if (!component)
-        {
-            component = entity->AddComponent<ny::ECS::MeshRendererComponent>();
-        }
-
-        sys->RegisterEntity(entity);
-
-        component->m_material = new ny::Rendering::Material("Assets/Shaders/pos.vs", "Assets/Shaders/uv.fs", "Assets/Textures/debug.jpeg");
-        component->m_mesh = mesh;
+        return new ny::Rendering::Mesh(settings);
     }
 
     void SceneLoader::GetAccessorData(i32 accessorId, Mesh::VertexAttributesSettings::Data& data)
