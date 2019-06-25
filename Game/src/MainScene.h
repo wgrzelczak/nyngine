@@ -9,6 +9,6 @@ public:
     virtual void Update() override;
 
 private:
-    EcsEntity m_box;
+    EcsEntity* m_box{nullptr};
     EcsEntity m_directionalLight;
 };

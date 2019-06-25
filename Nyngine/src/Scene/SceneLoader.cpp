@@ -46,8 +46,11 @@ namespace ny
 
     void SceneLoader::LoadTransform(fx::gltf::Node& node, ECS::Transform& transform)
     {
+        //pos(x, y, z)
         transform.SetPosition({node.translation.at(0), node.translation.at(1), node.translation.at(2)});
-        transform.SetRotation({node.rotation.at(0), node.rotation.at(1), node.rotation.at(2), node.rotation.at(3)});
+        //quat(w, x, y, z)
+        transform.SetRotation({node.rotation.at(3), node.rotation.at(0), node.rotation.at(1), node.rotation.at(2)});
+        //scale(x, y, z)
         transform.SetScale({node.scale.at(0), node.scale.at(1), node.scale.at(2)});
     }
 

@@ -16,7 +16,10 @@ namespace ny::ECS
 
         void NormalizeRotation() { m_rotation = glm::normalize(m_rotation); }
         void AddRotation(const glm::quat& rotation);
+
+        glm::vec3& GetPositionRef() { return m_position; }
         glm::quat& GetRotationRef() { return m_rotation; }
+        glm::vec3& GetScaleRef() { return m_scale; }
 
     private:
         glm::vec3 m_position{0.0f, 0.0f, 0.0f};
