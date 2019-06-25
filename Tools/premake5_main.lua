@@ -21,6 +21,7 @@ IncludeDir["ImGui"] = "%{wks.location}/External/ImGui"
 IncludeDir["GLM"] = "%{wks.location}/External/glm"
 IncludeDir["STB"] = "%{wks.location}/External/stb"
 IncludeDir["fx-gltf"] = "%{wks.location}/External/fx-gltf/include"
+IncludeDir["fx-gltf-3rd"] = "%{wks.location}/External/fx-gltf/test/thirdparty"
 
 
 include "premake5_game.lua"

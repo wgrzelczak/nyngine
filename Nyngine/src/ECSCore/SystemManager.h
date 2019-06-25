@@ -9,7 +9,11 @@ namespace ny::ECS::Core
         ~SystemManager();
 
         template <class T>
-        std::shared_ptr<T> RegisterSystem();
+        std::shared_ptr<T> CreateSystem();
+
+        template <class T>
+        std::shared_ptr<T> GetSystem(bool createIfNotFound = true);
+
         void RemoveSystem(const std::weak_ptr<SystemBase>& sys);
         void RemoveSystems();
         void Update();
@@ -23,11 +27,20 @@ namespace ny::ECS::Core
     };
 
     template <class T>
-    inline std::shared_ptr<T> SystemManager::RegisterSystem()
+    inline std::shared_ptr<T> SystemManager::CreateSystem()
     {
         static_assert(std::is_base_of<SystemBase, T>(), "Template param should derive from System: " __FUNCSIG__);
         std::shared_ptr<T> sys(new T());
         RegisterSystem(sys);
         return sys;
+    }
+    template <class T>
+    inline std::shared_ptr<T> SystemManager::GetSystem(bool createIfNotFound)
+    {
+        static_assert(std::is_base_of<SystemBase, T>(), "Template param should derive from System: " __FUNCSIG__);
+
+        NY_WARN("GetSystem not implemented!!");
+
+        return createIfNotFound ? CreateSystem<T>() : nullptr;
     }
 } // namespace ny::ECS::Core

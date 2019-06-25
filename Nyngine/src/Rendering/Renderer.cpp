@@ -63,7 +63,7 @@ namespace ny::Rendering
             cmd.m_material->GetProgram()->SetMatrix("MVP", (PV * cmd.m_transform));
             cmd.m_mesh->Bind();
 
-            glDrawElements(GL_TRIANGLES, static_cast<i32>(cmd.m_mesh->m_indicies.size()), GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, static_cast<i32>(cmd.m_mesh->m_indicesNum), GL_UNSIGNED_SHORT, 0);
         }
         m_commandBuffer->Clear();
     }
