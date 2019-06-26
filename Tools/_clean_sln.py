@@ -1,11 +1,26 @@
 import os
-os.chdir("..")
+#GitPython package
+import git
+from distutils.util import strtobool
 
-print("Cleaning solution...")
+solutionDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+previousWorkingDirectory = os.getcwd()
+os.chdir(solutionDir)
+
+git = git.Repo("").git
+print(git.clean('-Xdn'))
+
 print(80*'-', "\n")
 
-os.system("tools\\premake5.exe clean")
+if strtobool(input("Want remove above? (Y/N): ")):
+    try:
+        print(git.clean('-Xdf'))
+    except Exception as e:
+        print(80*'-', "\n")
+        print("Some files wasn't removed. Exception trace:")
+        print(e)
+        print(80*'-', "\n")
 
-print("\n", 80*'-')
-print("Solution cleaned")
-#os.system("pause")
+os.chdir(previousWorkingDirectory)
+os.system("pause")

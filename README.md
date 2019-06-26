@@ -9,12 +9,10 @@ Window's sandbox in C++.
 * fx-gltf
 
 ## Requirements
-* python3
+* python3 + pip
 
 ## Installation
-0. ```git submodule update --init --recursive```
-1. ```Tools/_generate_sln.py```
-2. ```Tools/git_copy_hooks.py```
+Execute ```Tools/initialize.py```
 
 ## Directory Hierarchy
 - Build
@@ -27,12 +25,16 @@ Window's sandbox in C++.
 
 ## Tools
 ### Premake5
-Genereating vs solution.
-- ```premake5_main.lua``` - main config file
-
+Genereating vs solution. Every project has separate lua configuration file.
+- ```premake5_main.lua``` - main solution, which includes all project's configurations
+- ```premake5_engine.lua``` - engine project
+- ```premake5_game.lua``` - game project
+- ```premake5_glad.lua``` - GLAD project
+- ```premake5_glfw.lua``` - GLFW project
+- ```premake5_imgui.lua``` - ImGui project
 
 ### Code formatting
 Formatting all (c, cpp, h, hpp) files in _Game_ and _Nyngine_ directories.
 - ```.clang-format``` - all code formatting rules
 - Auto-formatting on ```git commit```
-- Manual-formatting by ```Tools/_clang_format_all.py```
+- Manual-formatting by ```Tools/clang_format_all.py```
