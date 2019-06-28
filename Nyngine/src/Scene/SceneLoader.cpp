@@ -26,33 +26,31 @@ namespace ny
         NY_DEBUG("Unloaded");
     }
 
-    EcsEntity* SceneLoader::CreateEntityByNodeIndex(i32 nodeId, bool withChildren)
+    void SceneLoader::LoadScene(Scene* scene, i32 sceneId)
     {
+        for (const auto& n : m_doc.scenes.at(sceneId).nodes)
+        {
+            scene->m_objects.push_back(CreateEntityByNodeIndex(n));
+        }
+    }
+
+    std::shared_ptr<EcsEntity> SceneLoader::CreateEntityByNodeIndex(i32 nodeId, bool withChildren)
+    {
+        auto entity = std::make_shared<EcsEntity>();
+
         fx::gltf::Node& node = m_doc.nodes.at(nodeId);
-
-        EcsEntity* entity{new EcsEntity()};
-
         LoadTransform(node, entity->m_transform);
+        AddMesh(node, entity);
 
-        Rendering::Mesh* pMesh = nullptr;
-        if (node.mesh != GLTF_INVALID_INDEX)
+        if (withChildren)
         {
-            NY_DEBUG("Loadig mesh...");
-            NY_ASSERT(node.mesh < m_doc.meshes.size(), "Error! Invalid gltf id");
-            pMesh = LoadMesh(m_doc.meshes.at(node.mesh));
+            for (const auto& n : node.children)
+            {
+                auto c = CreateEntityByNodeIndex(n);
+                c->SetParent(entity);
+                entity->AddChild(c);
+            }
         }
-
-        auto sys = Ecs::GetSystemManager()->GetSystem<ECS::MeshRendererSystem>();
-        auto component = entity->GetComponent<ECS::MeshRendererComponent>();
-        if (!component)
-        {
-            component = entity->AddComponent<ECS::MeshRendererComponent>();
-        }
-
-        sys->RegisterEntity(entity);
-
-        component->m_material = new Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/glTF/Duck/" + m_doc.images.at(0).uri);
-        component->m_mesh = pMesh;
 
         return entity;
     }
@@ -65,6 +63,31 @@ namespace ny
         transform.SetRotation({node.rotation.at(3), node.rotation.at(0), node.rotation.at(1), node.rotation.at(2)});
         //scale(x, y, z)
         transform.SetScale({node.scale.at(0), node.scale.at(1), node.scale.at(2)});
+    }
+
+    void SceneLoader::AddMesh(fx::gltf::Node& node, std::shared_ptr<EcsEntity> entity)
+    {
+        Rendering::Mesh* pMesh = nullptr;
+        if (node.mesh == GLTF_INVALID_INDEX)
+        {
+            return;
+        }
+
+        NY_DEBUG("Loadig mesh...");
+        NY_ASSERT(node.mesh < m_doc.meshes.size(), "Error! Invalid gltf id");
+        pMesh = LoadMesh(m_doc.meshes.at(node.mesh));
+
+        auto sys = Ecs::GetSystemManager()->GetSystem<ECS::MeshRendererSystem>();
+        auto component = entity->GetComponent<ECS::MeshRendererComponent>();
+        if (!component)
+        {
+            component = entity->AddComponent<ECS::MeshRendererComponent>();
+        }
+
+        sys->RegisterEntity(entity.get());
+
+        component->m_material = new Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/glTF/Duck/" + m_doc.images.at(0).uri);
+        component->m_mesh = pMesh;
     }
 
     Rendering::Mesh* SceneLoader::LoadMesh(fx::gltf::Mesh& inMesh)

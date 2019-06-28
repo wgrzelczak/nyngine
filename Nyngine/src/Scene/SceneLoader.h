@@ -12,11 +12,14 @@ namespace ny
         SceneLoader(const std::string& filename);
         ~SceneLoader();
 
-        void LoadSceneNodes(Scene* scene) {}
-        EcsEntity* CreateEntityByNodeIndex(i32 nodeId, bool withChildren = false);
+        void LoadScene(Scene* scene, i32 sceneId);
+        std::shared_ptr<EcsEntity> CreateEntityByNodeIndex(i32 nodeId, bool withChildren = true);
 
     private:
         void LoadTransform(fx::gltf::Node& node, ECS::Transform& transform);
+
+        void AddMesh(fx::gltf::Node& node, std::shared_ptr<EcsEntity> entity);
+
         Rendering::Mesh* LoadMesh(fx::gltf::Mesh& inMesh);
 
         void GetAccessorData(i32 accessorId, Rendering::Mesh::VertexAttributesSettings::Data& data);

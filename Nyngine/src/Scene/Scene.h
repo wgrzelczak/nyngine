@@ -10,5 +10,7 @@ namespace ny
         virtual void Init() = 0;
         virtual void Destroy() = 0;
         virtual void Update() = 0;
+
+        std::vector<std::shared_ptr<EcsEntity>> m_objects;
     };
 } // namespace ny

@@ -17,7 +17,8 @@ namespace ny::ECS
         mat = mat * glm::toMat4(m_rotation);
         mat = glm::scale(mat, m_scale);
 
-        //mat = parent->GetModelMatrix() * mat;
+        if (m_parent)
+            mat = m_parent->CalculateModelMatrix() * mat;
 
         return mat;
     }
