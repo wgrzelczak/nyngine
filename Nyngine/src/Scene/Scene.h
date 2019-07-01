@@ -12,5 +12,6 @@ namespace ny
         virtual void Update() = 0;
 
         std::vector<std::shared_ptr<EcsEntity>> m_objects;
+        EcsPtr m_ecs{nullptr};
     };
 } // namespace ny

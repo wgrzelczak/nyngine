@@ -23,11 +23,11 @@ void NyngineApp::Init()
 void NyngineApp::Tick()
 {
     m_currentScene->Update();
-    Ecs::Get()->GetSystemManager()->Update();
 }
 
 void NyngineApp::Shutdown()
 {
     NY_TRACE("Shutting down...");
+    m_currentScene->Destroy();
     delete m_currentScene;
 }

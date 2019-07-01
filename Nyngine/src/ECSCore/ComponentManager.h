@@ -6,9 +6,19 @@
 
 namespace ny::ECS::Core
 {
+    class EcsManager;
+
     class ComponentManager
     {
+    public:
+        ComponentManager(EcsManager* ecs) :
+            p_ecs(ecs)
+        {
+        }
+
     private:
+        EcsManager* p_ecs{nullptr};
+
         friend class Entity;
         friend class ComponentBase;
 

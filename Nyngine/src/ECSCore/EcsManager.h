@@ -9,30 +9,29 @@ namespace ny::ECS::Core
     class EcsManager final
     {
     public:
-        static EcsManager* const Get()
+        EcsManager() :
+            m_componentManager(this),
+            m_systemManager(this),
+            m_eventManager(this)
         {
-            static EcsManager instance;
-            return &instance;
         }
 
-        static ComponentManager* GetComponentManager()
+        ComponentManager* GetComponentManager()
         {
-            return &Get()->m_componentManager;
+            return &m_componentManager;
         }
 
-        static SystemManager* GetSystemManager()
+        SystemManager* GetSystemManager()
         {
-            return &Get()->m_systemManager;
+            return &m_systemManager;
         }
 
-        static EventManager* GetEventManager()
+        EventManager* GetEventManager()
         {
-            return &Get()->m_eventManager;
+            return &m_eventManager;
         }
 
     private:
-        EcsManager() {}
-
         ComponentManager m_componentManager;
         SystemManager m_systemManager;
         EventManager m_eventManager;

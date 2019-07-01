@@ -9,7 +9,7 @@ namespace ny
     class SceneLoader
     {
     public:
-        SceneLoader(const std::string& filename);
+        SceneLoader(const std::string& filename, EcsPtr ecs);
         ~SceneLoader();
 
         void LoadScene(Scene* scene, i32 sceneId);
@@ -17,13 +17,11 @@ namespace ny
 
     private:
         void LoadTransform(fx::gltf::Node& node, ECS::Transform& transform);
-
         void AddMesh(fx::gltf::Node& node, std::shared_ptr<EcsEntity> entity);
-
         Rendering::Mesh* LoadMesh(fx::gltf::Mesh& inMesh);
-
         void GetAccessorData(i32 accessorId, Rendering::Mesh::VertexAttributesSettings::Data& data);
 
+        EcsPtr m_ecs;
         fx::gltf::Document m_doc;
     };
 } // namespace ny

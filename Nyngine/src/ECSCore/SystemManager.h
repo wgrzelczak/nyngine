@@ -3,9 +3,16 @@
 
 namespace ny::ECS::Core
 {
+    class EcsManager;
+
     class SystemManager
     {
     public:
+        SystemManager(EcsManager* ecs) :
+            p_ecs(ecs)
+        {
+        }
+
         ~SystemManager();
 
         template <class T>
@@ -23,6 +30,7 @@ namespace ny::ECS::Core
         void UnregisterSystem(const std::shared_ptr<SystemBase>& sys);
         void UnregisterSystems();
 
+        EcsManager* p_ecs{nullptr};
         std::list<std::shared_ptr<SystemBase>> m_systems;
     };
 

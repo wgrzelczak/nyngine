@@ -9,11 +9,13 @@ static glm::quat tmpQuatN{1.f, 0.f, 0.f, 0.f};
 
 void MainScene::Init()
 {
-    auto loader = ny::SceneLoader("Assets/glTF/Duck/Duck.gltf");
+    m_ecs.reset(new Ecs());
+    {
+        auto loader = ny::SceneLoader("Assets/glTF/Duck/Duck.gltf", m_ecs);
 
-    loader.LoadScene(this, 0);
-
-    m_objects[0]->m_transform.SetScale({0.01, 0.01, 0.01});
+        loader.LoadScene(this, 0);
+    }
+    //m_objects[0]->m_transform.SetScale({0.01, 0.01, 0.01});
 
     ny::ImGuiSystem::RegisterFunction(
         [this]() -> void {
@@ -33,10 +35,13 @@ void MainScene::Init()
 
 void MainScene::Destroy()
 {
+    m_objects.clear();
 }
 
 void MainScene::Update()
 {
+    m_ecs->GetSystemManager()->Update();
+
     f32 delta = (float)ny::Core::Time::Delta() * 0.0001f;
     m_objects[0]->m_transform.AddRotation(tmpQuatN * delta);
 }

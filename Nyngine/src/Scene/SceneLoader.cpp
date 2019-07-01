@@ -15,7 +15,8 @@
 
 namespace ny
 {
-    SceneLoader::SceneLoader(const std::string& filename)
+    SceneLoader::SceneLoader(const std::string& filename, EcsPtr ecs) :
+        m_ecs(ecs)
     {
         NY_DEBUG("Loading {}...", filename);
         m_doc = fx::gltf::LoadFromText(filename);
@@ -36,7 +37,7 @@ namespace ny
 
     std::shared_ptr<EcsEntity> SceneLoader::CreateEntityByNodeIndex(i32 nodeId, bool withChildren)
     {
-        auto entity = std::make_shared<EcsEntity>();
+        auto entity = std::make_shared<EcsEntity>(m_ecs); //todo: move create to EcsManager
 
         fx::gltf::Node& node = m_doc.nodes.at(nodeId);
         LoadTransform(node, entity->m_transform);
@@ -77,7 +78,7 @@ namespace ny
         NY_ASSERT(node.mesh < m_doc.meshes.size(), "Error! Invalid gltf id");
         pMesh = LoadMesh(m_doc.meshes.at(node.mesh));
 
-        auto sys = Ecs::GetSystemManager()->GetSystem<ECS::MeshRendererSystem>();
+        auto sys = m_ecs->GetSystemManager()->GetSystem<ECS::MeshRendererSystem>();
         auto component = entity->GetComponent<ECS::MeshRendererComponent>();
         if (!component)
         {
@@ -86,7 +87,10 @@ namespace ny
 
         sys->RegisterEntity(entity.get());
 
-        component->m_material = new Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", "Assets/glTF/Duck/" + m_doc.images.at(0).uri);
+        std::string img = "Assets/Textures/debug.jpeg";
+        if (m_doc.images.size() > 0)
+            img = "Assets/glTF/Duck/" + m_doc.images.at(0).uri;
+        component->m_material = new Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", img);
         component->m_mesh = pMesh;
     }
 

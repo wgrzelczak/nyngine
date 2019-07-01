@@ -3,6 +3,7 @@
 #include "GameEntity.h"
 
 using Ecs = ny::ECS::Core::EcsManager;
+using EcsPtr = std::shared_ptr<Ecs>;
 
 using EcsCoreEntity = ny::ECS::Core::Entity;
 using EcsEntity = ny::ECS::GameEntity;

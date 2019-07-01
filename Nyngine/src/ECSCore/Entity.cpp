@@ -5,7 +5,8 @@ namespace ny::ECS::Core
 {
     static u32 NEXT_ENTITY_ID = 0;
 
-    Entity::Entity() :
+    Entity::Entity(std::weak_ptr<EcsManager> ecs) :
+        m_ecs(ecs),
         m_id(NEXT_ENTITY_ID++)
     {
     }

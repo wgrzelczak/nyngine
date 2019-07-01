@@ -93,5 +93,7 @@ namespace ny::Core
     void Engine::Shutdown()
     {
         m_window->Close();
+
+        m_app->Shutdown();
     }
 } // namespace ny::Core

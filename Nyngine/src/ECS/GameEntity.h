@@ -5,9 +5,17 @@
 
 namespace ny::ECS
 {
+    namespace Core
+    {
+        class EcsManager;
+    }
+
     class GameEntity : public Core::Entity
     {
     public:
+        GameEntity(std::weak_ptr<Core::EcsManager> ecs) :
+            Core::Entity(ecs) {}
+
         std::string m_name{"Id#" + std::to_string(GetId())};
         Transform m_transform;
 
