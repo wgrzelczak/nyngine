@@ -2,6 +2,7 @@
 #include "SceneLoader.h"
 #include "Ecs\MeshRendererComponent.h"
 #include "Ecs\MeshRendererSystem.h"
+#include <glm/gtx/matrix_decompose.hpp>
 
 #define GLTF_INVALID_INDEX (-1)
 #define GLTF_KEY_ATTRIBUTE_POSITION "POSITION"
@@ -58,12 +59,48 @@ namespace ny
 
     void SceneLoader::LoadTransform(fx::gltf::Node& node, ECS::Transform& transform)
     {
-        //pos(x, y, z)
-        transform.SetPosition({node.translation.at(0), node.translation.at(1), node.translation.at(2)});
-        //quat(w, x, y, z)
-        transform.SetRotation({node.rotation.at(3), node.rotation.at(0), node.rotation.at(1), node.rotation.at(2)});
-        //scale(x, y, z)
-        transform.SetScale({node.scale.at(0), node.scale.at(1), node.scale.at(2)});
+        if (std::equal(std::begin(node.matrix), std::end(node.matrix), std::begin(fx::gltf::defaults::IdentityMatrix)))
+        {
+            //Matrix is not filled, load TRS
+
+            //pos(x, y, z)
+            transform.SetPosition({node.translation.at(0), node.translation.at(1), node.translation.at(2)});
+            //quat(w, x, y, z)
+            transform.SetRotation({node.rotation.at(3), node.rotation.at(0), node.rotation.at(1), node.rotation.at(2)});
+            //scale(x, y, z)
+            transform.SetScale({node.scale.at(0), node.scale.at(1), node.scale.at(2)});
+        }
+        else
+        {
+            const glm::mat4 matrix{
+                node.matrix.at(0),
+                node.matrix.at(1),
+                node.matrix.at(2),
+                node.matrix.at(3),
+                node.matrix.at(4),
+                node.matrix.at(5),
+                node.matrix.at(6),
+                node.matrix.at(7),
+                node.matrix.at(8),
+                node.matrix.at(9),
+                node.matrix.at(10),
+                node.matrix.at(11),
+                node.matrix.at(12),
+                node.matrix.at(13),
+                node.matrix.at(14),
+                node.matrix.at(15)};
+
+            glm::vec3 scale;
+            glm::quat rotation;
+            glm::vec3 translation;
+            glm::vec3 skew;
+            glm::vec4 perspective;
+            glm::decompose(matrix, scale, rotation, translation, skew, perspective);
+
+            transform.SetPosition(translation);
+            transform.SetRotation(rotation);
+            transform.SetScale(scale);
+        }
     }
 
     void SceneLoader::AddMesh(fx::gltf::Node& node, std::shared_ptr<EcsEntity> entity)
