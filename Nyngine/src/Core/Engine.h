@@ -19,7 +19,6 @@ namespace ny::Core
 
     public:
         static Engine* GetInstance();
-        static Application* GetApplication();
 
     protected:
         Engine() {}
@@ -45,7 +44,7 @@ namespace ny::Core
         void Shutdown();
 
         State m_state{State::Init};
-        Application* m_app{nullptr};
+        std::unique_ptr<Application> m_app{nullptr};
         std::shared_ptr<Log> m_logger{nullptr};
 
         std::unique_ptr<Renderer> m_renderer{nullptr};

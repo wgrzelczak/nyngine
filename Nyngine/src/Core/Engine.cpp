@@ -12,17 +12,14 @@ namespace ny::Core
         return &instance;
     }
 
-    Application* Engine::GetApplication()
-    {
-        return GetInstance()->m_app;
-    }
-
     void Engine::Run(Application* app)
     {
+        NY_ASSERT(!m_app, "Application has beed initialized already!!");
+
         Log::Init("Core");
 
-        NY_ASSERT(app, "Application ptr is null!!");
-        m_app = app;
+        NY_ASSERT(app, "Application does not exist!!");
+        m_app.reset(app);
 
         Init();
 
@@ -54,15 +51,17 @@ namespace ny::Core
         NY_ASSERT(m_app, "");
 
         auto DispatchEvent = [&](auto&& listener) {
-            EVENT_DISPATCH(listener, e, WindowClosedEvent);
-            EVENT_DISPATCH(listener, e, WindowResizedEvent);
-            EVENT_DISPATCH(listener, e, KeyPressedEvent);
-            EVENT_DISPATCH(listener, e, KeyReleasedEvent);
-            EVENT_DISPATCH(listener, e, KeyTypedEvent);
+            EVENT_DISPATCH(listener, e, MouseMovedEvent);
             EVENT_DISPATCH(listener, e, MouseButtonPressedEvent);
             EVENT_DISPATCH(listener, e, MouseButtonReleasedEvent);
             EVENT_DISPATCH(listener, e, MouseScrolledEvent);
-            EVENT_DISPATCH(listener, e, MouseMovedEvent);
+
+            EVENT_DISPATCH(listener, e, KeyPressedEvent);
+            EVENT_DISPATCH(listener, e, KeyReleasedEvent);
+            EVENT_DISPATCH(listener, e, KeyTypedEvent);
+
+            EVENT_DISPATCH(listener, e, WindowResizedEvent);
+            EVENT_DISPATCH(listener, e, WindowClosedEvent);
         };
 
         DispatchEvent(*this);
@@ -96,6 +95,7 @@ namespace ny::Core
         m_window->Close();
 
         m_app->Shutdown();
+        m_app.reset();
 
         Log::Deinit();
     }
