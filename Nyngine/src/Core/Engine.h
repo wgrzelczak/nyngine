@@ -27,7 +27,7 @@ namespace ny::Core
         Engine(Engine&) = delete;
         Engine(Engine&&) = delete;
 
-        void Run(Application* app);
+        i32 Run(Application* app);
 
         void Invoke(Event& e);
         void OnEvent(WindowClosedEvent& e);

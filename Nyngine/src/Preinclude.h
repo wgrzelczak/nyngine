@@ -30,3 +30,9 @@ using f32 = float;
 #define BIT_ARE_SET(n, m) ((n & m) != 0)
 #define BIT_SET(n, pos) n |= BIT_POSITION(pos)
 #define BIT_CLEAR(n, pos) n &= ~BIT_POSITION(pos)
+
+namespace ErrorCode
+{
+    constexpr i32 Success{0};
+    constexpr i32 Error{-1};
+} // namespace ErrorCode

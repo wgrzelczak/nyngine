@@ -12,7 +12,7 @@ namespace ny::Core
         return &instance;
     }
 
-    void Engine::Run(Application* app)
+    i32 Engine::Run(Application* app)
     {
         NY_ASSERT(!m_app, "Application has beed initialized already!!");
 
@@ -29,6 +29,8 @@ namespace ny::Core
         }
 
         Shutdown();
+
+        return ErrorCode::Success;
     }
 
     void Engine::Init()
