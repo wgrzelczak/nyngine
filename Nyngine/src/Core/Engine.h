@@ -33,6 +33,8 @@ namespace ny::Core
         void Invoke(Event& e);
         void OnEvent(WindowClosedEvent& e);
 
+        std::shared_ptr<Log> GetLogger() const { return m_logger; }
+
         void SetState(State state) { m_state = state; }
         Window& GetWindow() const { return *m_window; }
         Renderer& GetRenderer() const { return *m_renderer; }
@@ -44,6 +46,7 @@ namespace ny::Core
 
         State m_state{State::Init};
         Application* m_app{nullptr};
+        std::shared_ptr<Log> m_logger{nullptr};
 
         std::unique_ptr<Renderer> m_renderer{nullptr};
         std::unique_ptr<Window> m_window{nullptr};

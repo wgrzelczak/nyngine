@@ -19,6 +19,8 @@ namespace ny::Core
 
     void Engine::Run(Application* app)
     {
+        Log::Init("Core");
+
         NY_ASSERT(app, "Application ptr is null!!");
         m_app = app;
 
@@ -35,7 +37,6 @@ namespace ny::Core
     void Engine::Init()
     {
         Time::Init();
-        Log::Init();
 
         m_window = std::make_unique<Window>();
         m_renderer = std::make_unique<Renderer>();
@@ -95,5 +96,7 @@ namespace ny::Core
         m_window->Close();
 
         m_app->Shutdown();
+
+        Log::Deinit();
     }
 } // namespace ny::Core
