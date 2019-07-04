@@ -11,6 +11,9 @@ Window's sandbox in C++.
 ## Requirements
 * python3 + pip
 
+## Issues
+https://app.gitkraken.com/glo/board/XR4CR2LZywAP4u39
+
 ## Installation
 Execute ```Tools/initialize.py```
 
