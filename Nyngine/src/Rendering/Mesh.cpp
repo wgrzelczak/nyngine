@@ -15,16 +15,10 @@ namespace ny::Rendering
 
     Mesh::~Mesh()
     {
-        for (u32 i{0}; i < GL_ATTRIB_NUM; ++i)
-        {
-            if (m_vbos[i] != 0)
-                glDeleteBuffers(1, &m_vbos[i]);
-        }
-
-        if (m_ebo != 0)
-            glDeleteBuffers(1, &m_ebo);
-        if (m_vao != 0)
-            glDeleteVertexArrays(1, &m_vao);
+        //glDeleteBuffers silently ignores 0's and names that do not correspond to existing buffer objects.
+        glDeleteBuffers(GL_ATTRIB_NUM, m_vbos);
+        glDeleteBuffers(1, &m_ebo);
+        glDeleteVertexArrays(1, &m_vao);
     }
 
     void Mesh::Generate(VertexAttributesSettings settings)
