@@ -4,7 +4,7 @@
 
 namespace ny::ECS
 {
-    class MeshRendererSystem : public EcsSystem<MeshRendererComponent>
+    class MeshRendererSystem : public EcsSystem<MeshRendererSystem, MeshRendererComponent>
     {
     public:
         MeshRendererSystem();

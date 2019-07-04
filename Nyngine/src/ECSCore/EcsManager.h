@@ -10,9 +10,9 @@ namespace ny::ECS::Core
     {
     public:
         EcsManager() :
-            m_componentManager(this),
-            m_systemManager(this),
-            m_eventManager(this)
+            m_componentManager(),
+            m_systemManager(),
+            m_eventManager()
         {
         }
 

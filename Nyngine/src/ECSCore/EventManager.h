@@ -8,8 +8,7 @@ namespace ny::ECS::Core
     class EventManager
     {
     public:
-        EventManager(EcsManager* ecs) :
-            p_ecs(ecs)
+        EventManager()
         {
         }
 
@@ -17,7 +16,6 @@ namespace ny::ECS::Core
         std::shared_ptr<E> GetEvent(const u32 id);
 
     private:
-        EcsManager* p_ecs{nullptr};
         std::map<u32, std::shared_ptr<EventBase>> m_events;
     };
 

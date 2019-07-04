@@ -8,7 +8,14 @@ namespace ny::ECS::Core
     public:
         ComponentBase() :
             m_enabled(true)
-        {}
+        {
+            NY_DEBUG("ComponentBase");
+        }
+
+        ~ComponentBase()
+        {
+            NY_DEBUG("~ComponentBase");
+        }
 
         bool m_enabled;
     };

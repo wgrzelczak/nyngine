@@ -9,28 +9,24 @@ namespace ny::ECS::Core
         RemoveSystems();
     }
 
-    void SystemManager::RegisterSystem(const std::shared_ptr<SystemBase>& sys)
+    void SystemManager::RegisterSystem(std::shared_ptr<SystemBase> sys, SystemTypeId id)
     {
-        m_systems.push_front(sys);
+        m_systems.insert_or_assign(id, sys);
     }
 
-    void SystemManager::UnregisterSystem(const std::shared_ptr<SystemBase>& sys)
+    void SystemManager::UnregisterSystem(SystemTypeId id)
     {
-        m_systems.remove(sys);
+        m_systems.erase(id);
     }
 
     void SystemManager::UnregisterSystems()
     {
-        //todo check leaks
         m_systems.clear();
     }
 
-    void SystemManager::RemoveSystem(const std::weak_ptr<SystemBase>& sys)
+    void SystemManager::RemoveSystem(SystemTypeId id)
     {
-        if (auto shared = sys.lock())
-        {
-            UnregisterSystem(shared);
-        }
+        UnregisterSystem(id);
     }
 
     void SystemManager::RemoveSystems()
@@ -40,8 +36,10 @@ namespace ny::ECS::Core
 
     void SystemManager::Update()
     {
-        auto Update = [](std::shared_ptr<SystemBase> sys) {
-            sys->Update();
+        using Data = std::pair<SystemTypeId, std::shared_ptr<SystemBase>>;
+
+        auto Update = [](Data element) {
+            element.second->Update();
         };
 
         std::for_each(std::begin(m_systems), std::end(m_systems), Update);

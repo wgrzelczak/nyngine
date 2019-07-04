@@ -11,30 +11,46 @@ namespace ny::ECS::Core
         virtual void RegisterEntity(Entity* const entity) = 0;
     };
 
-    template <class RequiredComponent>
-    class System : public SystemBase
+    using SystemTypeId = u32;
+
+    template <class T>
+    class SystemType : public SystemBase
+    {
+    public:
+        static SystemTypeId GetId() { return Id; }
+
+    protected:
+        const static SystemTypeId Id;
+    };
+
+    static SystemTypeId NEXT_SYSTEM_ID{0};
+    template <class T>
+    const SystemTypeId SystemType<T>::Id = NEXT_SYSTEM_ID++;
+
+    template <class T, class C>
+    class System : public SystemType<C>
     {
     public:
         virtual void Update() final;
         virtual void RegisterEntity(Entity* const entity) final;
 
     protected:
-        using pFuncUpdate = void (*)(const std::shared_ptr<RequiredComponent>&);
-        pFuncUpdate m_updateCallback{nullptr};
+        std::list<std::shared_ptr<C>> m_components;
 
-        std::list<std::shared_ptr<RequiredComponent>> m_components;
+        using pFuncUpdate = void (*)(const std::shared_ptr<C>&);
+        pFuncUpdate m_updateCallback{nullptr};
     };
 
-    template <class RequiredComponent>
-    inline void System<RequiredComponent>::Update()
+    template <class T, class C>
+    inline void System<T, C>::Update()
     {
         std::for_each(std::begin(m_components), std::end(m_components), m_updateCallback);
     }
 
-    template <class RequiredComponent>
-    inline void System<RequiredComponent>::RegisterEntity(Entity* const entity)
+    template <class T, class C>
+    inline void System<T, C>::RegisterEntity(Entity* const entity)
     {
-        if (auto ptr = entity->GetComponent<RequiredComponent>())
+        if (auto ptr = entity->GetComponent<C>())
         {
             m_components.push_back(ptr);
         }
@@ -42,7 +58,7 @@ namespace ny::ECS::Core
         {
             NY_WARN("[ECS] Entity {} has NOT requred component!", entity->GetId());
 
-            ptr = entity->AddComponent<RequiredComponent>();
+            ptr = entity->AddComponent<C>();
             m_components.push_back(ptr);
         }
     }
