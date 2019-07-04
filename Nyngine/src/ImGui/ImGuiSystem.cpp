@@ -50,12 +50,10 @@ namespace ny
     {
         NewFrame();
 
-        ImGui::Begin("Window");
         for (const auto& f : m_drawFunctions)
         {
             if (f) f();
         }
-        ImGui::End();
 
         EndFrame();
     }

@@ -25,8 +25,8 @@ void MainScene::Init()
                 {
                     o->ImGuiDraw();
                 }
-                ImGui::End();
             }
+            ImGui::End();
 
             ImGui::DragFloat4("Rotation In Time", &tmpQuat.x, 0.0001f, -1.f, 1.f, "%.5f");
             tmpQuatN = glm::normalize(tmpQuat);

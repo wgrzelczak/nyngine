@@ -77,22 +77,26 @@ namespace ny::Rendering
     {
         ImGuiSystem::RegisterFunction(
             [this]() -> void {
-                if (ImGui::Button("Reinitialize renderer")) Init();
-                if (ImGui::Button("Reset camera position"))
+                if (ImGui::Begin("Window"))
                 {
-                    m_camera = {{0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0}};
-                    m_camera.SetPerspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
-                }
-                ImGui::DragFloat3("Camera position", &m_camera.GetPositionRef().x, 0.01f);
-                m_camera.UpdateView();
+                    if (ImGui::Button("Reinitialize renderer")) Init();
+                    if (ImGui::Button("Reset camera position"))
+                    {
+                        m_camera = {{0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0}};
+                        m_camera.SetPerspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
+                    }
+                    ImGui::DragFloat3("Camera position", &m_camera.GetPositionRef().x, 0.01f);
+                    m_camera.UpdateView();
 
-                //Directional light
-                if (ImGui::Button("Toggle directional light")) m_directionalLight.m_enabled = !m_directionalLight.m_enabled;
-                ImGui::DragFloat3("Directional Light Position", &m_directionalLight.m_position.x);
-                ImGui::DragFloat3("Directional Light Color", &m_directionalLight.m_color.x, 0.01f, 0.0f);
-                ImGui::DragFloat("Directional Light Ambient Strength", &m_directionalLight.m_ambientStrength, 0.01f);
-                ImGui::DragFloat("Directional Light Specular Strength", &m_directionalLight.m_specularStrength, 0.01f);
-                ImGui::DragInt("Directional Light Specular Shininess", (i32*)&m_directionalLight.m_specularShininess);
+                    //Directional light
+                    if (ImGui::Button("Toggle directional light")) m_directionalLight.m_enabled = !m_directionalLight.m_enabled;
+                    ImGui::DragFloat3("Directional Light Position", &m_directionalLight.m_position.x);
+                    ImGui::DragFloat3("Directional Light Color", &m_directionalLight.m_color.x, 0.01f, 0.0f);
+                    ImGui::DragFloat("Directional Light Ambient Strength", &m_directionalLight.m_ambientStrength, 0.01f);
+                    ImGui::DragFloat("Directional Light Specular Strength", &m_directionalLight.m_specularStrength, 0.01f);
+                    ImGui::DragInt("Directional Light Specular Shininess", (i32*)&m_directionalLight.m_specularShininess);
+                }
+                ImGui::End();
             });
     }
 } // namespace ny::Rendering
