@@ -2,8 +2,18 @@
 #include "ImGuiSystem.h"
 #include "Core\Engine.h"
 
-namespace ny
+namespace ny::imgui
 {
+    void RegisterFunction(Function drawFunction)
+    {
+        ImGuiSystem::GetInstance()->RegisterFunction(drawFunction);
+    }
+
+    void RegisterWindow(std::string name, Function drawFunction, bool isOpened)
+    {
+        ImGuiSystem::GetInstance()->RegisterWindow(ImGuiWindow(name, drawFunction, 0, isOpened));
+    }
+
     ImGuiSystem* ImGuiSystem::GetInstance()
     {
         static ImGuiSystem instance;
@@ -11,6 +21,16 @@ namespace ny
     }
 
     ImGuiSystem::ImGuiSystem()
+    {
+        InitCore();
+        m_mainWindow = std::make_unique<ImGuiWindow>(
+            "ImGui",
+            std::bind(&ImGuiSystem::MainWindowDrawFunction, this),
+            ImGuiWindowFlags_MenuBar,
+            true);
+    }
+
+    void ImGuiSystem::InitCore()
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -49,28 +69,27 @@ namespace ny
     void ImGuiSystem::Update()
     {
         NewFrame();
-
-        for (const auto& f : m_drawFunctions)
         {
-            if (f) f();
+            DrawWindows();
+            DrawMainWindow();
         }
-
         EndFrame();
     }
 
     void ImGuiSystem::Clear()
     {
         m_drawFunctions.clear();
+        m_windows.clear();
     }
 
-    void ImGuiSystem::RegisterFunction(Function function)
+    void ImGuiSystem::RegisterFunction(Function drawFunction)
     {
-        GetInstance()->RegisterFunctionImpl(function);
+        m_drawFunctions.push_back(std::move(drawFunction));
     }
 
-    void ImGuiSystem::RegisterFunctionImpl(Function function)
+    void ImGuiSystem::RegisterWindow(ImGuiWindow window)
     {
-        m_drawFunctions.push_back(std::move(function));
+        m_windows.push_back(std::move(window));
     }
 
     void ImGuiSystem::NewFrame()
@@ -98,4 +117,39 @@ namespace ny
         }
     }
 
-} // namespace ny
+    void ImGuiSystem::DrawMainWindow()
+    {
+        m_mainWindow->Draw();
+    }
+
+    void ImGuiSystem::DrawWindows()
+    {
+        for (auto& w : m_windows)
+        {
+            w.Draw();
+        }
+    }
+
+    void ImGuiSystem::MainWindowDrawFunction()
+    {
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("Windows"))
+            {
+                for (auto& w : m_windows)
+                {
+                    if (ImGui::MenuItem(w.m_title.c_str(), nullptr, &w.m_isOpen)) {}
+                }
+
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
+
+        for (const auto& f : m_drawFunctions)
+        {
+            if (f) f();
+        }
+    }
+
+} // namespace ny::imgui

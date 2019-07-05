@@ -81,7 +81,7 @@ namespace ny::Core
 
         Time::Update();
 
-        ImGuiSystem::GetInstance()->Update();
+        imgui::ImGuiSystem::GetInstance()->Update();
 
         m_app->Tick();
 

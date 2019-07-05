@@ -1,10 +1,13 @@
 #pragma once
 #include "Preinclude.h"
-#include "imgui.h"
-#include "imgui_bridge.h"
+//#include "imgui_bridge.h"
+#include "ImGuiWindow.h"
 
-namespace ny
+namespace ny::imgui
 {
+    void RegisterFunction(Function drawFunction);
+    void RegisterWindow(std::string name, Function drawFunction, bool isOpened = false);
+
     class ImGuiSystem
     {
     public:
@@ -14,17 +17,24 @@ namespace ny
         void Update();
         void Clear();
 
-        using Function = std::function<void()>;
-        static void RegisterFunction(Function function);
+        void RegisterFunction(Function drawFunction);
+        void RegisterWindow(ImGuiWindow window);
 
     private:
         ImGuiSystem();
 
+        void InitCore();
+
         void NewFrame();
         void EndFrame();
 
-        void RegisterFunctionImpl(Function function);
+        void DrawMainWindow();
+        void DrawWindows();
 
+        void MainWindowDrawFunction();
+
+        std::unique_ptr<ImGuiWindow> m_mainWindow{nullptr};
         std::vector<Function> m_drawFunctions;
+        std::vector<ImGuiWindow> m_windows;
     };
-} // namespace ny
+} // namespace ny::imgui

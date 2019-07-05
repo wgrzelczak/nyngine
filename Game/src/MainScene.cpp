@@ -17,20 +17,20 @@ void MainScene::Init()
     }
     //m_objects[0]->m_transform.SetScale({0.01, 0.01, 0.01});
 
-    ny::ImGuiSystem::RegisterFunction(
+    ny::imgui::RegisterFunction(
         [this]() -> void {
-            if (ImGui::Begin("Objects"))
-            {
-                for (const auto& o : m_objects)
-                {
-                    o->ImGuiDraw();
-                }
-            }
-            ImGui::End();
-
             ImGui::DragFloat4("Rotation In Time", &tmpQuat.x, 0.0001f, -1.f, 1.f, "%.5f");
             tmpQuatN = glm::normalize(tmpQuat);
         });
+
+    auto callback = [this]() -> void {
+        for (const auto& o : m_objects)
+        {
+            o->ImGuiDraw();
+        }
+    };
+
+    ny::imgui::RegisterWindow("Objects", callback);
 }
 
 void MainScene::Destroy()
