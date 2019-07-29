@@ -16,7 +16,7 @@ namespace ny::ECS
         GameEntity(std::weak_ptr<Core::EcsManager> ecs) :
             Core::Entity(ecs) {}
 
-        std::string m_name{"Id#" + std::to_string(GetId())};
+        std::string m_name{"Id#"};
         Transform m_transform;
 
         void SetParent(std::shared_ptr<GameEntity> parent)
@@ -40,7 +40,7 @@ namespace ny::ECS
     public:
         void ImGuiDraw()
         {
-            if (ImGui::TreeNode(m_name.c_str()))
+            if (ImGui::TreeNode(std::string(m_name + "##" + std::to_string(GetId())).c_str()))
             {
                 ImGui::DragFloat3(std::string("Position##" + std::to_string(GetId())).c_str(), &m_transform.GetPositionRef().x, 0.01f);
                 ImGui::DragFloat4(std::string("Rotation##" + std::to_string(GetId())).c_str(), &m_transform.GetRotationRef().x, 0.01f);

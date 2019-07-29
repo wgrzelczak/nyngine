@@ -39,10 +39,12 @@ namespace ny
     std::shared_ptr<EcsEntity> SceneLoader::CreateEntityByNodeIndex(i32 nodeId, bool withChildren)
     {
         auto entity = std::make_shared<EcsEntity>(m_ecs); //todo: move create to EcsManager
+        entity->m_name = std::to_string(nodeId);
 
         fx::gltf::Node& node = m_doc.nodes.at(nodeId);
         LoadTransform(node, entity->m_transform);
-        AddMesh(node, entity);
+        LoadMesh(node, entity);
+        //LoadAnimation();
 
         if (withChildren)
         {
@@ -103,7 +105,7 @@ namespace ny
         }
     }
 
-    void SceneLoader::AddMesh(fx::gltf::Node& node, std::shared_ptr<EcsEntity> entity)
+    void SceneLoader::LoadMesh(fx::gltf::Node& node, std::shared_ptr<EcsEntity> entity)
     {
         Rendering::Mesh* pMesh = nullptr;
         if (node.mesh == GLTF_INVALID_INDEX)
@@ -113,7 +115,7 @@ namespace ny
 
         NY_DEBUG("Loadig mesh...");
         NY_ASSERT(node.mesh < m_doc.meshes.size(), "Error! Invalid gltf id");
-        pMesh = LoadMesh(m_doc.meshes.at(node.mesh));
+        pMesh = CreateMesh(m_doc.meshes.at(node.mesh));
 
         auto sys = m_ecs->GetSystemManager()->GetSystem<ECS::MeshRendererSystem>();
         auto component = entity->GetComponent<ECS::MeshRendererComponent>();
@@ -127,29 +129,43 @@ namespace ny
         std::string img = "Assets/Textures/debug.jpeg";
         if (m_doc.images.size() > 0)
             img = "Assets/glTF/Duck/" + m_doc.images.at(0).uri;
-        component->m_material = new Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", img);
+        component->m_material = new Rendering::Material("Assets/Shaders/defaultJoints.vs", "Assets/Shaders/defaultColor.fs", img);
         component->m_mesh = pMesh;
     }
 
-    Rendering::Mesh* SceneLoader::LoadMesh(fx::gltf::Mesh& inMesh)
+    void SceneLoader::LoadAnimation(fx::gltf::Node& node, std::shared_ptr<EcsEntity> entity)
+    {
+    }
+
+    Rendering::Mesh* SceneLoader::CreateMesh(fx::gltf::Mesh& inMesh)
     {
         ny::Rendering::Mesh::VertexAttributesSettings settings;
 
-        NY_DEBUG("Loading indices...")
+        NY_DEBUG("Loading indices...");
         auto accessorId = inMesh.primitives[0].indices;
         GetAccessorData(accessorId, settings.indices);
 
-        NY_DEBUG("Loading positions...")
+        NY_DEBUG("Loading positions...");
         accessorId = inMesh.primitives[0].attributes[GLTF_KEY_ATTRIBUTE_POSITION];
         GetAccessorData(accessorId, settings.positions);
 
-        NY_DEBUG("Loading normals...")
+        NY_DEBUG("Loading normals...");
         accessorId = inMesh.primitives[0].attributes[GLTF_KEY_ATTRIBUTE_NORMAL];
         GetAccessorData(accessorId, settings.normals);
 
-        NY_DEBUG("Loading texcoords0...")
+        NY_DEBUG("Loading texcoords0...");
         accessorId = inMesh.primitives[0].attributes[GLTF_KEY_ATTRIBUTE_TEXCOORD0];
         GetAccessorData(accessorId, settings.texcoords);
+
+        NY_DEBUG("Loading joints0...");
+        accessorId = inMesh.primitives[0].attributes[GLTF_KEY_ATTRIBUTE_JOINTS0];
+        GetAccessorData(accessorId, settings.joints);
+
+        NY_DEBUG("Loading weights0...");
+        accessorId = inMesh.primitives[0].attributes[GLTF_KEY_ATTRIBUTE_WEIGHTS0];
+        GetAccessorData(accessorId, settings.weights);
+
+        NY_DEBUG("Loading jointMatrices...");
 
         return new ny::Rendering::Mesh(settings);
     }

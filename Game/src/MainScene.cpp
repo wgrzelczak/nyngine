@@ -11,10 +11,16 @@ void MainScene::Init()
 {
     m_ecs.reset(new Ecs());
     {
-        auto loader = ny::SceneLoader("Assets/glTF/Duck/Duck.gltf", m_ecs);
+        //auto loader = ny::SceneLoader("Assets/glTF/Duck/Duck.gltf", m_ecs);
+
+        auto loader = ny::SceneLoader("Assets/glTF/RiggedFigure/RiggedFigure.gltf", m_ecs);
 
         loader.LoadScene(this, 0);
     }
+
+    //m_objects[0]->m_transform.SetScale({50, 50, 50});
+    // m_objects[0]->m_transform.SetRotation({0, 0, 0, 1});
+
     //m_objects[0]->m_transform.SetScale({0.01, 0.01, 0.01});
 
     ny::imgui::RegisterFunction(

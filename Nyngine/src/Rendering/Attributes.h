@@ -7,7 +7,10 @@
 #define GL_ATTRIB_LOCATION_TEXCOORDS0 (2)
 #define GL_ATTRIB_LOCATION_TEXCOORDS1 (3)
 
-#define GL_ATTRIB_NUM (4)
+#define GL_ATTRIB_LOCATION_JOINTS (8)
+#define GL_ATTRIB_LOCATION_WEIGHTS (9)
+
+#define GL_ATTRIB_NUM (6)
 
 namespace ny::Rendering
 {

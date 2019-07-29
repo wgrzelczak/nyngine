@@ -17,8 +17,10 @@ namespace ny
 
     private:
         void LoadTransform(fx::gltf::Node& node, ECS::Transform& transform);
-        void AddMesh(fx::gltf::Node& node, std::shared_ptr<EcsEntity> entity);
-        Rendering::Mesh* LoadMesh(fx::gltf::Mesh& inMesh);
+        void LoadMesh(fx::gltf::Node& node, std::shared_ptr<EcsEntity> entity);
+        void LoadAnimation(fx::gltf::Node& node, std::shared_ptr<EcsEntity> entity);
+
+        Rendering::Mesh* CreateMesh(fx::gltf::Mesh& inMesh);
         void GetAccessorData(i32 accessorId, Rendering::Mesh::VertexAttributesSettings::Data& data);
 
         EcsPtr m_ecs;

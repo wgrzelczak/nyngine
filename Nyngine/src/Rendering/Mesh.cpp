@@ -53,6 +53,12 @@ namespace ny::Rendering
         //Normals
         BindAttrib(GL_ATTRIB_LOCATION_NORMALS, settings.normals);
 
+        //Joints
+        BindAttrib(GL_ATTRIB_LOCATION_JOINTS, settings.joints);
+
+        //Weights
+        BindAttrib(GL_ATTRIB_LOCATION_WEIGHTS, settings.weights);
+
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);

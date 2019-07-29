@@ -25,6 +25,11 @@ namespace ny::Rendering
             Data positions;
             Data normals;
             Data texcoords;
+
+            Data joints;
+            Data weights;
+
+            Data jointsMatrices;
         };
 
         Mesh();
