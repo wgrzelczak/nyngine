@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "Program.h"
 #include "Shader.h"
+#include "glad/glad.h"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace ny::Rendering

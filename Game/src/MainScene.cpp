@@ -2,7 +2,6 @@
 #include "MainScene.h"
 #include "Core\Input\Input.h"
 #include "ECS\MeshRendererSystem.h"
-#include "Rendering\ModelLoader.h"
 #include "Scene\SceneLoader.h"
 
 static glm::quat tmpQuat{1.f, 0.f, 0.f, 0.f};
