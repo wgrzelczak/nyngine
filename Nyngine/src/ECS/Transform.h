@@ -18,6 +18,10 @@ namespace ny::ECS
         void NormalizeRotation() { m_rotation = glm::normalize(m_rotation); }
         void AddRotation(const glm::quat& rotation);
 
+        glm::vec3 GetPosition() const { return m_position; }
+        glm::quat GetRotation() const { return m_rotation; }
+        glm::vec3 GetScale() const { return m_scale; }
+
         glm::vec3& GetPositionRef() { return m_position; }
         glm::quat& GetRotationRef() { return m_rotation; }
         glm::vec3& GetScaleRef() { return m_scale; }
@@ -25,7 +29,7 @@ namespace ny::ECS
         void SetParent(Transform* parent) { m_parent = parent; }
         Transform* GetParent() const { return m_parent; }
 
-    private:
+    protected:
         glm::vec3 m_position{0.0f, 0.0f, 0.0f};
         glm::quat m_rotation{0.0f, 0.0f, 0.0f, 1.0f};
         glm::vec3 m_scale{0.0f, 0.0f, 0.0f};

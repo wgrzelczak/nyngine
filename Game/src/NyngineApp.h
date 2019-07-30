@@ -15,7 +15,4 @@ public:
     virtual void Init() override;
     virtual void Tick() override;
     virtual void Shutdown() override;
-
-private:
-    Scene* m_currentScene{nullptr};
 };

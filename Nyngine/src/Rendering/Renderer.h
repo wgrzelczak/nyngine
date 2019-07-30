@@ -9,15 +9,12 @@ namespace ny::Rendering
     class Renderer
     {
     public:
-        Renderer();
-
         void Init();
-        void Render();
+        void Render(const Camera& camera);
 
         void PushCommand(Command&& cmd);
 
     private:
-        Camera m_camera;
         LightDirectional m_directionalLight;
 
         std::unique_ptr<CommandBuffer> m_commandBuffer{nullptr};

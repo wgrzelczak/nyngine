@@ -87,7 +87,7 @@ namespace ny::Core
 
         m_window->Update();
 
-        m_renderer->Render();
+        m_renderer->Render(m_app->GetCurrentScene()->GetMainCameraRef());
         //NY_DEBUG("FPS: {}", 1000000.0f / Time::Delta());
         //NY_DEBUG("Frame time: {}ms", Time::Delta() / 1000.f);
     }

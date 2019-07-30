@@ -10,8 +10,9 @@ namespace ny::Rendering
     }
 
     Camera::Camera(glm::vec3 position, glm::vec3 forward, glm::vec3 up) :
-        m_position(position), m_front(forward), m_up(up)
+        m_front(forward), m_up(up)
     {
+        SetPosition(position);
         UpdateView();
     }
 
@@ -38,10 +39,4 @@ namespace ny::Rendering
     {
         m_projection = glm::ortho(left, right, top, bottom, nearClip, farClip);
     }
-
-    glm::vec3& Camera::GetPositionRef()
-    {
-        return m_position;
-    }
-
 } // namespace ny::Rendering

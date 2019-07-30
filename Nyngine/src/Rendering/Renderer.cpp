@@ -8,27 +8,22 @@
 
 namespace ny::Rendering
 {
-    Renderer::Renderer() :
-        m_camera({0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0})
-    {
-        RegisterImGuiDebug();
-
-        m_commandBuffer = std::make_unique<CommandBuffer>();
-        glEnable(GL_DEPTH_TEST);
-    }
-
     void Renderer::Init()
     {
         NY_INFO("[Rendering] Initialize...");
-        m_camera.SetPerspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
+        RegisterImGuiDebug();
+
+        m_commandBuffer = std::make_unique<CommandBuffer>();
 
         NY_INFO("[Rendering] Initialized");
     }
 
-    void Renderer::Render()
+    void Renderer::Render(const Camera& camera)
     {
         glClearColor(0.25f, 0.25f, 0.25f, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
+
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe
 
         u32 width{ny::Core::Engine::GetInstance()->GetWindow().GetWidth()};
@@ -37,7 +32,7 @@ namespace ny::Rendering
         f32 ratio{width / (f32)height};
         glViewport(0, 0, width, height);
 
-        glm::mat4 PV{m_camera.Projection() * m_camera.View()};
+        glm::mat4 PV{camera.Projection() * camera.View()};
 
         for (const auto& cmd : m_commandBuffer->GetCommands())
         {
@@ -59,7 +54,7 @@ namespace ny::Rendering
 
             cmd.m_material->GetProgram()->SetUint("time", static_cast<u32>(ny::Core::Time::DeltaFromStart()));
             cmd.m_material->GetProgram()->SetMatrix("M", (cmd.m_transform));
-            cmd.m_material->GetProgram()->SetVector("ViewPos", m_camera.GetPosition());
+            cmd.m_material->GetProgram()->SetVector("ViewPos", camera.GetPosition());
             cmd.m_material->GetProgram()->SetMatrix("MVP", (PV * cmd.m_transform));
             cmd.m_mesh->Bind();
 
@@ -77,13 +72,6 @@ namespace ny::Rendering
     {
         auto callback = [this]() -> void {
             if (ImGui::Button("Reinitialize renderer")) Init();
-            if (ImGui::Button("Reset camera position"))
-            {
-                m_camera = {{0, 0, -3.0f}, {0, 0, 1}, {0, 1, 0}};
-                m_camera.SetPerspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
-            }
-            ImGui::DragFloat3("Camera position", &m_camera.GetPositionRef().x, 0.01f);
-            m_camera.UpdateView();
 
             //Directional light
             if (ImGui::Button("Toggle directional light")) m_directionalLight.m_enabled = !m_directionalLight.m_enabled;
