@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "MainScene.h"
 #include "Core\Input\Input.h"
+#include "Core\Utilities\Filesystem.h"
 #include "ECS\MeshRendererSystem.h"
 #include "Scene\SceneLoader.h"
 
@@ -14,7 +15,7 @@ void MainScene::Init()
 
     m_ecs.reset(new Ecs());
     {
-        auto loader = ny::SceneLoader("Assets/glTF/Duck/Duck.gltf", m_ecs);
+        auto loader = ny::SceneLoader(NY_PATH(GLTF, "Duck/Duck.gltf"), m_ecs);
         loader.LoadScene(this, 0);
     }
 

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SceneLoader.h"
+#include "Core\Utilities\Filesystem.h"
 #include "Ecs\MeshRendererComponent.h"
 #include "Ecs\MeshRendererSystem.h"
 #include <glm/gtx/matrix_decompose.hpp>
@@ -124,10 +125,10 @@ namespace ny
 
         sys->RegisterEntity(entity.get());
 
-        std::string img = "Assets/Textures/debug.jpeg";
+        std::string img = NY_PATH(Texture, "/debug.jpeg");
         if (m_doc.images.size() > 0)
-            img = "Assets/glTF/Duck/" + m_doc.images.at(0).uri;
-        component->m_material = new Rendering::Material("Assets/Shaders/default.vs", "Assets/Shaders/default.fs", img);
+            img = NY_PATH(GLTF, "Duck/" + m_doc.images.at(0).uri);
+        component->m_material = new Rendering::Material(NY_PATH(Shader, "default.vs"), NY_PATH(Shader, "default.fs"), img);
         component->m_mesh = pMesh;
     }
 
