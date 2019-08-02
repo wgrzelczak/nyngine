@@ -126,10 +126,12 @@ namespace ny
 
         sys->RegisterEntity(entity.get());
 
+        component->m_material = Rendering::GetMaterial(NY_PATH(Shader, "default.vs"), NY_PATH(Shader, "default.fs"));
+
         std::string img = NY_PATH(Texture, "/debug.jpeg");
         if (m_doc.images.size() > 0)
             img = NY_PATH(GLTF, "Duck/" + m_doc.images.at(0).uri);
-        component->m_material = Rendering::GetMaterial(NY_PATH(Shader, "default.vs"), NY_PATH(Shader, "default.fs"));
+        component->m_material->GetSharedMaterial()->SetMainTexture(img);
         component->m_mesh = pMesh;
     }
 

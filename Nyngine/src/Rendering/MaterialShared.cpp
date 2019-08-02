@@ -10,9 +10,6 @@ namespace ny::Rendering
     {
         NY_INFO("[Rendering] Creating Material: {}, {}", vertexShader, fragmentShader);
         CreateProgram(std::move(vertexShader), std::move(fragmentShader));
-
-        //Texture texture = Texture(std::move(textureFilename));
-        //m_textureId = texture.GetId();
     }
 
     MaterialShared::~MaterialShared()
@@ -20,6 +17,10 @@ namespace ny::Rendering
         NY_INFO("[Rendering] Destroying Material...");
         if (m_program != nullptr)
             delete m_program;
+
+        if (m_textureId != 0)
+            glDeleteTextures(1, &m_textureId);
+
         NY_INFO("[Rendering] Material has been destroyed");
     }
 
@@ -28,12 +29,25 @@ namespace ny::Rendering
         if (!m_program) return;
 
         glUseProgram(m_program->m_programId);
-        //glBindTexture(GL_TEXTURE_2D, m_textureId);
+
+        if (m_textureId != 0)
+        {
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, m_textureId);
+        }
+    }
+
+    void MaterialShared::SetMainTexture(std::string texturePath)
+    {
+        if (m_textureId != 0)
+            glDeleteTextures(1, &m_textureId);
+
+        Texture texture = Texture(std::move(texturePath));
+        m_textureId = texture.GetId();
     }
 
     void MaterialShared::CreateProgram(std::string vertexShader, std::string fragmentShader)
     {
-        //m_program = std::make_unique<Program>(vertexShader, fragmentShader);
         if (m_program != nullptr) delete m_program;
         m_program = new Program(vertexShader, fragmentShader);
     }
