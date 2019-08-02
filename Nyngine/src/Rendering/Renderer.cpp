@@ -40,22 +40,22 @@ namespace ny::Rendering
 
             if (m_directionalLight.m_enabled)
             {
-                cmd.m_material->GetProgram()->SetVector("DirLightPos", m_directionalLight.m_position);
-                cmd.m_material->GetProgram()->SetVector("DirLightColor", m_directionalLight.m_color);
-                cmd.m_material->GetProgram()->SetFloat("DirLightAmbientStrength", m_directionalLight.m_ambientStrength);
-                cmd.m_material->GetProgram()->SetFloat("DirLightSpecularStrength", m_directionalLight.m_specularStrength);
-                cmd.m_material->GetProgram()->SetUint("DirLightSpecularShininess", m_directionalLight.m_specularShininess);
+                cmd.m_material->GetProgram().SetVector("DirLightPos", m_directionalLight.m_position);
+                cmd.m_material->GetProgram().SetVector("DirLightColor", m_directionalLight.m_color);
+                cmd.m_material->GetProgram().SetFloat("DirLightAmbientStrength", m_directionalLight.m_ambientStrength);
+                cmd.m_material->GetProgram().SetFloat("DirLightSpecularStrength", m_directionalLight.m_specularStrength);
+                cmd.m_material->GetProgram().SetUint("DirLightSpecularShininess", m_directionalLight.m_specularShininess);
             }
             else
             {
-                cmd.m_material->GetProgram()->SetVector("DirLightColor", glm::vec3(1));
-                cmd.m_material->GetProgram()->SetFloat("DirLightAmbientStrength", 1.0);
+                cmd.m_material->GetProgram().SetVector("DirLightColor", glm::vec3(1));
+                cmd.m_material->GetProgram().SetFloat("DirLightAmbientStrength", 1.0);
             }
 
-            cmd.m_material->GetProgram()->SetUint("time", static_cast<u32>(ny::Core::Time::DeltaFromStart()));
-            cmd.m_material->GetProgram()->SetMatrix("M", (cmd.m_transform));
-            cmd.m_material->GetProgram()->SetVector("ViewPos", camera.GetPosition());
-            cmd.m_material->GetProgram()->SetMatrix("MVP", (PV * cmd.m_transform));
+            cmd.m_material->GetProgram().SetUint("time", static_cast<u32>(ny::Core::Time::DeltaFromStart()));
+            cmd.m_material->GetProgram().SetMatrix("M", (cmd.m_transform));
+            cmd.m_material->GetProgram().SetVector("ViewPos", camera.GetPosition());
+            cmd.m_material->GetProgram().SetMatrix("MVP", (PV * cmd.m_transform));
             cmd.m_mesh->Bind();
 
             glDrawElements(GL_TRIANGLES, static_cast<i32>(cmd.m_mesh->m_indicesNum), GL_UNSIGNED_SHORT, 0);

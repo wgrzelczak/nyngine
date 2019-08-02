@@ -118,12 +118,7 @@ namespace ny
         pMesh = LoadMesh(m_doc.meshes.at(node.mesh));
 
         auto sys = m_ecs->GetSystemManager()->GetSystem<ECS::MeshRendererSystem>();
-        auto component = entity->GetComponent<ECS::MeshRendererComponent>();
-        if (!component)
-        {
-            component = entity->AddComponent<ECS::MeshRendererComponent>();
-        }
-
+        auto component = entity->ReceiveComponent<ECS::MeshRendererComponent>();
         sys->RegisterEntity(entity.get());
 
         component->m_material = Rendering::GetMaterial(NY_PATH(Shader, "default.vs"), NY_PATH(Shader, "default.fs"));

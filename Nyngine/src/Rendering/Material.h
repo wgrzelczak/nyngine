@@ -10,7 +10,7 @@ namespace ny::Rendering
         Material(const Material& material);
 
         void Bind() const;
-        Program* GetProgram() const { return m_sharedMaterialPtr->GetProgram(); }
+        Program& GetProgram() const { return m_sharedMaterialPtr->GetProgram(); }
 
         std::shared_ptr<MaterialShared> GetSharedMaterial() const { return m_sharedMaterialPtr; }
 

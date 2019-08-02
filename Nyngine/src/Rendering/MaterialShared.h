@@ -17,7 +17,7 @@ namespace ny::Rendering
         ~MaterialShared();
 
         void Bind() const;
-        Program* GetProgram() const { return m_program; }
+        Program& GetProgram() const { return *m_program; }
         u32 GetTextureId() const { return m_textureId; }
 
         void SetMainTexture(std::string texturePath);
@@ -27,7 +27,7 @@ namespace ny::Rendering
     private:
         void CreateProgram(std::string vertexShader, std::string fragmentShader);
 
-        Program* m_program{nullptr};
+        std::unique_ptr<Program> m_program{nullptr};
         u32 m_textureId{0};
     };
 } // namespace ny::Rendering

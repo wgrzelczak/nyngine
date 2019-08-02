@@ -16,6 +16,9 @@ namespace ny::ECS::Core
         template <class T>
         std::shared_ptr<T> AddComponent() const;
 
+        template <class T>
+        std::shared_ptr<T> ReceiveComponent() const;
+
     private:
         std::weak_ptr<EcsManager> m_ecs;
         const u32 m_id;
@@ -40,5 +43,16 @@ namespace ny::ECS::Core
             return ecs->GetComponentManager()->AddEntityComponent<T>(this);
         NY_ERROR("ECS is nullptr!!");
         return std::shared_ptr<T>();
+    }
+
+    template <class T>
+    inline std::shared_ptr<T> Entity::ReceiveComponent() const
+    {
+        static_assert(std::is_base_of<ComponentBase, T>(), "Template param should derive from Component: " __FUNCSIG__);
+
+        if (auto component = GetComponent<T>(); component != nullptr)
+            return component;
+
+        return AddComponent<T>();
     }
 } // namespace ny::ECS::Core

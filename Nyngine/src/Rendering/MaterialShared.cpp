@@ -15,8 +15,7 @@ namespace ny::Rendering
     MaterialShared::~MaterialShared()
     {
         NY_INFO("[Rendering] Destroying Material...");
-        if (m_program != nullptr)
-            delete m_program;
+        m_program.reset();
 
         if (m_textureId != 0)
             glDeleteTextures(1, &m_textureId);
@@ -48,8 +47,7 @@ namespace ny::Rendering
 
     void MaterialShared::CreateProgram(std::string vertexShader, std::string fragmentShader)
     {
-        if (m_program != nullptr) delete m_program;
-        m_program = new Program(vertexShader, fragmentShader);
+        m_program.reset(new Program(vertexShader, fragmentShader));
     }
 
 } // namespace ny::Rendering
