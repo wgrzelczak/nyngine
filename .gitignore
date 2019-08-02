@@ -1,6 +1,8 @@
 .vs/
 Build/
 */__pycache__/
+*.pyc
+
 
 *.sln
 *.vcxproj
@@ -9,6 +11,7 @@ Build/
 
 
 imgui.ini
+
 
 #Exclude all exe files
 !Tools/*.exe
