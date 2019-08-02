@@ -21,7 +21,7 @@ namespace ny::ECS
             return entity->m_transform.CalculateModelMatrix();
         }
 
-        Material* m_material{nullptr};
+        std::shared_ptr<Material> m_material{nullptr};
         Mesh* m_mesh{nullptr};
     };
 } // namespace ny::ECS

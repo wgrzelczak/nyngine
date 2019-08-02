@@ -3,6 +3,7 @@
 #include "Core\Utilities\Filesystem.h"
 #include "Ecs\MeshRendererComponent.h"
 #include "Ecs\MeshRendererSystem.h"
+#include "Rendering/MaterialManager.h"
 #include <glm/gtx/matrix_decompose.hpp>
 
 #define GLTF_INVALID_INDEX (-1)
@@ -128,7 +129,7 @@ namespace ny
         std::string img = NY_PATH(Texture, "/debug.jpeg");
         if (m_doc.images.size() > 0)
             img = NY_PATH(GLTF, "Duck/" + m_doc.images.at(0).uri);
-        component->m_material = new Rendering::Material(NY_PATH(Shader, "default.vs"), NY_PATH(Shader, "default.fs"), img);
+        component->m_material = Rendering::GetMaterial(NY_PATH(Shader, "default.vs"), NY_PATH(Shader, "default.fs"));
         component->m_mesh = pMesh;
     }
 

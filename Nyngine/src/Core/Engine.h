@@ -3,6 +3,7 @@
 #include "Event\InputEvents.h"
 #include "Event\WindowEvents.h"
 #include "FieldDetection.h"
+#include "Rendering/MaterialManager.h"
 #include "Rendering/Renderer.h"
 
 namespace ny::Core
@@ -37,6 +38,7 @@ namespace ny::Core
         void SetState(State state) { m_state = state; }
         Window& GetWindow() const { return *m_window; }
         Renderer& GetRenderer() const { return *m_renderer; }
+        MaterialManager& GetMaterialManager() const { return *m_materialManager; }
 
     private:
         void Init();
@@ -49,6 +51,7 @@ namespace ny::Core
 
         std::unique_ptr<Renderer> m_renderer{nullptr};
         std::unique_ptr<Window> m_window{nullptr};
+        std::unique_ptr<MaterialManager> m_materialManager{nullptr};
     };
 } // namespace ny::Core
 

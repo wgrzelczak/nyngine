@@ -38,6 +38,7 @@ namespace ny::Core
         Time::Init();
 
         m_window = std::make_unique<Window>();
+        m_materialManager = std::make_unique<MaterialManager>();
         m_renderer = std::make_unique<Renderer>();
         m_renderer->Init();
 
@@ -94,10 +95,14 @@ namespace ny::Core
 
     void Engine::Shutdown()
     {
-        m_window->Close();
-
         m_app->Shutdown();
         m_app.reset();
+
+        m_renderer.reset();
+        m_materialManager.reset();
+
+        m_window->Close();
+        m_window.reset();
 
         Log::Deinit();
     }

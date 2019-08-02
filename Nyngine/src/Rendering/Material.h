@@ -1,23 +1,20 @@
 #pragma once
-#include "Preinclude.h"
-#include "Program.h"
+#include "MaterialShared.h"
 
 namespace ny::Rendering
 {
     class Material
     {
     public:
-        Material(std::string vertexShader, std::string fragmentShader, std::string textureFilename);
-        ~Material();
+        Material(std::shared_ptr<MaterialShared> sharedMaterial);
+        Material(const Material& material);
 
         void Bind() const;
-        Program* GetProgram() const { return m_program; }
-        u32 GetTextureId() const { return m_textureId; }
+        Program* GetProgram() const { return m_sharedMaterialPtr->GetProgram(); }
+
+        std::shared_ptr<MaterialShared> GetSharedMaterial() const { return m_sharedMaterialPtr; }
 
     private:
-        void CreateProgram(std::string vertexShader, std::string fragmentShader);
-
-        Program* m_program{nullptr};
-        u32 m_textureId{0};
+        std::shared_ptr<MaterialShared> m_sharedMaterialPtr;
     };
 } // namespace ny::Rendering
