@@ -7,4 +7,7 @@ os.system("git submodule update --init --recursive")
 os.system("python generate_sln.py")
 os.system("python git_copy_hooks.py")
 
+os.system("python -m pip install --upgrade pip")
+os.system("python -m pip install GitPython")
+
 os.chdir(previousWorkingDirectory)
